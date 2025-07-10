@@ -171,7 +171,7 @@ barbfspeciesbysite <-ggplot(divsitesCBAY20242, aes(fill = Species, y= Speciesnum
 
 barbfspeciesbysite
 
-ggsave("barsrbf.png", plot = barbfspeciesbysite, width = 9, height = 5, dpi = 300)
+ggsave("../plots/barsrbf.png", plot = barbfspeciesbysite, width = 9, height = 5, dpi = 300)
 
 
 #creating a matrix of what black fly species are at which site based on P/A
@@ -207,7 +207,7 @@ tileplot <-ggplot(mat_long, aes(x = Site, y = Species, fill = Presence)) +
 
 tileplot
 
-ggsave("tileplotsl.png", plot = tileplot , width = 6, height = 3, dpi = 300)
+ggsave("../plots/tileplotsl.png", plot = tileplot , width = 6, height = 3, dpi = 300)
 
 #looking at statistical difference in species richness between sites 
 
@@ -411,7 +411,7 @@ barsumhabdata <- ggplot(summarydataforgraph, aes(y= Average, x= Habitat.type)) +
         strip.text = element_text(face = "bold", size = "12")) +
   facet_wrap(~type, scales = "free_y")
 barsumhabdata
-ggsave("barsumhab.png", plot = barsumhabdata, width = 5, height = 3, dpi = 300)
+ggsave("../plots/barsumhab.png", plot = barsumhabdata, width = 5, height = 3, dpi = 300)
 
 #making a species composition grpah for the black flies at terrestrial and river locations
 
@@ -453,7 +453,7 @@ barbfspeciesbyhabtype <-ggplot(divhabtypeCBAY2024, aes(fill = Species, y= Specie
 
 barbfspeciesbyhabtype
 
-ggsave("barshabtype.png", plot = barbfspeciesbyhabtype, width = 6, height = 3, dpi = 300)
+ggsave("../plots/barshabtype.png", plot = barbfspeciesbyhabtype, width = 6, height = 3, dpi = 300)
 
 
 #### PART 5 - Preparing data for Multidimentional analysis ----
@@ -525,7 +525,7 @@ nmdsplot2023 <- ggplot(data = nmds_scores_2023, aes(x = NMDS1, y = NMDS2)) +
         legend.text = element_text(size = 9, colour = "black")) + 
   labs(colour = "Sampling location", fill = "Habitat type")
 nmdsplot2023
-ggsave("nmdsplothabtypeandlloc.png", nmdsplot2023, width = 4, height = 3, dpi = 300)
+ggsave("../plots/nmdsplothabtypeandlloc.png", nmdsplot2023, width = 4, height = 3, dpi = 300)
 
 anosim(species_matrix_bfht, Environmental_bfht$Habitat.type, permutations = 999, distance = "bray", strata = NULL)
 anosim(species_matrix_bfht, Environmental_bfht$ExactSite, permutations = 999, distance = "bray", strata = NULL)
