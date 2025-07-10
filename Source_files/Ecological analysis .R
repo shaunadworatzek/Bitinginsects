@@ -12,17 +12,12 @@ library(betapart)
 library(reshape2)
 library(DescTools)
 
-
-#set working directory to source file location
-
-setwd("Source_files")
-
 #### PART 1 - Cleaning the COI  data ----
 
 #open data of the dominant contigs into R
 
-CBAYCOIrestplates_Domcontigs <- read_tsv(file = "../Data/Shauna_COI_CBAY2024_TaxonomicAssignments_DominantContigs.tsv")
-CBAYCOIplate3_Domcontigs <- read_tsv(file = "../Data/Shauna_100dilution_TaxonomicAssignments_DominantContigs.tsv")
+CBAYCOIrestplates_Domcontigs <- read_tsv(file = "../raw-data/Shauna_COI_CBAY2024_TaxonomicAssignments_DominantContigs.tsv")
+CBAYCOIplate3_Domcontigs <- read_tsv(file = "../raw-data/Shauna_100dilution_TaxonomicAssignments_DominantContigs.tsv")
 
 View(CBAYCOIrestplates_Domcontigs)
 View(CBAYCOIplate3_Domcontigs)
@@ -82,7 +77,7 @@ rm(CBAYCOI_Domcontigs_blackflyspecies)
 
 #### PART 2 - Combing with sample metadata for analysis of sampling sites ----
 
-CBAY2024_sampledata <- read_csv(file = "../Data/CBAY2024_sampledata.csv")
+CBAY2024_sampledata <- read_csv(file = "../raw-data/CBAY2024_sampledata.csv")
 
 view(CBAY2024_sampledata)
 
@@ -596,7 +591,7 @@ wilcox.test(Value ~ type, data = dataframebeta)
 
 #### PART 7 - analyzing abundence data based on site and between mosquitoes and black flies ----
 
-cbay2024_abundence <- read.csv(file = "../Data/cbay2024_abundence.csv")
+cbay2024_abundence <- read.csv(file = "../raw-data/cbay2024_abundence.csv")
 
 view(cbay2024_abundence)
 

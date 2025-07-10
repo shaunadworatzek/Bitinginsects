@@ -14,14 +14,11 @@ library(ggtree)     #for plotting phylogeny trees
 library(seqinr)
 library(DECIPHER)
 
-#setting working directory to course file location
-setwd("Source_files")
-
 #### PART 1 - Mosquito phylogeny ----
 
 #opening fasta file with just the mosquito sequences 
 
-CBAY_mos_DNA <- readDNAStringSet(file = "../Data/CBAY2024mosalignment.fasta")
+CBAY_mos_DNA <- readDNAStringSet(file = "../raw-data/CBAY2024mosalignment.fasta")
 class(CBAY_mos_DNA)
 
 #preforming an alignment 
@@ -146,7 +143,7 @@ binary_matrix_traitg1 <- binary_matrix_traitg1 %>% as.data.frame() %>%
   select("SampleID","ExactSitedew line rd" , "ExactSitefreshwater river","ExactSiteGrenier lake",
          "ExactSitelong pt creek", "ExactSitegravel pit")
 
-write_tsv(binary_matrix_traitg1, "mosmetadatag1.tsv")
+write_tsv(binary_matrix_traitg1, "../processed-data/mosmetadatag1.tsv")
 
 
 # 2. Compare exact entries side by side
@@ -173,7 +170,7 @@ rownames(seqs_group2) <- trimws(rownames(seqs_group2))
 
 #making a nexus file 
 
-write.nexus.data(seqs_group1, file = "output_alignment.nex")
+write.nexus.data(seqs_group1, file = "../processed-data/output_alignment_mos1.nex")
 
 
 all(rownames(CBAY_mosmetadatagroup1) %in% seqs_group1$ranges$NAMES)
@@ -202,16 +199,16 @@ binary_matrix_traitg2 <- binary_matrix_traitg2 %>% as.data.frame() %>%
   rownames_to_column(var = "SampleID")
 
 
-write_tsv(binary_matrix_traitg2, "mosmetadatag2.tsv")
+write_tsv(binary_matrix_traitg2, "../processed-data/mosmetadatag2.tsv")
 
 #making a nexus file 
 
-write.nexus.data(seqs_group2, file = "output_alignment2.nex")
+write.nexus.data(seqs_group2, file = "../processed-data/output_alignment_mos2.nex")
 
 
 #### PART 3 - looking at all of the black fly samples ---- 
 
-CBAY_bf_DNAall <- readDNAStringSet(file = "../Data/CBAY_bf_2024.fasta")
+CBAY_bf_DNAall <- readDNAStringSet(file = "../raw-data/CBAY_bf_2024.fasta")
 class(CBAY_bf_DNAall)
 
 #preforming an alignment 
@@ -359,9 +356,9 @@ all(seqnames_clean %in% sampleIDs_clean)
 
 #making a nexus file 
 
-write.nexus.data(fasta_supb, file = "fasta_supb.nex")
+write.nexus.data(fasta_supb, file = "../processed-data/fasta_supb.nex")
 
-#### - trying to make a haplotype nwtrok for the simuluum group  ----
+#### - trying to make a haplotype network for the simuluum group  ----
 
 sampleidsimulium <- CBAY_bfmetadata  %>%
   filter(Species %in% c("Simulium noelleri", "Simulium decorum*", "Simulium vulgare*", "Simulium decimatum"))
