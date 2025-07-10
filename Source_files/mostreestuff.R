@@ -14,8 +14,8 @@ library(ggtree)     #for plotting phylogeny trees
 library(seqinr)
 library(DECIPHER)
 
-#setting working directory to coursefile location
-setwd("C:/Users/sdwor/OneDrive - University of Guelph/1- MASTERS DEGREE/Bitinginsects/Source_files")
+#setting working directory to course file location
+setwd("Source_files")
 
 #### PART 1 - Mosquito phylogeny ----
 

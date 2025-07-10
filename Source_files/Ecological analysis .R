@@ -15,7 +15,7 @@ library(DescTools)
 
 #set working directory to source file location
 
-setwd("C:/Users/sdwor/OneDrive - University of Guelph/1- MASTERS DEGREE/Bitinginsects/Source_files")
+setwd("Source_files")
 
 #### PART 1 - Cleaning the COI  data ----
 
