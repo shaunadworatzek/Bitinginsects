@@ -45,6 +45,7 @@ ggplot(CBAYCOI_Domcontigs_family, aes(y=countfamily, x=Family)) +
   geom_col(fill = "skyblue3") +
   theme_bw()  #7 families which weren't mosquitoes or black flies 
 
+rm(CBAYCOI_Domcontigs_family)
 
 #now lets look at the genus diversity of only black flies and mosquitoes
 
@@ -60,8 +61,10 @@ CBAYCOI_Domcontigs_bitinggenus <- CBAYCOI_Domcontigs %>%
 
 ggplot(CBAYCOI_Domcontigs_bitinggenus, aes(y=countgenera, x=Genus)) +
   geom_col(fill = "skyblue3") +
-  theme_bw() #w
+  theme_bw() 
 #all mosqutioes were aedes - but we saw a split in black flies between 4 different genera
+
+rm(CBAYCOI_Domcontigs_bitinggenus)
 
 #it seems like all the mosquitoes were only identified to the genus level so lets look at the species of black flies
 
@@ -74,6 +77,8 @@ ggplot(CBAYCOI_Domcontigs_blackflyspecies, aes(y=countspecies, x=Species)) +
   geom_col(fill = "skyblue3") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45)) # we got 7 different species plus unknown species
+
+rm(CBAYCOI_Domcontigs_blackflyspecies)
 
 #### PART 2 - Combing with sample metadata for analysis of sampling sites ----
 
@@ -118,6 +123,7 @@ ggplot(CBAY_2024_siteslook, aes(y= countsites, x= ExactSite)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45)) # we have 5 different sites after combing
 
+rm(CBAY_2024_siteslook)
 
 #making a graph for the different black fly species at different sites 
 
