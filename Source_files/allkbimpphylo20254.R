@@ -14,6 +14,7 @@ library(ggplot2)    #for plotting
 library(ggtree)     #for plotting phylogeny trees 
 library(seqinr)
 library(DECIPHER)
+library(betapart)
 
 #### - Preparing the site metadata for analysis ----
 
@@ -99,7 +100,7 @@ kbimp2024_sampledata <- kbimp2024_sampledata %>%
 KGLKTK_COI_Domcontigs <- read_tsv(file = "../raw-data/Shauna_COI_KGLKTK2024_TaxonomicAssignments_DominantContigs.tsv")
 CBAYCOIrestplates_Domcontigs <- read_tsv(file = "../raw-data/Shauna_COI_CBAY2024_TaxonomicAssignments_DominantContigs.tsv")
 CBAYCOIplate3_Domcontigs <- read_tsv(file = "../raw-data/Shauna_100dilution_TaxonomicAssignments_DominantContigs.tsv")
-
+problemsamples <- read_csv(file = "../raw-data/problemsamples.csv")
 View(KGLKTK_COI_Domcontigs)
 View(CBAYCOIrestplates_Domcontigs)
 View(CBAYCOIplate3_Domcontigs)
@@ -121,11 +122,13 @@ CBAYCOIplate3_Domcontigs <- CBAYCOIplate3_Domcontigs %>%
 
 #negative controls on plate 1,2,4,5,6
 
+
 CBAYCOIrestplates_Domcontigs <- CBAYCOIrestplates_Domcontigs %>%
   filter(!Sample %in% c("KBIMP_004_H11", "KBIMP_004_D12", "KBIMP_004_E12", 
                         "KBIMP_004_F12", "KBIMP_004_G12", "KBIMP_004_H10", "KBIMP-_006_H1",
                         "KBIMP-_006_H10", "KBIMP-_006_H4", "KBIMP-_006_H5", "KBIMP-_006_H6",
-                        "KBIMP-_006_H8")) %>%
+                        "KBIMP-_006_H8", "KBIMP_01_G11", "KBIMP_01_G12", "KBIMP_01_H1", "KBIMP_01_G11")) %>%
+  filter(!Sample %in% problemsamples$`problem samples`) %>%
   add_row(Plate ='KBIMP_01_CBAY2024', Sample = 'KBIMP_01_H12', ReadCount = 0) %>%
   group_by(Plate) %>%
   mutate(ReadCount = ReadCount - ReadCount[grepl("H12", Sample)]) %>%
@@ -136,10 +139,11 @@ CBAYCOIrestplates_Domcontigs <- CBAYCOIrestplates_Domcontigs %>%
 #negative controls for Kugluktuk plate 
 
 KGLKTK_COI_Domcontigs <- KGLKTK_COI_Domcontigs %>%
+  filter(!Sample %in% c("KBIMP-_008_F4", "KBIMP-_008_F5")) %>%
   mutate(ReadCount = ReadCount - ReadCount[Sample == 'KBIMP-_007_H12']) %>%
   filter(!ReadCount <= 0)
 
-length(KGLKTK_COI_Domcontigs$Sample) #120 lost 48
+length(KGLKTK_COI_Domcontigs$Sample) #118 lost 48 (some of these were due to sampling issues and not controls)
 length(CBAYCOIrestplates_Domcontigs$Sample) #354 lost 76 (but this includes the 7 repeats)
 length(CBAYCOIplate3_Domcontigs$Sample) #95 lost 0 (there were doubles of some samples)
 
@@ -160,7 +164,7 @@ write_tsv(KBIMP_Domcontigs, "../processed-data/alldata_2024_domcontigs.tsv")
 #looking at it by Family
 KBIMP_Domcontigs_family <- KBIMP_Domcontigs %>%
   select(Family) %>%
-  count(Family, name = "countfamily")
+  dplyr::count(Family, name = "countfamily")
 
 view(KBIMP_Domcontigs_family)
 
@@ -184,7 +188,7 @@ KBIMP_Domcontigs_bitinggenus <- KBIMP_Domcontigs %>%
   filter(Family != "Sphaeroceridae") %>%
   filter(Family != "unknown") %>%
   select(Genus) %>%
-  count(Genus, name = "countgenera")
+  dplyr::count(Genus, name = "countgenera")
 
 ggplot(KBIMP_Domcontigs_bitinggenus, aes(y=countgenera, x=Genus)) +
   geom_col(fill = "skyblue3") +
@@ -198,7 +202,7 @@ rm(KBIMP_Domcontigs_bitinggenus)
 KBIMP_Domcontigs_blackflyspecies <- KBIMP_Domcontigs %>%
   filter(Family == "Simuliidae") %>%
   select(Species) %>%
-  count(Species, name = "countspecies")
+  dplyr::count(Species, name = "countspecies")
 
 length(KBIMP_Domcontigs_blackflyspecies$Species) #12 species of black fly are seen here but 2 of them are unknowns 
 
@@ -214,7 +218,7 @@ rm(KBIMP_Domcontigs_blackflyspecies)
 KBIMP_Domcontigs_mosquitoes <- KBIMP_Domcontigs %>%
   filter(Family == "Culicidae") %>%
   select(Species) %>%
-  count(Species, name = "countspecies")
+  dplyr::count(Species, name = "countspecies")
 
 length(KBIMP_Domcontigs_mosquitoes$Species) #2 species of black fly are seen here but most of them are unknowns 
 
@@ -253,7 +257,7 @@ alighned_kbimpmos_DNA <- DNAStringSet(muscle::muscle(kbimp_mos_DNA))
 
 kbimp_mos_phydat <- as.phyDat(alighned_kbimpmos_DNA, type = "DNA")
 class(kbimp_mos_phydat) # is a "phyDat" object
-length(kbimp_mos_phydat) # has the  species as seen before
+length(kbimp_mos_phydat) # 192 has the  species as seen before
 
 #determining the best model for the ML tree 
 
@@ -393,8 +397,8 @@ ggsave("../plots/mosphylomoregroups.png", plot = mosquitotree2024, width = 6, he
 
 
 # Hierarchical clustering
-hc <- hclust(dist.kbimp.mos)
-groups_haplotype <- cutree(hc, k = 5) #this clustering allows me to take the various subspecies/haplotypes shown on the tree together to be saved as the required file 
+hc_hap_mos <- hclust(dist.kbimp.mos)
+groups_haplotype <- cutree(hc_hap_mos, k = 5) #this clustering allows me to take the various subspecies/haplotypes shown on the tree together to be saved as the required file 
 
 # View assignments
 table(groups_haplotype)
@@ -402,7 +406,7 @@ table(groups_haplotype)
 seqs_punctor_mos <- alighned_kbimpmos_DNA[names(groups_haplotype)[groups_haplotype == 1]]
 seqs_nigripes_mos <- alighned_kbimpmos_DNA[names(groups_haplotype)[groups_haplotype == 2]]
 seqs_excrucians_mos <- alighned_kbimpmos_DNA[names(groups_haplotype)[groups_haplotype == 4]]
-
+seqs_alaskinesis_mos <- alighned_kbimpmos_DNA[names(groups_haplotype)[groups_haplotype == 5]]
 
 kbimp_mosmetadata <- kbimp2024_sampledata %>%
   inner_join(KBIMP_Domcontigs, join_by(SampleID == Sample)) %>%
@@ -410,42 +414,26 @@ kbimp_mosmetadata <- kbimp2024_sampledata %>%
   filter(Family == "Culicidae") %>%
   add_row(SampleID = "Root", Sector = "Root")
 
-kbimp_mosmetadata_punctor <- kbimp_mosmetadata %>%
-  filter(SampleID %in% names(seqs_punctor_mos)) %>%
-  select(SampleID, ExactSite) %>%
-  column_to_rownames(var = "SampleID")
+get_binary_trait_matrix <- function(seq_data) {
+    
+    mosmetadata <- kbimp_mosmetadata %>%
+    filter(SampleID %in% names(seq_data)) %>%
+    select(SampleID, ExactSite) %>%
+    column_to_rownames(var = "SampleID")
+    
+    binary_matrix_trait <- model.matrix(~ ExactSite - 1, data = mosmetadata)
 
-kbimp_mosmetadata_nigirpes <- kbimp_mosmetadata %>%
-  filter(SampleID %in% names(seqs_nigripes_mos)) %>%
-  select(SampleID, ExactSite) %>%
-  column_to_rownames(var = "SampleID")
+    binary_matrix_trait <- binary_matrix_trait %>% as.data.frame() %>%
+      rownames_to_column(var = "SampleID") 
+  
+    return(binary_matrix_trait)
+    
+}
 
-kbimp_mosmetadata_excrucians <- kbimp_mosmetadata %>%
-  filter(SampleID %in% names(seqs_excrucians_mos)) %>%
-  select(SampleID, ExactSite) %>%
-  column_to_rownames(var = "SampleID")
-
-# Convert to binary matrix
-binary_matrix_trait_punctor <- model.matrix(~ ExactSite - 1, data = kbimp_mosmetadata_punctor)
-binary_matrix_trait_nigirpes <- model.matrix(~ ExactSite - 1, data = kbimp_mosmetadata_nigirpes)
-binary_matrix_trait_excrucians <- model.matrix(~ ExactSite - 1, data = kbimp_mosmetadata_excrucians)
-
-binary_matrix_trait_punctor <- binary_matrix_trait_punctor %>% as.data.frame() %>%
-  rownames_to_column(var = "SampleID") %>%
-  select("SampleID","ExactSitedew line rd" , "ExactSitefreshwater river","ExactSiteGrenier lake",
-         "ExactSitelong pt creek", "ExactSitegravel pit", "ExactSite4 mile bay",
-         "ExactSitebehind town", "ExactSiteother side of heart lake", "ExactSitetrail to 4 mile")
-
-binary_matrix_trait_nigirpes <- binary_matrix_trait_nigirpes %>% as.data.frame() %>%
-  rownames_to_column(var = "SampleID") %>%
-  select("SampleID","ExactSitedew line rd" , "ExactSitefreshwater river","ExactSiteGrenier lake",
-         "ExactSitelong pt creek",  "ExactSitetrail to 4 mile")
-
-binary_matrix_trait_excrucians <- binary_matrix_trait_excrucians %>% as.data.frame() %>%
-  rownames_to_column(var = "SampleID") %>%
-  select("SampleID","ExactSite4 mile bay" , "ExactSitebehind town","ExactSiteother side of heart lake",
-         "ExactSitetrail to 4 mile")
-
+binary_matrix_trait_punctor <- get_binary_trait_matrix(seqs_punctor_mos)
+binary_matrix_trait_nigirpes <- get_binary_trait_matrix(seqs_nigripes_mos)
+binary_matrix_trait_excrucians <- get_binary_trait_matrix(seqs_excrucians_mos)
+binary_matrix_trait_alaskinesis <- get_binary_trait_matrix(seqs_alaskinesis_mos)
 
 #writing the binary matrices and nexus files 
 write_tsv(binary_matrix_trait_punctor, "../processed-data/mosmetadata_punctor.tsv")
@@ -454,6 +442,9 @@ write_tsv(binary_matrix_trait_nigirpes, "../processed-data/mosmetadatag_nigirpes
 write.nexus.data(seqs_nigripes_mos, file = "../processed-data/output_alignment_nigirpes.nex")
 write_tsv(binary_matrix_trait_excrucians, "../processed-data/mosmetadataexcrucians.tsv")
 write.nexus.data(seqs_excrucians_mos, file = "../processed-data/output_alignment_excrucians.nex")
+write_tsv(binary_matrix_trait_alaskinesis, "../processed-data/mosmetadataalaskinesis.tsv")
+write.nexus.data(seqs_alaskinesis_mos, file = "../processed-data/output_alignment_alaskinesis.nex")
+
 
 
 #### - Black flies - Phylogenetic analysis and resolution of undefined species ----
@@ -467,7 +458,7 @@ kbimp_bf_DNA_df <- KBIMP_Domcontigs %>%
   select(Sample, Sequence) 
  
 
-view(kbimp_bf_DNA_df)
+#view(kbimp_bf_DNA_df)
 
 # Convert the 'sequence' column to a DNAStringSet
 kbimp_bf_DNA <- DNAStringSet(kbimp_bf_DNA_df$Sequence)
@@ -540,9 +531,9 @@ tree_with_bs <- plotBS(rooted.bstree.bf, bs)
 #After BLASTing these sequences I change the name of these 14 sequences and add the species name 
 
 speciesdata <- KBIMP_Domcontigs %>%
-  filter(Sample %in% c("KBIMP_01_B8" ,  "KBIMP_002_D12" , "KBIMP_002_E5"  , "KBIMP-_005_F4" ,
-                       "KBIMP-_006_D8"  ,   "KBIMP-_007_E10" ,
-                       "KBIMP-_006_C5"     ,      "KBIMP_003_B12" ,
+  filter(Sample %in% c("KBIMP_002_A7",  "KBIMP_002_D12" , "KBIMP_002_E5"  , "KBIMP-_005_F4" ,
+                       "KBIMP-_006_D8"  ,
+                       "KBIMP-_006_C5"     ,      "KBIMP_003_B12" ,"KBIMP-_007_E10",
                        "KBIMP_003_E7", "KBIMP_003_F2" ,"KBIMP-_005_A2",
                        "KBIMP-_007_C11" , "KBIMP-_007_C5", "KBIMP-_007_D4", "KBIMP-_007_E9",
                        "KBIMP-_008_A3", "KBIMP-_008_B2", "KBIMP-_008_D10", "KBIMP-_008_D4", "KBIMP-_008_D5")) %>%
@@ -604,7 +595,7 @@ node <- 1:Ntip(rooted.bstree.bf)
 
 bftree2024 <- (
   ggtree(rooted.bstree.bf, layout = "dendrogram", branch.length = TRUE) +
-    geom_tiplab(size =2) +
+    geom_tiplab(size =2, colour = "transparent") +
     geom_tippoint(aes(color = speciesdata$Species[node]), size = 2) +
     scale_color_manual(values = group_colors, name = "Species") +
     geom_text(aes(label = speciesdata$cluster_size[node]), vjust = 1.7, size =3) +
@@ -621,37 +612,89 @@ ggsave("../plots/bfphylo.png", plot = bftree2024, width = 6, height = 6, dpi = 3
 #### - Black flies - Getting the sequences for haplotype networks ---- 
 
 # Hierarchical clustering
-hc <- hclust(dist.kbimp.bf)
-groups <- cutree(hc, k = 20)
+hc_bf_hap <- hclust(dist.kbimp.bf)
+groups <- cutree(hc_bf_hap, k = 15)
 
 # View assignments
 table(groups)
 
-seqs_group1 <- alighned_kbimpbf_DNA[names(groups)[groups == 1]] #174: Metacnephia borealis - same with 16
-seqs_group2 <- alighned_kbimpbf_DNA[names(groups)[groups == 2]]  #21: Cnephia eremites - same with 16
+seqs_metacnephia <- alighned_kbimpbf_DNA[names(groups)[groups == 1]] #174: Metacnephia borealis - same with 16
+seqs_Cnephia <- alighned_kbimpbf_DNA[names(groups)[groups == 2]]  #15: Cnephia eremites - same with 16
+seqs_undescribed <- alighned_kbimpbf_DNA[names(groups)[groups == 3]] #82 undescribed 
+seqs_subpusillum <- alighned_kbimpbf_DNA[names(groups)[groups == 4]] #6: Simulium subpusillum - same with 16
+seqs_norelli <- alighned_kbimpbf_DNA[names(groups)[groups == 5]] #13: Simulium noelleri - 12 with 16 
+seqs_tuberosum <- alighned_kbimpbf_DNA[names(groups)[groups == 7]] 
+seqs_emergens <- alighned_kbimpbf_DNA[names(groups)[groups == 8]] #1: Stegopterna emergens - same with 16
+seqs_decimatum <- alighned_kbimpbf_DNA[names(groups)[groups == 9]] #13: Simulium decimatum - same with 16
+seqs_baffinse <- alighned_kbimpbf_DNA[names(groups)[groups == 10]] #1: Simulium baffinense - same with 16
+seqs_arcticum <- alighned_kbimpbf_DNA[names(groups)[groups == 11]] #6:  Simulium arcticum complex
+seqs_malyschevi  <- alighned_kbimpbf_DNA[names(groups)[groups == 12]] #1: Simulium decorum 
+seqs_congareenarum <- alighned_kbimpbf_DNA[names(groups)[groups == 13]] #18:Simulium congareenarum
+seqs_venustum <- alighned_kbimpbf_DNA[names(groups)[groups == 14]] #11: Simulium malyschevi
+seqs_cragi.bicorne <- alighned_kbimpbf_DNA[names(groups)[groups == 15]] #3: S tuberosum complex - same with 16
 
-seqs_group4 <- alighned_kbimpbf_DNA[names(groups)[groups == 4]] #6: Simulium subpusillum - same with 16
-seqs_group5 <- alighned_kbimpbf_DNA[names(groups)[groups == 5]] #13: Simulium noelleri - 12 with 16 
-seqs_tuberosum1 <- alighned_kbimpbf_DNA[names(groups)[groups == 7]] 
-seqs_group8 <- alighned_kbimpbf_DNA[names(groups)[groups == 8]] #1: Stegopterna emergens - same with 16
-seqs_group9 <- alighned_kbimpbf_DNA[names(groups)[groups == 9]] #13: Simulium decimatum - same with 16
-seqs_group10 <- alighned_kbimpbf_DNA[names(groups)[groups == 10]] #1: Simulium baffinense - same with 16
-seqs_decorum  <- alighned_kbimpbf_DNA[names(groups)[groups == 11]] #1: Simulium decorum 
-seqs_arcticum1 <- alighned_kbimpbf_DNA[names(groups)[groups == 12]] #6:  Simulium arcticum complex
+kbimp_bfmetadata <- kbimp2024_sampledata %>%
+  inner_join(KBIMP_Domcontigs, join_by(SampleID == Sample)) %>%
+  select(SampleID, SamplingProtocol, FieldID, ExactSite, Lat, Lon, Family, Sector) %>%
+  filter(Family == "Simuliidae") %>%
+  add_row(SampleID = "Root", Sector = "Root")
 
-seqs_group13 <- alighned_kbimpbf_DNA[names(groups)[groups == 13]] #18:Simulium congareenarum
-seqs_group14 <- alighned_kbimpbf_DNA[names(groups)[groups == 14]] #11: Simulium malyschevi
-seqs_tuberosum2 <- alighned_kbimpbf_DNA[names(groups)[groups == 15]] #3: S tuberosum complex - same with 16
-seqs_venustum <- alighned_kbimpbf_DNA[names(groups)[groups == 16]] #2: Simulium venustum complex
-seqs_subpusillum <- alighned_kbimpbf_DNA[names(groups)[groups == 17]] #2: Simulium subpusillum
-seqs_bicorne <- alighned_kbimpbf_DNA[names(groups)[groups == 19]] #2: Simulium bicorne
+get_binary_trait_matrix_bf <- function(seq_data) {
+  
+  bfmetadata <- kbimp_bfmetadata %>%
+    filter(SampleID %in% names(seq_data)) %>%
+    select(SampleID, ExactSite) %>%
+    column_to_rownames(var = "SampleID")
+  
+  binary_matrix_trait <- model.matrix(~ ExactSite - 1, data = bfmetadata)
+  
+  binary_matrix_trait <- binary_matrix_trait %>% as.data.frame() %>%
+    rownames_to_column(var = "SampleID") 
+  
+  return(binary_matrix_trait)
+  
+}
+
+binary_matrix_trait_metacnephia <- get_binary_trait_matrix_bf(seqs_metacnephia)
+binary_matrix_trait_Cnephia <- get_binary_trait_matrix_bf(seqs_Cnephia)
+binary_matrix_trait_undescribed <- get_binary_trait_matrix_bf(seqs_undescribed)
+binary_matrix_trait_subpusillum <- get_binary_trait_matrix_bf(seqs_subpusillum)
+binary_matrix_trait_norelli <- get_binary_trait_matrix_bf(seqs_norelli)
+binary_matrix_trait_arcticum <- get_binary_trait_matrix_bf(seqs_arcticum)
+binary_matrix_trait_decimatum <- get_binary_trait_matrix_bf(seqs_decimatum)
+
+#writing the binary matrices and nexus files 
+write_tsv(binary_matrix_trait_metacnephia, "../processed-data/mosmetadata_metacnephia.tsv")
+write.nexus.data(seqs_metacnephia, file = "../processed-data/output_alignment_metacnephia.nex")
+write_tsv(binary_matrix_trait_Cnephia, "../processed-data/mosmetadatag_Cnephia.tsv")
+write.nexus.data(seqs_Cnephia, file = "../processed-data/output_alignment_Cnephia.nex")
+write_tsv(binary_matrix_trait_undescribed, "../processed-data/mosmetadataundescribed.tsv")
+write.nexus.data(seqs_undescribed, file = "../processed-data/output_alignment_undescribed.nex")
+write_tsv(binary_matrix_trait_norelli, "../processed-data/mosmetadatanorelli.tsv")
+write.nexus.data(seqs_norelli, file = "../processed-data/output_alignment_norelli.nex")
+write_tsv(binary_matrix_trait_arcticum, "../processed-data/mosmetadataarcticum.tsv")
+write.nexus.data(seqs_arcticum, file = "../processed-data/output_alignment_arcticum.nex")
+
+#### - Black flies - Geeeting species groups for species data in ecological analysis ---- 
+
+# Hierarchical clustering
+hc_bf <- hclust(dist.kbimp.bf)
+groups <- cutree(hc_bf, k = 20)
+
+# View assignments
+table(groups)
 
 
-seqs_Simulium_undescribed  <- alighned_kbimpbf_DNA[names(groups)[groups == 3]] #86: Simulium sp. Unclassified - same with 16
-seqs_noelleri <- alighned_kbimpbf_DNA[names(groups)[groups == 5]] #13: Simulium noelleri - 12 with 16 
-#with 15 cuts it puts the norelli and decorum together with an addtional cut it sperates them
-#with 17 cuts it seperates the tubersum complex into a group of 8 and a group of three - the group of 6 is" Simulium annulitarse and the group of three is:Simulium
-#tuberosum complex and unspecified 
+seqs_Simulium_undescribed <- alighned_kbimpbf_DNA[names(groups)[groups == 3]] #82 undescribed 
+seqs_subpusillum <- alighned_kbimpbf_DNA[names(groups)[groups == 17]] #6: Simulium subpusillum - same with 16
+seqs_norelli <- alighned_kbimpbf_DNA[names(groups)[groups == 8]] #13: Simulium noelleri - 12 with 16 
+seqs_tuberosum1 <- alighned_kbimpbf_DNA[names(groups)[groups == 6]] 
+seqs_decorum <- alighned_kbimpbf_DNA[names(groups)[groups == 11]] #13: Simulium decimatum - same with 16
+seqs_arcticum <- alighned_kbimpbf_DNA[names(groups)[groups == 12]] #6:  Simulium arcticum complex
+seqs_tuberosum2 <- alighned_kbimpbf_DNA[names(groups)[groups == 15]] 
+seqs_venustum <- alighned_kbimpbf_DNA[names(groups)[groups == 16]] #11: Simulium malyschevi
+seqs_bicorne <- alighned_kbimpbf_DNA[names(groups)[groups == 19]] #3: S tuberosum complex - same with 16
+
 
 
 #### - Ecological analysis ----
@@ -663,14 +706,16 @@ KBIMP_updatedspecies <- KBIMP_Domcontigs %>%
   mutate(Species = ifelse(Sample %in%names(seqs_nigripes_mos) , "Aedes impiger/Aedes nigripes", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_excrucians_mos) , "Aedes excrucians", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_Simulium_undescribed) , "Simulium undescribed", Species)) %>%
-  mutate(Species = ifelse(Sample %in%names(seqs_noelleri) , "Simulium noelleri", Species)) %>%
+  mutate(Species = ifelse(Sample %in%names(seqs_norelli) , "Simulium noelleri", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_tuberosum1) , "Simulium tuberosum complex", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_tuberosum2) , "Simulium tuberosum complex", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_decorum) , "Simulium decorum", Species)) %>%
-  mutate(Species = ifelse(Sample %in%names(seqs_arcticum1) , "Simulium arcticum complex", Species)) %>%
+  mutate(Species = ifelse(Sample %in%names(seqs_arcticum) , "Simulium arcticum complex", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_venustum) , "Simulium venustum complex", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_subpusillum) , "Simulium subpusillum", Species)) %>%
   mutate(Species = ifelse(Sample %in%names(seqs_bicorne) , "Simulium bicorne", Species)) 
+
+write_tsv(KBIMP_updatedspecies, "../processed-data/KBIMP_updatedspecies.tsv")
 
 #looking at thr black fly species 
 
@@ -704,6 +749,13 @@ ggplot(KBIMP_Domcontigs_mosquitoes, aes(y=countspecies, x=Species)) +
 
 rm(KBIMP_Domcontigs_mosquitoes)
 
+#making a combined file of sample and metadata 
+
+KBIMP_domcontigs_meta <- KBIMP_updatedspecies %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID))
+
+
+write_csv(KBIMP_domcontigs_meta, "../processed-data/KBIMP_domcontigs_meta.csv")
 
 #now I make this data into a species by site matrix with each repitition at each site combined
 
@@ -722,6 +774,9 @@ species_matrix_CBAY_sites <- KBIMP_updatedspecies %>%
 
 betacbaybf <- beta.pair(species_matrix_CBAY_sites, index.family = "sorensen")  
 
+print(betacbaybf$beta.sim)
+print(betacbaybf$beta.sne)
+print(betacbaybf$beta.sor)
 
 #converting this P/A into the long format
 
@@ -748,7 +803,7 @@ tileplot <-ggplot(mat_long, aes(x = Site, y = Species, fill = Presence)) +
 
 tileplot
 
-ggsave("../plots/tileplotsl.png", plot = tileplot , width = 6, height = 3, dpi = 300)
+ggsave("../plots/tileplotscbay.png", plot = tileplot , width = 6, height = 3, dpi = 300)
 
 #now I do this again but for KGLKTK 
 
@@ -767,6 +822,9 @@ species_matrix_KGLTK_sites <- KBIMP_updatedspecies %>%
 
 betacbayKGLTK <- beta.pair(species_matrix_KGLTK_sites, index.family = "sorensen")  
 
+print(betacbayKGLTK$beta.sim)
+print(betacbayKGLTK$beta.sne)
+print(betacbayKGLTK$beta.sor)
 
 #converting this P/A into the long format
 
@@ -793,7 +851,7 @@ tileplot <-ggplot(mat_long, aes(x = Site, y = Species, fill = Presence)) +
 
 tileplot
 
-ggsave("../plots/tileplotsl.png", plot = tileplot , width = 6, height = 3, dpi = 300)
+ggsave("../plots/tileplotskug.png", plot = tileplot , width = 6, height = 3, dpi = 300)
 
 
 #now I do betadiverity comparing the two communities
@@ -812,10 +870,13 @@ species_matrix_communties <- KBIMP_updatedspecies %>%
 
 betacommunties <- beta.pair(species_matrix_communties, index.family = "sorensen")  
 
+print(betacommunties$beta.sim)
+print(betacommunties$beta.sne)
+print(betacommunties$beta.sor)
 
 #converting this P/A into the long format
 
-mat_long <- species_matrix_KGLTK_sites %>%
+mat_long <- species_matrix_communties %>%
   as.data.frame() %>%
   rownames_to_column(var = "Site") %>%
   pivot_longer(-Site, names_to = "Species", values_to = "Presence") %>%
@@ -839,6 +900,74 @@ tileplot <-ggplot(mat_long, aes(x = Site, y = Species, fill = Presence)) +
 tileplot
 
 ggsave("../plots/tileplotsl.png", plot = tileplot , width = 6, height = 3, dpi = 300)
+
+write_csv(species_matrix_communties, "../processed-data/species_matrix_communties.csv")
+write_csv(species_matrix_KGLTK_sites , "../processed-data/species_matrix_KGLTK_sites.csv")
+write_csv(species_matrix_CBAY_sites , "../processed-data/species_matrix_CBAY_sites.csv")
+
+
+#### - Looking at the relative abundance of different species ---- 
+
+
+
+
+relative_abundence_CBAY <- KBIMP_updatedspecies %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>%
+  filter(Family %in% c("Culicidae", "Simuliidae")) %>%
+  select(ExactSite, Species, Sector, FieldID) %>%
+  filter(Sector == "CBAY") %>%
+  dplyr::count(FieldID, Species, name = "Abundance") %>%
+  group_by(FieldID) %>%
+  mutate(Rel_abundence = (Abundance/ sum(Abundance))) %>%
+  ungroup()
+
+relative_abundence_CBAY <- KBIMP_updatedspecies %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>%
+  filter(Family %in% c("Culicidae", "Simuliidae")) %>%
+  filter(Sector == "CBAY") %>%
+  select(ExactSite, Species, Sector, FieldID) %>%
+  dplyr::count(ExactSite, FieldID, Species, name = "Abundance") %>%
+  group_by(ExactSite, FieldID) %>%
+  mutate(Rel_abundence = asin(Abundance / sum(Abundance))) %>%
+  ungroup() %>%
+  filter(!ExactSite %in% c("gravel pit", "Grenier lake"))
+
+
+
+#exploring data for normality and equality of variance
+
+leveneTest(Rel_abundence ~ Species, data = relative_abundence_CBAY) #p-value greater than 0.05 - vairances equal 
+shapiro.test(relative_abundence_CBAY$Rel_abundence) #p-value less than 0.05 - data not normal
+
+#running a non-parmetric test because the data did not meet the above requirements
+
+modeluniqspsample <- kruskal.test(Rel_abundence ~ Species, data = relative_abundence_CBAY)
+
+modeluniqspsample <- aov(Rel_abundence ~ Species * ExactSite, data = relative_abundence_CBAY)
+
+summary(modeluniqspsample) #Kruskal-Wallis chi-squared = 3.6514, df = 4, p-value = 0.4552
+
+
+boxplotplot <- ggplot(relative_abundence_CBAY, aes(fill = Species , y = Rel_abundence, x = ExactSite)) +
+  geom_() +
+  theme_bw(base_size = 15) +
+  xlab("Ecology of Species Detected")+
+  ylab("Relative Abundance")+
+  labs(fill = "Sampling Type") +
+  theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"), axis.title.x = element_text(size = 12),      # X-axis title font size
+        axis.title.y = element_text(size = 12), axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        legend.title = element_text(size = 12),      # Legend title font size
+        legend.text = element_text(size = 10)) 
+
+boxplotplot
+
+ggsave("violinplot2.png", boxplotplot, width = 8, height = 4, dpi = 300)
+
+
+
+
+
+
 
 
 
