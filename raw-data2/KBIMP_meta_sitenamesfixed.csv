@@ -1,0 +1,93 @@
+﻿FieldID,ExactSite,Lat,Long,Elevation (m),SamplingMethod
+CBAY0001,Iqaluktuuttiaq Lake Region,69.20079,-104.76914,17,Malaise trap
+CBAY0002,Iqaluktuuttiaq Lake Region ,69.19431,-104.75409,20,Plankton net (64 micron)
+CBAY0003,Iqaluktuuttiaq Lake Region ,69.19431,-104.75409,20,D-ring dipnet (250 micron)
+CBAY0005,Iqaluktuuttiaq Lake Region ,69.19431,-104.75409,20,Plankton net (64 micron)
+CBAY0006,Iqaluktuuttiaq Lake Region,69.20525,-104.78947,7,Malaise trap
+CBAY0008,Iqaluktuuttiaq Lake Region ,69.19431,-104.75409,20,D-ring dipnet (250 micron)
+CBAY0010,DEW line Rd,69.11325,-105.08698,22,Plankton net (64 micron)
+CBAY0011,DEW line Rd,69.11325,-105.08698,22,D-ring dipnet (250 micron)
+CBAY0012,Uvayuk Road,69.15263,-104.91357,,Plankton net (64 micron)
+CBAY0015,Uvayuk Road,69.15263,-104.91357,,D-ring dipnet (250 micron)
+CBAY0020,Iqaluktuuttiaq Lake Region,69.20555,-104.78194,10,D-ring dipnet (250 micron)
+CBAY0021,Iqaluktuuttiaq Lake Region,69.204444,-104.773889,10,Surber net
+CBAY0022,DEW line Rd,69.11325,-105.08698,,Sweep net
+CBAY0023,Uvayuk Road ,69.153455,-104.913307,20,D-ring dipnet (250 micron)
+CBAY0024,Tikiraryuaq,69.121001,-105.437764,77,D-ring dipnet (250 micron)
+CBAY0025,Kangiqhuk,69.096233,-105.274031,,Malaise trap
+CBAY0026,Swimming Hole,69.12595,-105.070236,20,D-ring dipnet (250 micron)
+CBAY0027,DEW line Rd,69.132477,-104.988683,24,Malaise trap
+CBAY0028,Swimming Hole,69.132231,-104.988717,8,Sweep net
+CBAY0029,Swimming Hole,69.132486,-104.988703,9,D-ring dipnet (250 micron)
+CBAY0030,Swimming Hole,69.132438,-104.988833,8,Surber net
+CBAY0031,Tikiraryuaq,69.121001,-105.437764,77,Plankton net (64 micron)
+CBAY0032,DEW line Rd,69.11926,-105.127426,24,Sweep net
+CBAY0033,Swimming Hole,69.134216,-104.989923,13,Sweep net
+CBAY0034,Swimming Hole,69.128611,-104.987222, ,Malaise trap
+CBAY0035,Swimming Hole,69.128939,-104.994109,6,Sweep net
+CBAY0036,Tikiraryuaq,69.132925,-105.461572,24,Sweep net
+CBAY0037,DEW line Rd,69.158318,-105.180284,24,D-ring dipnet (250 micron)
+CBAY0038,Swimming Hole,69.119246,-105.127423,,Surber net
+CBAY0039,Swimming Hole,69.130466,-104.996363,5,Sweep net
+CBAY0040,Swimming Hole,69.120943,-105.042616,,Sweep net
+CBAY0041,DEW line Rd,69.147755,-105.1927579,36,Sweep net
+CBAY0042,Iqaluktuuttiaq Lake Region,69.20535,-104.77646,10,Malaise trap
+CBAY0043,Swimming Hole,69.12861,-104.98722,10,Malaise trap
+CBAY0044,DEW line Rd,69.167666,-105.195481,32,Sweep net
+CBAY0045,Tikiraryuaq,69.13281,-105.4632,,Malaise trap
+CBAY0046,DEW line Rd,69.119312,-105.127489,22,Sweep net
+CBAY0047,Tikiraryuaq,69.133033,-105.462978,12,Sweep net
+CBAY0048,Iqaluktuuttiaq Lake Region,69.20535,-104.77646,10,Malaise trap
+CBAY0049,Tikiraryuaq,69.13244,-105.413377,12,D-ring dipnet (250 micron)
+CBAY0050,DEW line Rd,69.158205,-105.190377,15,Sweep net
+CBAY0051,Kangiqhuk,69.09205,-105.25403,8,Malaise trap
+CBAY0052,DEW line Rd,69.132477,-104.988683,,Malaise trap
+CBAY0054,Uvayuk Road ,69.152192,-104.913481,20,Sweep net
+CBAY0055,Uvayuk Road ,69.14212,-104.947332,18,Sweep net
+CBAY0056,Tikiraryuaq,69.13281,-105.4632,12,Malaise trap
+CBAY0059,Uvayuk Road ,69.153455,-104.913307,20,Plankton net (64 micron)
+CBAY0060,Swimming Hole,69.132277,-104.988613,11,Sweep net
+CBAY0061,Kangiqhuk,69.092068,-105.2498,6,Sweep net
+CBAY0062,Swimming Hole,69.12861111,-104.9897222,0,Sweep net
+CBAY0065,DEW line Rd,69.121222,-105.045298,5,Sweep net
+CBAY0066,Swimming Hole,69.11194444,-104.9858333,10,Sweep net
+CBAY0067,Kangiqhuk,69.096233,-105.274031,19,Sweep net
+CBAY0068,Kangiqhuk,69.099735,-105.227898,5,Sweep net
+CBAY0069,Kangiqhuk,69.090294,-105.225557,,Sweep net
+CBAY0070,DEW line Rd,69.119088,-105.27378,20,Sweep net
+CBAY0071,Uvayuk Road ,69.14305556,-104.9475,20,Sweep net
+CBAY0072,Iqaluktuuttiaq Lake Region,69.17888889,-104.8227778,10,Sweep net
+CBAY0073,Iqaluktuuttiaq Lake Region,69.20527778,-104.7755556,10,Sweep net
+CBAY0078,Tikiraryuaq,69.132886,-105.463173,13,Sweep net
+KGLTK0001,In Town,67.82884,-115.096,0m,DipNet
+KGLTK0002,Heart Lake,67.80845,-115.208,32m,DipNet
+KGLTK0003,Heart Lake,67.80472,-115.231,47m,Malaise trap
+KGLTK0008,Trail to Oyakgaliatakvik,67.82381,-115.151,105m,Malaise trap
+KGLTK0010,Qurluqtup Kuugaa Estuary,67.80998,-115.126,3m,Malaise trap
+KGLTK0011,In Town,67.82486,-115.09,29m,Malaise trap
+KGLTK0012,In Town,67.82484,-115.09,0m,Sweep net
+KGLTK0014,Oyakgaliatakvik,67.8202,-115.085,0m,Malaise trap
+KGLTK0015,Trail to Oyakgaliatakvik,67.8233,-115.15,11m,Malaise trap
+KGLTK0016,In Town,67.8249,-115.09,0m,SurberNet
+KGLTK0017,In Town,67.8249,-115.09,0m,DipNet
+KGLTK0018,Qurluqtup Kuugaa Estuary,67.8099,-115.126,7m,Malaise trap
+KGLTK0019,Heart Lake,67.85138,-115.272,0m,Malaise trap
+KGLTK0020,Heart Lake,67.80478,-115.232,30m,Sweep net
+KGLTK0032,Oyakgaliatakvik,67.8288,-115.096,0m,Malaise trap
+KGLTK0033,Qurluqtup Kuugaa Estuary,,,19 m,sweep net
+KGLTK0034,Oyakgaliatakvik,67.80996,-115.126,0m,Malaise trap
+KGLTK0035,Heart Lake,67.85138,-115.272,0m,Malaise trap
+KGLTK0036,Qurluqtup Kuugaa Estuary,67.82495,-115.09,0m,Malaise trap
+KGLTK0037,Trail to Oyakgaliatakvik,67.8233,-115.15,10m,Malaise trap
+KGLTK0038,In Town,67.8249,-115.09,0m,Sweep net
+KGLTK0039,In Town,67.82886,-115.102,-16m,DipNet
+KGLTK0040,Trail to Oyakgaliatakvik,67.82256,-115.092,0m,SurberNet
+KGLTK0041,Trail to Oyakgaliatakvik,67.82321,-115.15,14m,Malaise trap
+KGLTK0042,Oyakgaliatakvik,67.82892,-115.102,om,Malaise trap
+KGLTK0043,Heart Lake,67.80479,-115.231,56m,Malaise trap
+KGLTK0044,Qurluqtup Kuugaa Estuary,67.80996,-115.126,9m,Malaise trap
+KGLTK0045,Qurluqtup Kuugaa Estuary,67.80994,-115.126,0m,Sweep net
+KGLTK0046,Trail to Oyakgaliatakvik,67.82354,-115.148,21m,DipNet
+KGLTK0047,Heart Lake,67.80469,-115.231,33m,Malaise trap
+KGLTK0048,Trail to Oyakgaliatakvik,67.82358,-115.148,0m,Malaise trap
+KGLTK0049,Qurluqtup Kuugaa Estuary,67.80997,-115.126,12m,Malaise trap
