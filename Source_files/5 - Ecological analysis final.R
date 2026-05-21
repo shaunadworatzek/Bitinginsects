@@ -29,13 +29,13 @@ library(ggvenn)
 
 #opening the required data 
 
-CBAY2025_metadata <- read_csv(file = "../raw-data2/CBAY2025_metadata.csv")
-KGLTK2025_metadata <- read_csv(file = "../raw-data2/KGLTK2025_metadata.csv")
-condensedsites <- read_csv(file = "../raw-data2/condencedsites.csv")
-KBIMP2025_updatedspecies <- read_tsv(file = "../processed-data/KBIMP2025_updatedspecies.tsv")
-KBIMP2024_updatedspecies <- read_tsv(file = "../processed-data/KBIMP2024_updatedspecies.tsv")
-kbimp2024_sampledata <- read_csv(file = "../raw-data/KBIMP2024_specimendata.csv")
-kbimp2024_sitesnamesfixed <- read_csv(file = "../raw-data/KBIMP_meta_sitenamesfixed.csv")
+CBAY2025_metadata <- read_csv(file = "raw-data2/CBAY2025_metadata.csv")
+KGLTK2025_metadata <- read_csv(file = "raw-data2/KGLTK2025_metadata.csv")
+condensedsites <- read_csv(file = "raw-data2/condencedsites.csv")
+KBIMP2025_updatedspecies <- read_tsv(file = "processed-data/KBIMP2025_updatedspecies.tsv")
+KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspecies.tsv")
+kbimp2024_sampledata <- read_csv(file = "raw-data/KBIMP2024_specimendata.csv")
+kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data/KBIMP_meta_sitenamesfixed.csv")
 
 #### - Preparing the site metadata for analysis ----
 
@@ -193,7 +193,7 @@ iNext <- ggiNEXT(em.inext)+
   scale_shape_manual( values = c(15, 16, 17, 18))
 
 
-ggsave("../plots/inext2025and2024.png", iNext , width = 6, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025and2024.png", iNext , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 ##### iNEXT both places, just black flies both months #####  
 
@@ -239,7 +239,7 @@ iNext_bf <- ggiNEXT(em.inext.sim)+
                     name = "Region") +
   scale_shape_manual( values = c(15, 16, 17, 18))
 
-ggsave("../plots/inext2025bf.png", iNext_bf , width = 6, height = 5, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025bf.png", iNext_bf , width = 6, height = 5, dpi = 300, bg = "transparent")
 
 ##### Just CBAY, just black flies for presentation graphic #####
 
@@ -280,7 +280,7 @@ iNext_bf <- ggiNEXT(em.inext.sim)+
   scale_shape_manual( values = c(15, 16, 17, 18)) +
   scale_y_continuous(limits = c(0, 30))
 
-ggsave("../plots/inext2025bfcbay.png", iNext_bf , width = 6, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025bfcbay.png", iNext_bf , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 ##### Both places, mosquitoes, both months #####
 
@@ -321,7 +321,7 @@ iNext_mos <- ggiNEXT(em.inext.cul)+
   scale_shape_manual( values = c(15, 16, 17, 18))
 
 
-ggsave("../plots/inext2025mos.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025mos.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 ##### Just CBAY, just mosquitoes for presentation graphic #####
 
@@ -354,7 +354,7 @@ iNext_mos <- ggiNEXT(em.inext.cul)+
   scale_y_continuous(limits = c(0, 8))
 
 
-ggsave("../plots/inext2025moscbay.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025moscbay.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 
 ##### determining if sampling extend was okay in August for mosquitoes #####
@@ -397,13 +397,13 @@ iNext_mos <- ggiNEXT(em.inext.cul)+
   scale_shape_manual( values = c(15, 16, 17, 18))
 
 
-ggsave("../plots/inext2025mos.png", iNext_mos , width = 6, height = 5, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025mos.png", iNext_mos , width = 6, height = 5, dpi = 300, bg = "transparent")
 
 
 
 #### - Investigating differences since 2012 ----
 
-sr_2012 <- read.csv(file = "../raw-data/schafer_2012.csv")
+sr_2012 <- read.csv(file = "raw-data/schafer_2012.csv")
 
 ##### venn diagram/ determining which species are different #####
 
@@ -446,7 +446,7 @@ venncbay <- ggvenn(venncbay,
                    fill_color = c("#000099", "#FFC000"),
                    set_name_size = 2, stroke_size = 0.6, text_size = 3)
 
-ggsave("../plots/venncbay.png", venncbay, width = 4, height = 2, dpi = 300)
+ggsave("plots/venncbay.png", venncbay, width = 4, height = 2, dpi = 300)
 
 vennkug <- venndiagramspecieslist %>%
   select(KGLTK,Kug, Species) %>%
@@ -469,12 +469,12 @@ vennkug <- ggvenn(vennkug,
                   fill_color = c("#000099", "#FFC000"),
                   set_name_size = 2, stroke_size = 0.6, text_size = 3)
 
-ggsave("../plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
+ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
 
 ##### making the figure for the change in the number of vectors #####
 
 
-vector_change <- read_csv(file = "../raw-data2/vector_change.csv")
+vector_change <- read_csv(file = "raw-data2/vector_change.csv")
 
 vector2012 <- vector_change %>%
   mutate(Count = ifelse(Year == "24/25", NA, Count))
@@ -503,9 +503,9 @@ vectorchange <- ggplot(vector2012, aes(x = Year, y =  Count, group = Type, colou
     strip.text  = element_text(face = "bold", size = 14)) 
 
 
-ggsave("../plots/vectorchangecbay1.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/vectorchangecbay1.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
 
-vector_change_kug <- read_csv(file = "../raw-data2/vector_change_kug.csv")
+vector_change_kug <- read_csv(file = "raw-data2/vector_change_kug.csv")
 
 vectorkug2012 <- vector_change_kug %>%
   mutate(Count = ifelse(Year == "24/25", NA, Count))
@@ -534,7 +534,7 @@ vectorchangekug <- ggplot(vectorkug2012, aes(x = Year, y =  Count, group = Type,
     strip.text  = element_text(face = "bold", size = 14)) 
 
 
-ggsave("../plots/vectorchangekug1.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/vectorchangekug1.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
 
 #figure with both years for cbay
 
@@ -560,7 +560,7 @@ vectorchange <- ggplot(vector_change, aes(x = Year, y =  Count, group = Type, co
     strip.text  = element_text(face = "bold", size = 14)) 
 
 
-ggsave("../plots/vectorchangecbay.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/vectorchangecbay.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
 
 #figure with both years for kugluktuk 
 
@@ -586,7 +586,7 @@ vectorchangekug <- ggplot(vector_change_kug, aes(x = Year, y =  Count, group = T
     strip.text  = element_text(face = "bold", size = 14)) 
 
 
-ggsave("../plots/vectorchangekug.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/vectorchangekug.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
 
 
 #### - Alpha div analysis ----
@@ -698,7 +698,7 @@ speciesrichplot <- ggplot() +
   
   facet_wrap(~Family) 
 
-ggsave("../plots/lineSRtotalSRcbayvskug.png", speciesrichplot , width = 10, height = 4, dpi = 300, bg = "transparent")
+ggsave("plots/lineSRtotalSRcbayvskug.png", speciesrichplot , width = 10, height = 4, dpi = 300, bg = "transparent")
 
 #### - Multidimentional 2024 and 2025 ----
 
@@ -825,7 +825,7 @@ nmdsplotmos <- ggplot(data = nmds_scores, aes(x = NMDS1, y = NMDS2)) +
 nmdsplotmos 
 
 
-ggsave("../plots/nmdsplotmos2024and2025.png", nmdsplotmos, width = 3, height = 3, dpi = 300)
+ggsave("plots/nmdsplotmos2024and2025.png", nmdsplotmos, width = 3, height = 3, dpi = 300)
 
 
 ##### just black flies -----
@@ -930,7 +930,7 @@ nmdsplotbf <- ggplot(data = nmds_scores, aes(x = NMDS1, y = NMDS2)) +
 nmdsplotbf
 
 
-ggsave("../plots/nmdsplotbf2024and2025.png", nmdsplotbf, width = 3, height = 3, dpi = 300)
+ggsave("plots/nmdsplotbf2024and2025.png", nmdsplotbf, width = 3, height = 3, dpi = 300)
 
 #two of the points are making it really hard to see the data so I am going to remove these points for plotting 
 ##### - just black flies with those two kugluktuk samples removed -----
@@ -1028,7 +1028,7 @@ nmdsplotbf2 <- ggplot(data = nmds_scores, aes(x = NMDS1, y = NMDS2)) +
 
 nmdsplotbf2 
 
-ggsave("../plots/nmdsplotbf22024and2025.png", nmdsplotbf2, width = 3, height = 3, dpi = 300)
+ggsave("plots/nmdsplotbf22024and2025.png", nmdsplotbf2, width = 3, height = 3, dpi = 300)
 
 ##### mosquitoes and black flies just sweep nets -----
 
