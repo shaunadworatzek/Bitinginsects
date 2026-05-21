@@ -1,0 +1,582 @@
+Sample,Site,Sample Replicate,Date set,Date collected,Collector,Sample type collection method,Lat,Lon,Elevation (m),Habitat type,Sample current location,Distance from water (m),HOBO tracker #,HOBO deployment date ,HOBO deployment time ,Temp C (Sweep),Relative Humidity (Sweep),DEWpt degrees C (sweep) ,Collection time period,Perservative,Notes,SHIPPING INFO,OWNER,Mosquito Head Abundance,Blackfly Head Abundance,Mosquito body count,Blackfly body count,When sorted,Mosquito head code,Blackfly head code,Mosquito body code,Blackfly body code,,,,,,,,
+CBAY0075,River at Swimming hole ,Sample 1,N/A,04-Aug-25,S. Dworatzek,Sweep net,69.1293,-104.99179,6,Lotic,Mail,0-5,22332997,04-Aug-25,13:27,22.41,51.78,12.02,5 mins,30 ml of 100% ETOH,"Quite windy and sunny;
+Bushes fairly small but continuous",Box 1,Guelph,0,500,0,503,never sorted in 96-well plate,NA,CBAY0075_BF_H,NA,CBAY0075_BF_B,,,,,number of samples left to do ,# of samples done,# of samples we may not do ,# of sample left without bad samples 
+CBAY0079,Greiner Lake Inlet,Sample 1,N/A,04-Aug-25,L. Chan,Sweep net,69.17868,-104.82275,5,Lotic,Mail,0-5,22332997,04-Aug-25,10:50,19.93,55.7,10.89,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Sunny and not very windy when sweeping;
+Bushes small and fragmented, small river going into Greiner, ground very wet",Box 1,Guelph,3,65,3,66,never sorted in 96-well plate,CBAY0079_M_H,CBAY0079_BF_H,CBAY0079_M_B,CBAY0079_BF_B,,,,,12,169,14,-2
+CBAY0084,In front of College ,Sample 1,N/A,04-Aug-25,L. Chan,Sweep net,69.12257,-105.05666,15,Lentic,Mail,0-5,22332997,04-Aug-25,17:15,18.37,59.53,10.36,5 mins,30 ml of 100% ETOH,"Tall green grass with some wild cotton;
+Grasses mostly growing next to a small pond but some growing inside the pond",Box 1,Guelph,3,14,3,14,previously sorted into 96 well plates ,CBAY0084_M_H,CBAY0084_BF_H,CBAY0084_M_B,CBAY0084_BF_B,,,,,,,,
+CBAY0091,Dew line Road 1,Sample 1,N/A,01-Aug-25,L. Chan,Sweep net,69.13698,-105.17181,25,Lentic,Mail,15-25,22332997,01-Aug-25,15:32,17.67,50.76,7.33,5 mins,30 ml of 100% ETOH,"The coordinnates taken last time was very inaccurate
+Same distance as last time (July 28);
+Wet ground, small bushes but more continuous",Box 1,Guelph,4,0,4,0,never sorted in 96-well plate,CBAY0091_M_H,,CBAY0091_M_B,,,,,,11133,,,
+CBAY0092,First Creek,Opportunistic ,N/A,01-Aug-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.13284,-105.463245,-5,Lotic,Mail,N/A,22332997,01-Aug-25,13:43,15.43,56.77,6.91,N/A,30 ml of 100% ETOH,"Sunny, not too windy;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22",Box 1,Guelph,139,2,140,2,never sorted in 96-well plate,CBAY0092_M_H,CBAY0092_BF_H,CBAY0092_M_B,CBAY0092_BF_B,,,,,,,,
+CBAY0095,Sewage-Dump,Week 2,26-Jul-25,02-Aug-25,"S. Dworatzek, L. Chan",Malaise trap,69.127081,-105.026465,11,Lentic,Mail,2.01,22332999,July 19 2025,16:22,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Next to the sewage lagoon and behind the dump,
+lots of garbage at site,
+lots of birds at site (sand pipers, gulls, geese, ducks, 
+phalaropes, Buntings, Sand Hill Cranes), 
+Many sand pipers more than other areas which is an indicator of invertebrates their main diet, 
+(way point #61)",Box 2,Guelph,7,2,7,2,previously sorted into 96 well plates ,CBAY0095_M_H,CBAY0095_BF_H,CBAY0095_M_B,CBAY0095_BF_B,,,,,,,,
+CBAY0096,Airport Road 2,Week 1,20-Jul-25,27-Jul-25,"S. Dworatzek, D. Nowosad, L. Chan, J. Bernhardt, T. McIlwraith, L. Jackson",Malaise Trap,69.11678,-105.088061,11,Lentic,Mail,2.01,22332988,20-Jul-25,12:00,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Pond without flow input and sandy/rocky bottom, ground surounding pond rocky,
+some large puddles but rest of ground relativly dry, wind direction to back of trap, 
+lots of bird poops nearby,
+had to secure trap woth two addtional metal wires at the back, 
+had to secure leads at back to metal wire with paracord, 
+very windy on set up date (July 20, 2025);
+(way point #64); Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 25","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,1,0,0,0,previously sorted into 96 well plates ,CBAY0096_M_H,N/A,N/A,N/A,,,,,,,,
+CBAY0097,Construction Shop,Week 1,19-Jul-25,26-Jul-25,"S. Dworatzek, D. Nowosad, L. Chan, J. Bernhardt",Malaise trap,69.126256,-105.037837,7,Lentic,Mail,5.79,22165546,19-Jul-25,17:30,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","This site is located behind a construction shop; 
+Swampy ground with many puddles; 
+Very windy on set up date (July 19 2025)
+(way point #62);
+Collected @ 11:47, new bottle CBAY0106","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,2,0,1,0,previously sorted into 96 well plates ,CBAY0097_M_H,N/A,CBAY0097_M_B,N/A,,,,,,,,
+CBAY0098,Behind College,Sample 1,N/A,04-Aug-25,L. Chan,Sweep net,69.1235,-105.06234,19,Lentic,Mail,0-5,22332997,04-Aug-25,18:15,19.07,62.57,11.82,5 mins,30 ml of 100% ETOH,"Mostly small to medium bushes with tall grasses when bushes were fragmented, ground dry",Box 1,Guelph,8,7,8,8,never sorted in 96-well plate,CBAY0098_M_H,CBAY0098_BF_H,CBAY0098_M_B,CBAY0098_BF_B,,,,,,,,
+CBAY0099,Airport Road 2,Week 2,27-Jul-25,03-Aug-25,"L. Chan, 
+S.Dworatzek",Malaise Trap,69.11678,-105.088061,11,Lentic,Mail,2.01,22332988,20-Jul-25,12:00,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Pond without flow input and sandy/rocky bottom, ground surounding pond rocky,
+some large puddles but rest of ground relativly dry, wind direction to back of trap, 
+lots of bird poops nearby,
+had to secure trap woth two addtional metal wires at the back, 
+had to secure leads at back to metal wire with paracord, 
+very windy on set up date (July 20, 2025) and date that the trap was taken down (Aug 3, 2025)
+(way point #64); Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 25
+HOBO wasn't logging :(((",Box 3,Guelph,14,6,14,6,previously sorted into 96 well plates ,CBAY0099_M_H,CBAY0099_BF_H,CBAY0099_M_B,CBAY0099_BF_B,,,,,,,,
+CBAY0100,In front of College ,Sample 2,N/A,04-Aug-25,S. Dworatzek,Sweep net,69.12257,-105.05666,15,Lentic,Mail,0-5,22332997,04-Aug-25,17:15,18.37,59.53,10.36,5 mins,30 ml of 100% ETOH,"Tall green grass with some wild cotton, gorwing mostly next to small pond but some inside of pond, sunny and still a little windy",Box 1,Guelph,6,3,7,3,never sorted in 96-well plate,CBAY0100_M_H,CBAY0100_BF_H,CBAY0100_M_B,CBAY0100_BF_H,,,,,,,,
+CBAY0101,Sewage-Dump,Week 1,19-Jul-25,26-Jul-25,"S. Dworatzek, D. Nowosad, L. Chan, J. Bernhardt",Malaise trap,69.127081,-105.026165,11,Lentic,Mail,2.01,22332999,July 19 2025,16:22,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Next to the sewage lagoon and behind the dump,
+lots of garbage at site,
+lots of birds at site (sand pipers, gulls, geese, ducks, 
+phalaropes, Buntings, Sand Hill Cranes), 
+Many sand pipers more than other areas which is an indicator of invertebrates their main diet, 
+(way point #61);
+Collected @ 10:30, new bottle is CBAY0095","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0102,West Arm Beach,Sample 2,N/A,05-Aug-25,S. Dworatzek,Sweep net,69.09205,-105.25403,3,Terrestrial,Mail,N/A,22332997,05-Aug-25,11:19,15.15,62.71,8.13,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Partially cloudy with some lighy breezes. Wind died down compared to how it was around 10am;
+Medium grass with some small bushes;
+The ground is much drier this time but some places still have small puddles",Box 2,Guelph,2,0,2,0,previously sorted into 96 well plates ,CBAY0102_M_H,N/A,CBAY0102_M_B,N/A,,,,,,,,
+CBAY0103,Airport Road 1,Week 1,20-Jul-25,27-Jul-25,"S. Dworatzek, D. Nowosad, L. Chan, J. Bernhardt, T. McIlwraith, L. Jackson",Malaise trap,69.117397,-105.081726,5,Lentic,Mail,3,22332989,20-Jul-25,11:12,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","On the outskirts of Town;
+Swampy and soft ground surrounded by a river and a pond;
+not many birds around compared to sewage dump and construction shop sites;
+Very windy on set up date (July 20, 2025)
+(way point #63); Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 25","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,1,4,1,4,previously sorted into 96 well plates ,CBAY0103_M_H,CBAY0103_BF_H,CBAY0103_M_B,CBAY0103_BF_B,,,,,,,,
+CBAY0104,Airport Road 1,Week 2,27-Jul-25,03-Aug-25,"L. Chan, 
+S.Dworatzek",Malaise Trap,69.117397,-105.081726,5,Lentic,Mail,3,22332989,20-Jul-25,11:12,,,,1 week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","On the outskirts of Town;
+Swampy and soft ground surrounded by a river and a pond;
+not many birds around compared to sewage dump and construction shop sites;
+Very windy on set up date (July 20, 2025) and date that the trap was taken down (Aug 3, 2025)
+(way point #63); Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 25",Box 3,Guelph,4,14,4,14,previously sorted into 96 well plates ,CBAY0104_M_H,CBAY0104_BF_H,CBAY0104_M_B,CBAY0104_BF_B,,,,,,,,
+CBAY0105,First Creek,Sample 2,N/A,22-Jul-25,L. Chan,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,11,22332997,22-Jul-25,N/A,9.25,65.52,N/A,3 mins,75 ml of 100% ETOH,"Rocky, area protected by a high bluff, shallow creek with a few large erratics, creek is audibly moving;
+damp soil on creek edge with pools around, grasses on far side;
+light breeze and overcast on the date of collection;
+Near small pond 11 m from the creek on transect, have some bushes but not overly bushy;
+In SD's fieldbook this sample was CBAY0139, but the sample was actually placed in a bottle labeled CBAY0105","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,,,,,,,,,,,,,,,,,
+CBAY0106,Construction Shop,Week 2,26-Jul-25,02-Aug-25,"S. Dworatzek, L. Chan",Malaise trap,69.126256,-105.037837,7,Lentic,Mail,5.79,22165546,19-Jul-25,17:30,,,,1 Week,"400 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","This site is located behind a construction shop; 
+Swampy ground with many puddles; 
+Very windy on set up date (July 19 2025)
+(way point #62)",Box 2,Guelph,7,4,7,4,Sorted into 96-well plates first ,CBAY_0106_M_H,CBAY_0106_BF_H,CBAY_0106_M_B,CBAY_0106_BF_B,,,,,,,,
+CBAY0107,River at Swimming hole ,Sample 2,N/A,04-Aug-25,L. Chan,Sweep net,69.1293,-104.99179,6,Lotic,Mail,0-5,22332997,04-Aug-25,13:27,22.41,51.78,12.02,5 mins,30 ml of 100% ETOH,"Quite windy and sunny;
+Bushes fairly large and continuous",Box 1,Guelph,4,500,4,499,never sorted in 96-well plate,CBAY_0107_M_H,CBAY_0107_BF_H,CBAY_0107_M_B,CBAY_0107_BF_B,,,,,,,,
+CBAY0108,Airport Road 5,Sample 1,N/A,05-Aug-25,S. Dworatzek,Sweep net,69.11612,-105.08144,10,Lentic,Mail,10-15,22332997,05-Aug-25,15:59,17.01,64.11,10.19,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Bushes fragmented, some large and some small; ground dry in some parts and slightly wet in others, bushes very dusty
+Ground dry with small creek coming out of pond on the middle of sample 1, evidence of another one which dried up ",Box 2,Guelph,32,168,32,168,Sorted into 96-well plates first ,CBAY_0108_M_H,CBAY_0108_BF_H,CBAY_0108_M_B,CBAY_0108_BF_B,,,,,,,,
+CBAY0109,Pond in front of Dump,Sample 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.121082,-105.043032,3,Lentic,Mail,1,22332997,22-Jul-25,10:49,8.94,67.09,3.3,3 mins,75 ml of 100% ETOH,"We were using the transect method where we sampled two replicates along each transect at each distance 
+from the freshwater, We sampled in a bushy that was the large willow bushes, there was a lot of garbage, 
+There was a lot of birds in the pond (swan, ducks, phaloropes)","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0110,Greiner Lake Inlet,Haphazard 1,N/A,21-Jul-25,"J. Bernhardt, L. Chan, S. Dworatzek",Sweep net,69.178445,-104.819465,CHECK WAY POINT,Lentic,Mail,1,N/A,N/A,N/A,,,,not recorded ,75 ml of 100% ETOH,"Samples taken by sweeping in bushes - it was too cold and windy for insects, sample was combined between 
+sweeping from both Lilian and Shauna, we were still distilling our method, 
+we may not have been collecting at the best spot in this location because the HTO got more insects in their sample, 
+lost some insects due to asperator not working the best, a little bit chaotic because we were running as we swept","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,0,2,0,2,never sorted in 96-well plate,N/A,CBAY_0110_BF_H,N/A,CBAY_0110_BF_B,,,,,,,,
+CBAY0111,Construction Shop 1,Sample 4,N/A,23-Jul-25,L. Chan,Sweep net,69.126489,-105.038541,7,Lentic,Mail,12.1,22332997,23-Jul-25,11:56,7.8,83.56,5.2,3 mins,75 ml of 100% ETOH,"Sweep net along 15 m transect line for 3 mins, 
+Rocky and low level veg with some grasses ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,,,,,,,,,,,,,,,,,
+CBAY0112,Construction Shop 1,Sample 2,N/A,23-Jul-25,L. Chan,Sweep net,69.126489,-105.038541,7,Lentic,Mail,12.3,22332997,23-Jul-25,11:27,8.7,74.31,4.39,3 mins,75 ml of 100% ETOH,"Sweep net along a 15 meters transect line parallel to the edge of the pond for 3 mins;
+Rocky and low level veg with some grasses ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,,,,,,,,,,,,,,,,,
+CBAY0114,Creek at end of Pelly Road,Sample 2,N/A,24-Jul-25,L. Chan,Sweep net,69.204162,-104.774428,21,Lotic,Mail,20-25,22332997,24-Jul-25,12:21,12.26,55.76,3.69,5 mins,75 ml of 100% ETOH,Swampy with some puddles,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,1,1,1,1,previously sorted into 96 well plates ,CBAY0114_M_H,CBAY0114_BF_H,CBAY0114_M_B,CBAY0114_BF_B,,,,,,,,
+CBAY0115,First Creek,Haphazard 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,N/A,22332997,22-Jul-25,N/A,N/A,N/A,N/A,N/A,75 ml of 100% ETOH,"Sweep net haphazardly; 
+Rocky, area protected by a high bluff, shallow creek with a few large erratics, creek is audibly moving;
+damp soil on creek edge with pools around, grasses on far side;
+light breeze and overcast on the date of collection","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,3,19,2,19,previously sorted into 96 well plates ,CBAY0115_M_H,CBAY0115_BF_H,CBAY0115_M_B,CBAY0115_BF_B,,,,,,,,
+CBAY0117,Construction Shop 1,Sample 1,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.126489,-105.038541,7,Lentic,Mail,1,22332997,23-Jul-25,11:27,8.7,74.31,4.39,3 mins,75 ml of 100% ETOH,"We used a new method for sampling from now on: sweep net along a 15 meters transect line parallel to the edge of the pond for 3 mins;
+Mossy, swampy, grassy, with many large puddles of water some of which were quite deep and some connected to the pond","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,,,,,,,,,,,,,,,,,
+CBAY0118,Construction Shop 1,Sample 3,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.126489,-105.038541,7,Lentic,Mail,0.6,22332997,23-Jul-25,11:56,7.8,83.56,5.2,3 mins,75 ml of 100% ETOH,"Sweep net along 15 m transect line for 3 mins, area was marshy and wet with high grass but not any bushes, 
+many wet puddles some of which connected to the pond others were completely seperate  ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0119,Freshwater river,Haphazard 1,N/A,21-Jul-25,"J. Bernhardt, L. Chan, S. Dworatzek",Sweep net,69.143364,-104.945461,13,Lentic,Mail,1,N/A,N/A,N/A,,,,not recorded ,75 ml of 100% ETOH,"Only Shauna collected this sample,
+Also cold and windy so not many bugs were seen but we got more bugs compared to Greiner Lake sample collected on the same day
+We sweep net around the bushes
+Slightly less chaotic than the above sample.","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0122,Construction Shop 2,Sample 4,N/A,23-Jul-25,L. Chan,Sweep net,69.126152,-105.043931,21,Lentic,Mail,20.3,22332997,23-Jul-25,10:38,11.42,61.51,4.3,1 min 30s,75 ml of 100% ETOH,"Very grassy agrea with some of the grass being quite tall, spot was quite dry and maybe even a little rocky with the most prominent feature being the tall grass ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0123,Construction Shop 2,Haphazard 2,N/A,23-Jul-25,L. Chan,Sweep net,69.126152,-105.043931,21,Lentic,Mail,N/A,22332997,23-Jul-25,10:38,11.42,61.51,4.3,3 mins,75 ml of 100% ETOH,Sweep net haphazardly for 3 mins,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,1,0,1,0,previously sorted into 96 well plates ,CBAY0123_M_H,N/A,CBAY0123_M_B,N/A,,,,,,,,
+CBAY0126,Construction Shop 2,Sample 3,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.126152,-105.043931,21,Lentic,Mail,13.2,22332997,23-Jul-25,10:38,11.42,61.51,4.3,1 min 30s,75 ml of 100% ETOH,"Very grassy agrea with some of the grass being quite tall, not very wet compared to other locations like construction shop 1","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0127,Freshwater river,Sample 4,N/A,23-Jul-25,L. Chan,Sweep net,69.143213,-104.945246,12,Lotic,Mail,2.4,22332997,23-Jul-25,16:31,8.2,70.05,3.08,3 mins,75 ml of 100% ETOH,"Was much more sheltered in this bushy area and the ground was wet and very mossy, 
+but no puddles on the ground just more moist and completely covered with rocks, 
+also near a part of the river which did not move as fast","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,,,,,,,,,,,,,,,,,
+CBAY0132,Airport Road 2,Sample 1,N/A,27-Jul-25,L. Chan,Sweep net,69.11678,-105.088061,11,Lentic,Mail,15-25,22332997,27-Jul-25,4:07,9.69,65.61,3.61,5 mins,30 ml of 100% ETOH,"Only tall grass which was lighter in colour (brown);
+Ground very wet with orangish mud, 
+has puddles on the gound some fairly large ","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,1,0,1,previously sorted into 96 well plates ,N/A,CBAY_0132_BF_H,N/A,CBAY_0132_BF_B,,,,,,,,
+CBAY0134,The Beach,Haphazard 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.105726,-105.404446,,Terrestrial,Mail,N/A,22332997,22-Jul-25,16:39,11.5,58.43,3.8,3 mins,75 ml of 100% ETOH,"Sweep net haphazardly in grassy area (looking for sandflies)
+some wet divits;
+Environmental measurements may not be accurate since the HOBO was not given enough time to adjust to ambient environment","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0135,Pond in front of Dump,Sample 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.121082,-105.043032,3,Lentic,Mail,21,22332997,22-Jul-25,11:24,8.32,73.43,3.36,3 mins,75 ml of 100% ETOH,"Rocky and barren ground woth some grassy bushes but otherwise empty, still managed to get one bug but it may 
+have already been dead apon collection","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0136,River at Swimming hole ,Opportunistic ,N/A,24-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.12863,-104.98762,ASK TAD,Lotic,Mail,N/A,22332997,24-Jul-25,1:35,13.28,55.4,4.55,N/A,75 ml of 100% ETOH,Got many mosquitoes,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,25,52,24,52,previously sorted into 96 well plates ,CBAY0136_M_H,CBAY0136_BF_H,CBAY0136_M_B,CBAY0136_BF_B,,,,,,,,
+CBAY0137,First Creek,Sample 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,1,22332997,22-Jul-25,N/A,10,72,N/A,3 mins,75 ml of 100% ETOH,"Rocky, area protected by a high bluff, shallow creek with a few large erratics, creek is audibly moving;
+damp soil on creek edge with pools around, grasses on far side;
+light breeze and overcast on the date of collection;
+1 m from the creek on transect, not bushy and likely the reason we did not get much (sample 2 has nothing)","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0139,First Creek,Sample 1,N/A,22-Jul-25,S. Dworatzek,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,11,22332997,22-Jul-25,N/A,9.25,65.52,N/A,3 mins,75 ml of 100% ETOH,"Rocky, area protected by a high bluff, shallow creek with a few large erratics, creek is audibly moving;
+damp soil on creek edge with pools around, grasses on far side;
+light breeze and overcast on the date of collection;
+Near small pond 11 m from the creek on transect, have some bushes but not overly bushy","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0140,Creek at end of Pelly Road,Opportunistic,N/A,24-Jul-25,L. Chan,"Taking mosquitoes off people with aspirator
+""i.e. sucking off people"" - Shauna",69.204162,-104.774428,21,Lotic,Mail,N/A,22332997,24-Jul-25,12:21,12.26,55.76,3.69,N/A,75 ml of 100% ETOH,Got many mosquitoes,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,56,0,51,0,previously sorted into 96 well plates ,CBAY0140_M_H,N/A,CBAY0140_M_B,N/A,,,,,,,,
+CBAY0141,Creek at end of Pelly Road,Haphazard 1,N/A,24-Jul-25,"T. McIlwraith, J. Bernhardt",Sweep net,69.204162,-104.774428,21,Lotic,Mail,N/A,22332997,24-Jul-25,12:21,12.26,55.76,3.69,N/A,75 ml of 100% ETOH,,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,11,0,11,0,never sorted in 96-well plate,CBAY0141_M_H,N/A,CBAY0141_M_B,N/A,,,,,,,,
+CBAY0142,Construction Shop 3,Sample 2,N/A,26-Jul-25,L. Chan,Sweep net,69.125642,-105.035794,-3,Lentic,Mail,0-5,22332997,26-Jul-25,12:12,12.8,66.07,6.71,5 mins,30 ml of 100% ETOH,"Sampled at a different pond nearby (pond 3)
+Lots of bushes, wet ground with puddles","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0143,Freshwater river,Sample 3,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.143213,-104.945246,12,Lotic,Mail,4.9,22332997,23-Jul-25,16:31,8.2,70.05,3.08,3 mins,75 ml of 100% ETOH,Didn't record HOBO deployment time ,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0144,First Creek,Haphazard 2,N/A,22-Jul-25,L. Chan,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,N/A,22332997,22-Jul-25,N/A,N/A,N/A,N/A,N/A,75 ml of 100% ETOH,"Sweep net haphazardly;
+Rocky, area protected by a high bluff, shallow creek with a few large erratics, creek is audibly moving;
+damp soil on creek edge with pools around, grasses on far side;
+light breeze and overcast on the date of collection;
+In SD's fieldbook this sample was CBAY0117, but the sample was actually placed in a bottle labeled CBAY0144","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0145,The Beach,Haphazard 2,N/A,22-Jul-25,L. Chan,Sweep net,69.105726,-105.404446,,Terrestrial,Mail,N/A,22332997,22-Jul-25,16:39,11.5,58.43,3.8,3 mins,75 ml of 100% ETOH,"Sweep net haphazardly; 
+Environmental measurements may not be accurate since the HOBO was not given enough time to adjust to ambient environment","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0146,Freshwater river,Sample 2,N/A,23-Jul-25,L. Chan,Sweep net,69.143213,-104.945246,12,Lotic,Mail,3.2,22332997,23-Jul-25,15:46,10.95,58.65,3.18,3 mins,75 ml of 100% ETOH,"Hole in net may have lost some insects on collection, sampled along a 15 m transect, 
+put transect along the side of the river which was more sheltered;
+mostly bushes","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0147,River at Swimming hole ,Sample 2,N/A,24-Jul-25,S. Dworatzek,Sweep net,69.12863,-104.98762,ASK TAD,Lotic,Mail,0-5,22332997,24-Jul-25,1:35,13.28,55.4,4.55,5 mins,75 ml of 100% ETOH,"Really long patch of bushes on one side of the river which was wet in some pacthes with moss but mainly sampling from the bushes, 
+Taped up net and brought back to lab to asperate ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,1,20,1,20,previously sorted into 96 well plates ,CBAY0147_M_H,CBAY0147_BF_H,CBAY0147_M_B,CBAY0147_BF_H,,,,,,,,
+CBAY0148,Creek at end of Pelly Road,Sample 1,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.204162,-104.774428,21,Lotic,Mail,7.6,22332997,23-Jul-25,14:29,11.29,58.52,3.56,3 mins,75 ml of 100% ETOH,"Bushes along sample, sample taken along 15 m transect, more rocky and dry here with some out cropped bushes ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,0,0,,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0150,Construction Shop 2,Haphazard 1,N/A,23-Jul-25,S. Dworatzek,Sweep net,69.126152,-105.043931,21,Lentic,Mail,N/A,22332997,23-Jul-25,10:38,11.42,61.51,4.3,3 mins,75 ml of 100% ETOH,Sweep net haphazardly for 3 mins,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0153,Creek at end of Pelly Road,Sample 2,N/A,23-Jul-25,L. Chan,Sweep net,69.204162,-104.774428,21,Lotic,Mail,12,22332997,23-Jul-25,14:29,11.29,58.52,3.56,3 mins,75 ml of 100% ETOH,"Rocky with low lying veg, lichen and other small plants, some grasses but not many, overall more rocky and dry here ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,0,0,,,,,,,,,,,,,,,
+CBAY0154,Outside of CHARS lab,Opportunistic ,N/A,24-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.120979,-105.042507,84,Terrestrial,Mail,N/A,22332997,24-Jul-25,15:13,13.49,53.74,4.31,N/A,75 ml of 100% ETOH,On the bench outside of CHARS lab building; got many mosquitoes especially off Tad,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,38,0,38,0,never sorted in 96-well plate,CBAY_0154_M_H,N/A,CBAY_0154_M_B,N/A,,,,,,,,
+CBAY0155,Creek at end of Pelly Road,Sample 1,N/A,24-Jul-25,S. Dworatzek,Sweep net,69.204162,-104.774428,21,Lotic,Mail,1-5,22332997,24-Jul-25,12:21,12.26,55.76,3.69,5 mins,75 ml of 100% ETOH,"Lots of bushes with some mossy pactahes but also very rocky (pebble like at shore along river), 
+not swampy like lots of puddles just mossy rocky and bushy. ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,1,0,1,0,previously sorted into 96 well plates ,CBAY_0155_M_H,N/A,CBAY_0155_M_B,N/A,,,,,,,,
+CBAY0156,Airport Road 1,Sample 4,N/A,25-Jul-25,L. Chan,Sweep net,69.117397,-105.081726,5,Lentic,Mail,40-50,22332997,25-Jul-25,16:52,8.67,67.33,2.97,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Fragmented bushes but mostly tall grass, very wet and swampy","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,1,0,1,0,previously sorted into 96 well plates ,CBAY_0156_M_H,N/A,CBAY_0156_M_B,N/A,,,,,,,,
+CBAY0157,Airport Road 1,Sample 2,N/A,27-Jul-25,S. Dworatzek,Sweep net,69.117397,-105.081726,5,Terrestrial,Mail,70-80,22332997,27-Jul-25,2:57,9.61,70,4.41,5 mins,30 ml of 100% ETOH,"Bushes fragmented, ground wet but no puddles, grassy ground but not very tall, not very sunny a little windly but not overly so ","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,2,12,2,12,previously sorted into 96 well plates ,CBAY_0157_M_H,CBAY_0157_BF_H,CBAY_0157_M_B,CBAY_0157_BF_H,,,,,,,,
+CBAY0158,Freshwater river,Haphazard 1,N/A,23-Jul-25,"J. Bernhardt, L. Chan, S. Dworatzek",Sweep net,69.143213,-104.945246,12,Lotic,Mail,N/A,22332997,23-Jul-25,15:56,9.79,62.69,3.02,N/A,75 ml of 100% ETOH,"Sweep net haphazardly, multiple sweeps put together","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,1,1,1,1,never sorted in 96-well plate,CBAY_0158_M_H,CBAY_0158_BF_H,CBAY_0158_M_B,CBAY_0158_BF_H,,,,,,,,
+CBAY0159,Freshwater river,Sample 1,N/A,23-Jul-25,S. Dworatek,Sweep net,69.143213,-104.945246,12,Lotic,Mail,17.6?,22332997,23-Jul-25,15:46,10.95,58.65,3.18,3 mins,75 ml of 100% ETOH,"Hole in net may have lost some insects on collection, sampled along a 15 m transect, 
+did not write down the distance from water!!! - have an estimate of what it was but not completely sure
+ (maybe we can go back and measure it again to confirm)
+put transect along an area with a lot of bushes but this was not on the point of the river 
+and was more windy than the other side, ground was more dry and rocky, 
+near a part of the river which moved faster ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 690090701317283",Guelph,,,,,,,,,,,,,,,,,
+CBAY0160,Creek at end of Pelly Road,Haphazard 1,N/A,23-Jul-25,"J. Bernhardt, L. Chan, S. Dworatzek",Sweep net,69.204162,-104.774428,21,Lotic,Mail,N/A,22332997,23-Jul-25,14:29,11.29,58.52,3.56,3 mins,75 ml of 100% ETOH,"Sweep net haphazardly, all 3 sweeps put all together","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,1,0,1,0,never sorted in 96-well plate,CBAY_0160_M_H,N/A,CBAY_0160_M_B,N/A,,,,,,,,
+CBAY0161,Construction Shop 3,Sample 1,N/A,26-Jul-25,S. Dworatzek,Sweep net,69.125642,-105.035794,-3,Lentic,Mail,0-5,22332997,26-Jul-25,12:12,12.8,66.07,6.71,5 mins,30 ml of 100% ETOH,"Sampled at a different pond nearby (pond 3)
+Lots of bushes, some of the bushes are basically gorwing out of the pond but other than that not overly swampy or 
+other puddles outside of the pond","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,, ,,,,,,,,,
+CBAY0162,River at Swimming hole ,Sample 1,N/A,24-Jul-25,J. Bernhardt,Sweep net,69.12863,-104.98762,ASK TAD,Lotic,Mail,0-5,22332997,24-Jul-25,1:35,13.28,55.4,4.55,5 mins ,75 ml of 100% ETOH,"Really long patch of bushes on one side of the river which was wet in some pacthes with moss but mainly sampling from the bushes, 
+Taped up net and brought back to lab to asperate ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,23,29,23,29,never sorted in 96-well plate,CBAY_0162_M_H,CBAY_0162_BF_H,CBAY_0162_M_B,CBAY_0162_BF_B,,,,,,,,
+CBAY0163,Sewage-Dump,Sample 4,N/A,26-Jul-25,L. Chan,Sweep net,69.127862,-105.026126,-55,Lentic,Mail,20-25,22332997,26-Jul-25,11:26,10.44,72.68,5.76,5 mins,30 ml of 100% ETOH,"Very windy but not overly cold, sunny;
+Elevation does not look right (double check this: waypoint #92)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0164,The Beach,Opportunistic ,N/A,26-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.105362,-105.406782,-1,Terrestrial,Mail,N/A,22332997,26-Jul-25,16:23,13.42,59.05,5.8,5 mins,30 ml of 100% ETOH,Sunny with some winds,"""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,67,1,66,1,never sorted in 96-well plate,CBAY_0164_M_H,CBAY_0164_BF_H,CBAY_0164_M_B,CBAY_0164_BF_B,,,,,,,,
+CBAY0165,River at Swimming hole ,Haphazard 1,N/A,24-Jul-25,T. McIlwraith,Sweep net,69.12863,-104.98762,ASK TAD,Lotic,Mail,N/A,22332997,24-Jul-25,1:35,13.28,55.4,4.55,N/A,75 ml of 100% ETOH,Taped up net and brought back to lab to asperate ,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,8,200,8,200,never sorted in 96-well plate,CBAY_0165_M_H,CBAY_0165_BF_H,CBAY_0165_M_B,CBAY_0165_BF_B,,,,,,,,
+CBAY0166,Airport Road 1,Sample 1,N/A,25-Jul-25,S. Dworatzek,Sweep net,69.117397,-105.081726,5,Lentic,Mail,0-5,22332997,25-Jul-25,15:32,7.93,76.31,4.06,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Fragmented bushes; pretty wet and marshy ground with large puddles on the other side of the pond;
+Coordinates and elevation does not look correct (see SD's field notebook), 
+Use measurements from sample 3 and 4 on the same day here (but the label on the bottle still use the original measurements);
+Starting from this day we used 30mL ETOH instead for perserving the bugs since it would be less work when we do the shipping","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,2,0,2,previously sorted into 96 well plates ,N/A,CBAY_0166_BF_H,N/A,CBAY_0166_BF_B,,,,,,,,
+CBAY0167,The Beach,Sample 1,N/A,26-Jul-25,L. Chan,Sweep net,69.105362,-105.406782,-1,Terrestrial,Mail,N/A,22332997,26-Jul-25,16:23,13.42,59.05,5.8,5 mins,30 ml of 100% ETOH,"Sunny with some winds;
+Took two 5-min samples, but since there was no freshwater nearby;
+Sampled in tall grass area, wet ground with divits","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,35,0,35,0,previously sorted into 96 well plates ,CBAY_0167_M_H,N/A,CBAY_0167_M_B,N/A,,,,,,,,
+CBAY0169,Sewage-Dump,Sample 2,N/A,24-Jul-25,S. Dworaztek,Sweep net,69.127081,-105.026165,11,Lentic,Mail,20-25,22332997,24-Jul-25,18:21,12.36,60.7,4.99,5 mins ,75 ml of 100% ETOH,lots of bushes,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,4,3,4,3,previously sorted into 96 well plates ,CBAY_0169_M_H,CBAY_0169_BF_H,CBAY_0169_M_B,CBAY_0169_BF_B,,,,,,,,
+CBAY0170,Sewage-Dump,Sample 1,N/A,24-Jul-25,L. Chan,Sweep net,69.127081,-105.026165,11,Lentic,Mail,0-5,22332997,24-Jul-25,18:21,12.36,60.7,4.99,5 mins,75 ml of 100% ETOH,lots of bushes but very dry and rocky because it was on a hill (or higher ground) above sample 3 and 4,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0171,Airport Road 2,Sample 2,N/A,25-Jul-25,L. Chan,Sweep net,69.11678,-105.088061,11,Lentic,Mail,40-50,22332997,25-Jul-25,16:08,8.62,71.9,3.81,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Mostly very tall grass, dry ground, some small bushes","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,1,0,1,previously sorted into 96 well plates ,N/A,CBAY_0171_BF_H,N/A,CBAY_0171_BF_B,,,,,,,,
+CBAY0172,Sewage-Dump,Sample 3,N/A,24-Jul-25,S. Dworatzek,Sweep net,69.127081,-105.026165,11,Terrestrial,Mail,65-75,22332997,24-Jul-25,18:21,12.36,60.7,4.99,5 mins,75 ml of 100% ETOH,"Lots of bushes, ground very wet and mossy, with some moss patches having lots of absorbed water and some puddles ","Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701317283",Guelph,1,0,1,0,previously sorted into 96 well plates ,CBAY_0172_M_H,N/A,CBAY_0172_M_B,N/A,,,,,,,,
+CBAY0173,Airport Road 1,Sample 2,N/A,25-Jul-25,L. Chan,Sweep net,69.117397,-105.081726,5,Terrestrial,Mail,70-80,22332997,25-Jul-25,15:32,7.93,76.31,4.06,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Fragmented bushes with a swampy and grassy ground. More bushes than the 0-5m sample
+Coordinates and elevation does not look correct (see SD's field notebook),
+Use measurements from sample 3 and 4 on the same day here (but the label on the bottle still use the original measurements);","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,5,0,5,previously sorted into 96 well plates ,N/A,CBAY_0173_BF_H,N/A,CBAY_0173_BF_B,,,,,,,,
+CBAY0174,Sewage-Dump,Sample 4,N/A,24-Jul-25,L. Chan,Sweep net,69.127081,-105.026165,11,Lentic,Mail,20-25,22332997,24-Jul-25,18:21,12.36,60.7,4.99,5 mins,75 ml of 100% ETOH,Sweep net broke during sampling; many trash in the bushes,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,1,0,1,0,previously sorted into 96 well plates ,CBAY_0174_M_H,N/A,CBAY_0174_M_B,N/A,,,,,,,,
+CBAY0175,Sewage-Dump,Opportunistic ,N/A,24-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.127087,-105.026165,11,Lentic,Mail,N/A,22332997,24-Jul-25,18:21,12.36,60.7,4.99,N/A,75 ml of 100% ETOH,not very many mosquitoes because it got windier right when we got to the sampling location,"Shipped July 25, 2025
+express post - 7 day shipping 
+shipping #- 0690090701412285",Guelph,4,0,4,0,previously sorted into 96 well plates ,CBAY_0175_M_H,N/A,CBAY_0175_M_B,N/A,,,,,,,,
+CBAY0176,Airport Road 1,Sample 3,N/A,25-Jul-25,S. Dworatzek,Sweep net,69.117397,-105.081726,5,Lentic,Mail,25-35,22332997,25-Jul-25,16:52,8.67,67.33,2.97,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Fragmented bushes, tall grass, very wet and swampy ground with puddles","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,5,0,5,previously sorted into 96 well plates ,N/A,CBAY_0176_BF_H,N/A,CBAY_0176_BF_B,,,,,,,,
+CBAY0177,First Creek,Opportunistic ,N/A,26-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.13284,-105.463245,-5,Lotic,Mail,N/A,22332997,26-Jul-25,15:09,15.95,53.33,6.69,5 mins,30 ml of 100% ETOH,"Date of sampling is sunny with some breezes;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,41,0,41,0,previously sorted into 96 well plates ,CBAY_0177_M_H,N/A,CBAY_0177_M_B,N/A,,,,,,,,
+CBAY0178,Airport Road 2,Sample 1,N/A,25-Jul-25,S. Dworatzek,Sweep net,69.11678,-105.088061,11,Lentic,Mail,15-25,22332997,25-Jul-25,16:08,8.62,71.9,3.81,5 mins,30 ml of 100% ETOH,"Date of sampling is very cold and windy;
+Only tall grass which was lighter in colour (brown);
+Ground very wet with orangish mud","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,1,0,1,0,previously sorted into 96-well plates ,CBAY_0178_M_H,N/A,CBAY_0178_M_B,N/A,,,,,,,,
+CBAY0181,Sewage-Dump,Sample 3,N/A,26-Jul-25,S. Dworatzek,Sweep net,69.127862,-105.026126,-55,Lentic,Mail,0-5,22332997,26-Jul-25,11:26,10.44,72.68,5.76,5 mins,30 ml of 100% ETOH,"Very windy but not overly cold, sunny;
+Elevation does not look right (double check this: waypoint #92)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,1,0,1,0,previously sorted into 96-well plates ,CBAY_0181_M_H,N/A,CBAY_0181_M_B,N/A,,,,,,,,
+CBAY0182,First Creek,Sample 2,N/A,26-Jul-25,L. Chan,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,5-10,22332997,26-Jul-25,15:09,15.95,53.33,6.69,5 mins,30 ml of 100% ETOH,"Date of sampling is sunny with some breezes;
+Dry ground, lots of bushes;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,2,5,2,5,previously sorted into 96-well plates ,CBAY_0182_M_H,CBAY_0182_BF_H,CBAY_0182_M_B,CBAY_0182_BF_B,,,,,,,,
+CBAY0183,Airport Road 1,Opportunistic ,N/A,27-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.117397,-105.081726,5,Lentic,Mail,N/A,22332997,27-Jul-25,2:57,9.61,70,4.41,N/A,30 ml of 100% ETOH,not very sunny a little windly but not overly so ,"""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,5,0,4,0,previously sorted into 96-well plates ,CBAY_0183_M_H,N/A,CBAY_0183_M_B,N/A,,,,,,,,
+CBAY0184,First Creek,Sample 1,N/A,26-Jul-25,S. Dworatzek,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,0-5,22332997,26-Jul-25,15:09,15.95,53.33,6.69,5 mins,30 ml of 100% ETOH,"Date of sampling is sunny with some breezes;
+Bushes next to water edge - along whole edge; ground;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,17,0,17,previously sorted into 96-well plates ,N/A,CBAY_0184_BF_H,N/A,CBAY_0184_BF_B,,,,,,,,
+CBAY0185,Airport Road 2,Sample 2,N/A,27-Jul-25,S. Dworatzek,Sweep net,69.11678,-105.088061,11,Lentic,Mail,40-50,22332997,27-Jul-25,4:07,9.69,65.61,3.61,5 mins,30 ml of 100% ETOH,"Grasses tall and green, some small and fragmented bushes, ground pretty dry","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0186,The Beach,Sample 2,N/A,26-Jul-25,S. Dworatzek,Sweep net,69.105362,-105.406782,-1,Terrestrial,Mail,N/A,22332997,26-Jul-25,16:23,13.42,59.05,5.8,5 mins,30 ml of 100% ETOH,"Sunny with some winds;
+Took two 5-min samples, but since there was no freshwater nearby;
+Sampled in tall grass area, dry ground","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,33,0,33,0,previously sorted into 96-well plates ,CBAY_0186_M_H,N/A,CBAY_0186_M_B,N/A,,,,,,,,
+CBAY0187,Airport Road 2,Opportunistic ,N/A,27-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.11678,-105.088061,11,Lentic,Mail,N/A,22332997,27-Jul-25,4:07,9.69,65.61,3.61,N/A,30 ml of 100% ETOH,not very sunny a little windly but not overly so ,"""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,2,0,2,0,previously sorted into 96-well plates ,CBAY_0187_M_H,N/A,CBAY_0187_M_B,N/A,,,,,,,,
+CBAY0188,Sewage-Dump,Sample 1,N/A,26-Jul-25,S. Dworatzek,Sweep net,69.127862,-105.026126,-55,Lentic,Mail,20-25,22332997,26-Jul-25,N/A,11.14,70.04,5.88,5 mins,30 ml of 100% ETOH,"Very windy but not overly cold, sunny;
+Very bushy, wet ground with many puddles, a little mossy;
+Worried some insects were lost half way through due to net flipping. Really struggled with net snagging in this sample;
+Elevation does not look right (double check this: waypoint #92)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0189,Airport Road 1,Sample 1,N/A,27-Jul-25,L. Chan,Sweep net,69.117397,-105.081726,5,Lentic,Mail,0-5,22332997,27-Jul-25,2:57,9.61,70,4.41,5 mins,30 ml of 100% ETOH,"Fragmented bushes, very wet ground with puddles, sample river flowing into water and 
+very large puddle on opposite side of sampling almost like a second pond, not very sunny a little windly but not overly so, 
+Had to redo sampling because bugs were lost due to flipping of net","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,1,7,1,7,previously sorted into 96-well plates ,CBAY_0189_M_H,CBAY_0189_BF_H,CBAY_0189_M_B,CBAY_0189_BF_B,,,,,,,,
+CBAY0190,Sewage-Dump,Sample 2,N/A,26-Jul-25,L. Chan,Sweep net,69.127862,-105.026126,-55,Terrestrial,Mail,65-75,22332997,26-Jul-25,N/A,11.14,70.04,5.88,5 mins,30 ml of 100% ETOH,"Very windy but not overly cold, sunny;
+Swampy with many puddles, bushes in patches
+Elevation does not look right (double check this: waypoint #92)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0191,Behind CHARS,Sample 1,N/A,28-Jul-25,S. Dworatzek,Sweep net,69.12031,-105.04631,6,Lentic,Mail,0-10,22332997,28-Jul-25,12:58,13.34,64.97,7.1,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Fragmented bushes near small pond and little creek;
+Ground fairly dry where bushes are with tall grass;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 3","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,7,0,7,0,previously sorted into 96-well plates ,CBAY_0191_M_H,N/A,CBAY_0191_M_B,N/A,,,,,,,,
+CBAY0193,Dew line Road next to station,Sample 2,N/A,28-Jul-25,L. Chan,Sweep net,69.119079,-105.127321,14,Lentic,Mail,0-5,22332997,28-Jul-25,16:10,14.8,57.09,6.41,5 mins,30 ml of 100% ETOH,"0-5m from eitther pond or creek leaving the pond, wet ground with some puddles, very bushy","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,36,72,33,72,previously sorted into 96-well plates ,CBAY_0193_M_H,CBAY_0193_BF_H,CBAY_0193_M_B,CBAY_0193_BF_B,,,,,,,,
+CBAY0194,Dew line Road 1,Sample 1,N/A,28-Jul-25,S. Dworatzek,Sweep net,69.13698,-105.17181,25,Lentic,Mail,15-25,22332997,28-Jul-25,15:22,14.97,55.81,6.24,5 mins,30 ml of 100% ETOH,"Very wet with large puddles in some places, bushes not continuous but not very fragmented either;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 1","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,9,0,9,0,previously sorted into 96-well plates ,CBAY_0194_M_H,N/A,CBAY_0194_M_B,N/A,,,,,,,,
+CBAY0195,Dew line Road 1,Opportunistic ,N/A,28-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.13698,-105.17181,25,Lentic,Mail,N/A,22332997,28-Jul-25,15:22,14.97,55.81,6.24,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 1","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,192,0,196,0,never sorted in 96-well plate,CBAY_0195_M_H,,CBAY_0195_M_B,,,,,,,,,
+CBAY0196,Behind OPS building in CHARS,Sample 1,N/A,28-Jul-25,S. Dworatzek,Sweep net,69.12205,-105.04109,-7,Lentic,Mail,0,22332997,28-Jul-25,13:48,13.97,60.41,6.43,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Sampled in the pond with some mini evergreen-looking plants",Box 2,Guelph,10,0,10,0,previously sorted into 96-well plates ,CBAY_0196_M_H,N/A,CBAY_0196_M_B,N/A,,,,,,,,
+CBAY0197,Dew line Road 1,Sample 2,N/A,28-Jul-25,L. Chan,Sweep net,69.13698,-105.17181,25,Lentic,Mail,0-5,22332997,28-Jul-25,15:22,14.97,55.81,6.24,5 mins,30 ml of 100% ETOH,"Bushes pretty fragmented, dry ground with grasses;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 1","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,7,0,6,0,previously sorted into 96-well plates ,CBAY_0197_M_H,N/A,CBAY_0197_M_B,N/A,,,,,,,,
+CBAY0198,Behind CHARS,Sample 2,N/A,28-Jul-25,L. Chan,Sweep net,69.12031,-105.04631,6,Lentic,Mail,25-35,22332997,28-Jul-25,12:58,13.34,64.97,7.1,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Far from pond up hill with some bushes (only 2 or 3), one of them is quite large; 
+Ground dry with some grass but not very tall;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 3","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,3,0,3,0,previously sorted into 96-well plates ,CBAY_0198_M_H,N/A,CBAY_0198_M_B,N/A,,,,,,,,
+CBAY0200,Dew line Road next to station,Opportunistic ,N/A,28-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.119079,-105.127321,14,Lentic,Mail,N/A,22332997,28-Jul-25,16:10,14.8,57.09,6.41,5 mins,30 ml of 100% ETOH,Partially sunny with some breezes but not windy on the date of sampling,"""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,225,2,225,2,previously sorted into 96-well plates ,CBAY_0200_M_H,CBAY_0200_BF_H,CBAY_0200_M_B,CBAY_0200_BF_B,,,,,,,,
+CBAY0201,Dew line Road next to station,Sample 1,N/A,28-Jul-25,S. Dworatzek,Sweep net,69.119079,-105.127321,14,Lentic,Mail,0-5,22332997,28-Jul-25,16:10,14.8,57.09,6.41,5 mins,30 ml of 100% ETOH,"0-5m from eitther pond or creek leaving the pond, wet ground with some puddles, very bushy","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,43,66,41,66,previously sorted into 96-well plates ,CBAY_0201_M_H,CBAY_0201_BF_H,CBAY_0201_M_B,CBAY_0201_BF_B,,,,,,,,
+CBAY0202,Dew line Road next to station,Sample 3,N/A,28-Jul-25,S. Dworatzek,Sweep net,69.119079,-105.127321,14,Lentic,Mail,0-10,22332997,28-Jul-25,16:10,14.8,57.09,6.41,5 mins,30 ml of 100% ETOH,"Wet but no puddles, creek running through sampling area","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,96,58,93,58,previously sorted into 96-well plates ,CBAY_0202_M_H,CBAY_0202_BF_H,CBAY_0202_M_B,CBAY_0202_BF_B,,,,,,,,
+CBAY0203,Dew line Road next to station,Sample 4,N/A,28-Jul-25,L. Chan,Sweep net,69.119079,-105.127321,14,Lentic,Mail,55-65,22332997,28-Jul-25,16:10,14.8,57.09,6.41,5 mins,30 ml of 100% ETOH,Wet but no puddles,"""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,16,27,16,27,previously sorted into 96-well plates ,CBAY_0203_M_H,CBAY_0203_BF_H,CBAY_0203_M_B,CBAY_0203_BF_B,,,,,,,,
+CBAY0204,Behind OPS building in CHARS,Opportunistic ,N/A,28-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.12205,-105.04109,-7,Lentic,Mail,N/A,22332997,28-Jul-25,13:48,13.97,60.41,6.43,5 mins,30 ml of 100% ETOH,Partially sunny with some breezes but not windy on the date of sampling,Box 3,Guelph,80,0,80,0,never sorted in 96-well plate,CBAY_0204_M_H,N/A,CBAY_0204_M_B,N/A,,,,,,,,
+CBAY0205,Behind CHARS,Opportunistic ,N/A,28-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.12031,-105.04631,6,Lentic,Mail,N/A,22332997,28-Jul-25,12:58,13.34,64.97,7.1,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 3","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821858284""",Guelph,60,0,60,0,previously sorted into 96-well plates ,CBAY_0205_M_H,N/A,CBAY_0205_M_B,N/A,,,,,,,,
+CBAY0206,Behind OPS building in CHARS,Sample 2,N/A,28-Jul-25,L. Chan,Sweep net,69.12205,-105.04109,-7,Lentic,Mail,0-5,22332997,28-Jul-25,13:48,13.97,60.41,6.43,5 mins,30 ml of 100% ETOH,"Partially sunny with some breezes but not windy on the date of sampling;
+Mostly tall grasses with some bush patches",Box 3,Guelph,2,1,2,1,previously sorted into 96-well plates ,CBAY_0206_M_H,CBAY_0206_BF_H,CBAY_0206_M_B,CBAY_0206_BF_B,,,,,,,,
+CBAY0207,Freshwater river,Sample 1,N/A,30-Jul-25,S. Dworatzek,Sweep net,69.143213,-104.945246,12,Lotic,Mail,5-10,22332997,30-Jul-25,11:15,22.94,48.76,11.6,5 mins,30 ml of 100% ETOH,"Bushes at end of point by more flowing water, sunny very warm not very windy;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,16,500,15,500,never sorted in 96-well plate,CBAY_0207_M_H,CBAY_0207_BF_H,CBAY_0207_M_B,CBAY_0207_BF_B,Acedentally sorted twice (50 were taken out of the one with less to have a total of 500 and the extra samples were returned to the bulk),,,,,,,
+CBAY0208,Behind College,Sample 2,N/A,29-Jul-25,L. Chan,Sweep net,69.1235,-105.06234,19,Lentic,Mail,20-30,22332997,29-Jul-25,17:13,19.44,55.06,10.19,5 mins,30 ml of 100% ETOH,"Fragmented bushes in patches, bushes quite large, ground wet and mossy with puddles, sunny and not very windy;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,6,0,6,0,previously sorted into 96-well plates ,CBAY_0208_M_H,N/A,CBAY_0208_M_B,N/A,,,,,,,,
+CBAY0209,West Arm Beach,Sample 1,N/A,29-Jul-25,S. Dworatzek,Sweep net,69.091701,-105.254371,19,Terrestrial,Mail,N/A,22332997,29-Jul-25,11:31,16.73,61.49,10.07,5 mins,30 ml of 100% ETOH,"Mostly taken from very tall and green grass in the middle of the raod, 
+also taken from blueish yellow grass and small flowery bushes at the side of the road, very dry ground, Sunny and not very windy ","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,11,0,11,0,previously sorted into 96-well plates ,CBAY_0209_M_H,N/A,CBAY_0209_M_B,N/A,,,,,,,,
+CBAY0210,West Arm Hills ,Opportunistic ,N/A,29-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.10201,-105.24301,7,Lentic,Mail,N/A,22332997,29-Jul-25,12:20,20.18,45.45,8.03,N/A,30 ml of 100% ETOH,"Sunny and not very windy, pretty large pond/lake, sample taken by shauna and lilian off of Hannah, Dani, Shauna, and Lilian;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 5","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,119,1,119,1,previously sorted into 96-well plates ,CBAY_0210_M_H,CBAY_0210_BF_H,CBAY_0210_M_B,CBAY_0210_BF_B,,,,,,,,
+CBAY0211,West Arm Hills ,Sample 1,N/A,29-Jul-25,S. Dworatzek,Sweep net,69.10201,-105.24301,7,Lentic,Mail,25-35,22332997,29-Jul-25,12:20,20.18,45.45,8.03,5 mins,30 ml of 100% ETOH,"Bushes fragmented but quite large, grassy and fairly dry ground in between, up hill from fresh water, 
+Sunny and not very windy, pretty large pond/lake;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 5","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,56,0,56,0,previously sorted into 96-well plates ,CBAY_0211_M_H,N/A,CBAY_0211_M_B,N/A,,,,,,,,
+CBAY0212,West Arm Beach,Opportunistic ,N/A,29-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.091701,-105.254371,19,Terrestrial,Mail,N/A,22332997,29-Jul-25,11:31,16.73,61.49,10.07,N/A,30 ml of 100% ETOH,"Sunny and not very windy, mosqutioes taken from Dani, Shauna, Hannah, and Lilian","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,83,1,84,1,never sorted in 96-well plate,CBAY_0212_M_H,CBAY_0212_BF_H,CBAY_0212_M_B,CBAY_0212_BF_B,,,,,,,,
+CBAY0213,Outside of CHARS lab,Opportunistic ,N/A,29-Jul-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.120979,-105.042507,84,Terrestrial,Mail,N/A,22332997,29-Jul-25,14:40,20.32,46.65,8.54,N/A,30 ml of 100% ETOH,"Sunny and not very windy, took up off of of Shauna, and Lilian on picnic table in the shade ","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,15,0,17,0,never sorted in 96-well plate,CBAY_0213_M_H,N/A,CBAY_0213_M_B,N/A,,,,,,,,
+CBAY0214,West Arm Hills ,Sample 2,N/A,29-Jul-25,L. Chan,Sweep net,69.10201,-105.24301,7,Terrestrial,Mail,95-105,22332997,29-Jul-25,12:20,20.18,45.45,8.03,5 mins,30 ml of 100% ETOH,"Lots of bushes not completely continous but more than sample one, Sunny and not very windy, pretty large pond/lake;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 5","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,12,0,12,0,previously sorted into 96-well plates ,CBAY_0214_M_H,N/A,CBAY_0214_M_B,N/A,,,,,,,,
+CBAY0216,West Arm Beach,Sample 2,N/A,29-Jul-25,L. Chan,Sweep net,69.091701,-105.254371,19,Terrestrial,Mail,N/A,22332997,29-Jul-25,11:31,16.73,61.49,10.07,5 mins,30 ml of 100% ETOH,"Mostly grassy with some short willow bushes, grass much shorter than sample one, ground very wet, Sunny and not very windy ","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,2,0,1,0,previously sorted into 96-well plates ,CBAY_0216_M_H,N/A,CBAY_0216_M_B,N/A,,,,,,,,
+CBAY0219,Behind College,Sample 1,N/A,29-Jul-25,S. Dworatzek,Sweep net,69.1235,-105.06234,19,Lentic,Mail,0-5,22332997,29-Jul-25,17:13,19.44,55.06,10.19,5 mins,30 ml of 100% ETOH,"Right next to freshwater sampling the fragmented bushes along the shore, ground wet but no pudddles, ground mossy with some 
+places having a green algae like coating, large pond/lake, sunny and not very windy;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,9,1,9,1,previously sorted into 96-well plates ,CBAY_0219_M_H,CBAY_0219_BF_H,CBAY_0219_M_B,CBAY_0219_BF_B,,,,,,,,
+CBAY0220,Outside of CHARS lab,Opportunistic ,N/A,31-Jul-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.120979,-105.042507,84,Terrestrial,Mail,N/A,22332997,31-Jul-25,16:30,,,,N/A,30 ml of 100% ETOH,"Not many mosquitoes today compared to the other day we sampled in the same location;
+Forgot to take HOBO measurements so we will use approximate time and the contruction site or sewage-dump temperature;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 24",Box 2,Guelph,15,2,15,2,never sorted in 96-well plate,CBAY_0220_M_H,CBAY_0220_BF_H,CBAY_0220_M_B,CBAY_0220_BF_B,,,,,,,,
+CBAY0222,Behind College,Opportunistic ,N/A,04-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.1235,-105.06234,19,Lentic,Mail,N/A,22332997,04-Aug-25,18:15,19.07,62.57,11.82,N/A,30 ml of 100% ETOH,Wind died down for a while and we got a bunch of opportunistic but then it picked up a lot again as we were finishing up,Box 1,Guelph,42,34,42,35,never sorted in 96-well plate,CBAY_0222_M_H,CBAY_0222_BF_H,CBAY_0222_M_B,CBAY_0222_BF_B,,,,,,,,
+CBAY0223,Behind College,Opportunistic ,N/A,29-Jul-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.1235,-105.06234,19,Lentic,Mail,N/A,22332997,29-Jul-25,17:13,19.44,55.06,10.19,N/A,30 ml of 100% ETOH,"Sunny and not very windy, sample taken by both lilian and shauna off of lilian and shauna;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,35,0,29,0,previously sorted into 96-well plates ,CBAY_0223_M_H,N/A,CBAY_0223_M_B,N/A,,,,,,,,
+CBAY0224,In front of College ,Sample 2,N/A,29-Jul-25,L. Chan,Sweep net,69.12257,-105.05666,15,Lentic,Mail,0-10,22332997,29-Jul-25,16:36,18.69,56.43,9.99,5 mins,30 ml of 100% ETOH,"Tall grass and some bushes, 0-5 m from very small pond 10 m from larger pond;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,5,1,6,1,previously sorted into 96-well plates ,CBAY_0224_M_H,CBAY_0224_BF_H,CBAY_0224_M_B,CBAY_0224_BF_B,,,,,,,,
+CBAY0225,Outside of CHARS lab,Opportunistic ,N/A,30-Jul-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.120979,-105.042507,84,Terrestrial,Mail,N/A,22332997,30-Jul-25,14:56,19.6,52.03,9.5,N/A,30 ml of 100% ETOH,"Not many mosquitoes today compared to the other day we sampled in the same location;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 24","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,9,1,10,1,never sorted in 96-well plate,CBAY_0225_M_H,CBAY_0225_BF_H,CBAY_0225_M_B,CBAY_0225_BF_B,,,,,,,,
+CBAY0226,In front of College ,Sample 1,N/A,29-Jul-25,S. Dworatzek,Sweep net,69.12257,-105.05666,15,Lentic,Mail,0-5,22332997,29-Jul-25,16:36,18.69,56.43,9.99,5 mins,30 ml of 100% ETOH,"Very tall grass, some of which was growing out of the pond, pond fairly small, sunny and not very windy;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,18,0,17,0,previously sorted into 96-well plates ,CBAY_0226_M_H,N/A,CBAY_0226_M_B,N/A,,,,,,,,
+CBAY0227,Greiner Lake Inlet,Sample 2,N/A,31-Jul-25,L. Chan,Sweep net,69.17868,-104.82275,5,Lotic,Mail,15-25,22332997,31-Jul-25,12:01,14.69,78.25,10.95,5 mins,30 ml of 100% ETOH,"Bushes large and continuous, ground dry, cloudy and feels humid, a bit breezy with the odd gust but not overly windy;
+We measured the distance from water on Aug 4, 2025 again and we decided 15-25 m is better",Box 2,Guelph,4,14,4,14,previously sorted into 96-well plates ,CBAY_0227_M_H,CBAY_0227_BF_H,CBAY_0227_M_B,CBAY_0227_BF_B,,,,,,,,
+CBAY0228,In front of College ,Opportunistic ,N/A,29-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.12257,-105.05666,15,Lentic,Mail,N/A,22332997,29-Jul-25,16:36,18.69,56.43,9.99,N/A,30 ml of 100% ETOH,"Taken off of Shauna and Lilian,  sunny and not very windy;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on Aug 4","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,63,0,67,0,never sorted in 96-well plate,CBAY_0228_M_H,,CBAY_0228_M_B,,,,,,,,,
+CBAY0229,Greiner Lake Inlet,Sample 1,N/A,31-Jul-25,S. Dworatzek,Sweep net,69.17868,-104.82275,5,Lotic,Mail,0-5,22332997,31-Jul-25,12:01,14.69,78.25,10.95,5 mins,30 ml of 100% ETOH,"Bushes small and fragmented, small river going into Greiner, sample got wet and bugs got stuck together, ground very wet, 
+cloudy and feels humid, a bit breezy with the odd gust but not overly windy",Box 3,Guelph,1,125,1,125,previously sorted into 96-well plates ,CBAY_0229_M_H,CBAY_0229_BF_H,CBAY_0229_M_B,CBAY_0229_BF_B,,,,,,,,
+CBAY0230,River at Swimming hole ,Sample 2,N/A,30-Jul-25,S. Dworatzek,Sweep net,69.12863,-104.98762,,Lotic,Mail,0-5,22332997,30-Jul-25,12:13,21.2,53.74,11.47,5 mins,30 ml of 100% ETOH,"3 patches of continuous bushes - ran between patches, sunny very warm not very windy;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,9,258,9,258,,CBAY_0230_M_H,CBAY_0230_BF_H,CBAY_0230_M_B,CBAY_0230_BF_B,,,,,,,,
+CBAY0231,River at Swimming hole ,Opportunistic ,N/A,31-Jul-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.12863,-104.98762,,Lotic,Mail,N/A,22332997,31-Jul-25,13:02,15.12,77.34,11.2,N/A,30 ml of 100% ETOH,"started to get much windier and very windy when we were finishing up, not many bigs fro opportunistic",Box 2,Guelph,4,5,4,5,never sorted in 96-well plate,CBAY_0231_M_H,CBAY_0231_BF_H,CBAY_0231_M_B,CBAY_0231_BF_B,,,,,,,,
+CBAY0232,Creek at end of Pelly Road,Opportunistic ,N/A,31-Jul-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.20421,-104.77438,9,Lotic,Mail,N/A,22332997,31-Jul-25,10:47,13.8,81.76,10.75,N/A,30 ml of 100% ETOH,"cloudy and feels humid, 
+a bit breezy with the odd gust but not overly windy",Box 2,Guelph,12,21,12,21,never sorted in 96-well plate,CBAY_0232_M_H,CBAY_0232_BF_H,CBAY_0232_M_B,CBAY_0232_BF_B,,,,,,,,
+CBAY0233,Creek at end of Pelly Road,Sample 1,N/A,31-Jul-25,L. Chan,Sweep net,69.20421,-104.77438,9,Lotic,Mail,0-5,22332997,31-Jul-25,10:47,13.8,81.76,10.75,5 mins,30 ml of 100% ETOH,"A different GPS was used to take the coordinates;
+Wet ground from rain, bushes large and fairly contiuous, cloudy and feels humid, 
+a bit breezy with the odd gust but not overly windy",Box 2,Guelph,1,500,1,499,previously sorted into 96-well plates,CBAY_0233_M_H,CBAY_0233_BF_H,CBAY_0233_M_B,CBAY_0233_BF_B,,,,,,,,
+CBAY0234,Freshwater river,Opportunistic ,N/A,30-Jul-25,L. Chan,Taking mosquitoes off people with aspirator,69.143213,-104.945246,12,Lotic,Mail,N/A,22332997,30-Jul-25,11:15,22.94,48.76,11.6,N/A,30 ml of 100% ETOH,"Sunny, little wind;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,108,23,108,22,never sorted in 96-well plate,CBAY_0234_M_H,CBAY_0234_BF_H,CBAY_0234_M_B,CBAY_0234_BF_B,,,,,,,,
+CBAY0235,River at Swimming hole ,Sample 2,N/A,31-Jul-25,L. Chan,Sweep net,69.12863,-104.98762,,Lotic,Mail,0-5,22332997,31-Jul-25,13:02,15.12,77.34,11.2,5 mins,30 ml of 100% ETOH,"Bushes continuous and mostly big, ground dry and grassy, started to get much windier and very windy when we were finishing up ",Box 2,Guelph,10,500,10,500,never sorted in 96-well plate,CBAY_0235_M_H,CBAY_0235_BF_H,CBAY_0235_M_B,CBAY_0235_BF_B,,,,,,,,
+CBAY0237,Greiner Lake Inlet,Opportunistic ,N/A,31-Jul-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.17868,-104.82275,5,Lotic,Mail,N/A,22332997,31-Jul-25,12:01,14.69,78.25,10.95,N/A,30 ml of 100% ETOH,"cloudy and feels humid, a bit breezy with the odd gust but not overly windy",Box 2,Guelph,40,3,40,3,never sorted in 96-well plate,CBAY0237_M_H,CBAY_0237_BF_H,CBAY_0237_M_B,CBAY_0237_BF_B,,,,,,,,
+CBAY0238,Creek at end of Pelly Road,Sample 2,N/A,31-Jul-25,S. Dworatzek,Sweep net,69.20421,-104.77438,9,Lotic,Mail,20-25,22332997,31-Jul-25,10:47,13.8,81.76,10.75,5 mins,30 ml of 100% ETOH,"Bushes small and continuous, ground wet with shallow and small puddles through out,  cloudy and feels humid, 
+a bit breezy with the odd gust but not overly windy",Box 2,Guelph,0,500,0,498,never sorted in 96-well plate,NA,CBAY_0238_BF_H,NA,CBAY_0238_BF_B,,,,,,,,
+CBAY0241,River at Swimming hole ,Sample 1,N/A,30-Jul-25,L. Chan,Sweep net,69.12863,-104.98762,,Lotic,Mail,0-5,22332997,30-Jul-25,12:13,21.2,53.74,11.47,5 mins,30 ml of 100% ETOH,"Creek going out of swimming hole, last time we sampled river going into swimming hole, Lilian sampled one side of River Shauna 
+sampled other side, bushes fairly continuous, sunny very warm not very windy;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,6,234,6,234,previously sorted into 96-well plates ,CBAY_0241_M_H,CBAY_0241_BF_H,CBAY_0241_M_B,CBAY_0241_BF_B,,,,,,,,
+CBAY0242,River at Swimming hole ,Opportunistic ,N/A,30-Jul-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.12863,-104.98762,,Lotic,Mail,N/A,22332997,30-Jul-25,12:13,21.2,53.74,11.47,N/A,30 ml of 100% ETOH,"sunny very warm not very windy;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,78,4,70,4,previously sorted into 96-well plates ,CBAY_0242_M_H,CBAY_0242_BF_H,CBAY_0242_M_B,CBAY_0242_BF_B,,,,,,,,
+CBAY0243,Freshwater river,Sample 2,N/A,30-Jul-25,L. Chan,Sweep net,69.143213,-104.945246,12,Lotic,Mail,0-5,22332997,30-Jul-25,11:15,22.94,48.76,11.6,5 mins,30 ml of 100% ETOH,"Continuous bushes by the edge of river inlet which flows slower, sunny very warm not very windy;
+Coordinates on the label were copied from HZ's measurement (see EHTO sheet)","""Shipped July 31, 2025 express post - 7 day shipping  shipping #- 0690090821826283""",Guelph,0,39,0,39,previously sorted into 96-well plates ,N/A,CBAY_0243_BF_H,N/A,CBAY_0243_BF_B,,,,,,,,
+CBAY0244,Behind College,Sample 2,N/A,04-Aug-25,S. Dworatzek,Sweep net,69.1235,-105.06234,19,Lentic,Mail,20-30,22332997,04-Aug-25,18:15,19.07,62.57,11.82,5 mins,30 ml of 100% ETOH,"Same place as L. Chan on July 29, 2025;
+Bushes mostly small to medium, fragmented with tall grass;
+Dry and rocky ground in some parts and wet with puddles in others",Box 2,Guelph,7,8,7,8,previously sorted into 96-well plates ,CBAY_0244_M_H,CBAY_0244_BF_H,CBAY_0244_M_H,CBAY_0244_BF_B,,,,,,,,
+CBAY0245,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,Zuri and Carmine,Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,Guelph,15,0,15,0,previously sorted into 96-well plates ,CBAY0245_M_H_KFS,N/A,CBAY0245_M_B_KFS,N/A,,,,,,,,
+CBAY0246,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,"Brandon, RJ, 
+and Jordan",Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,Guelph,41,1,40,1,previously sorted into 96-well plates ,CBAY0246_M_H_KFS,CBAY0246_BF_H_KFS,CBAY0246_M_B_KFS,CBAY0246_BF_B_KFS,,,,,,,,
+CBAY0247,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,Malaya,Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,,6,0,6,0,never sorted in 96-well plate,CBAY0247_M_H_KFS,NA,CBAY0247_M_B_KFS,NA,,,,,,,,
+CBAY0248,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,"Jessica and 
+Brother",Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,,146,2,146,2,previously sorted into 96 well plates ,CBAY0248_M_H_KFS,CBAY0248_BF_H_KFS,CBAY0248_M_B_KFS,CBAY0248_BF_B_KFS,,,,,,,,
+CBAY0249,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,Alyssa,Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,,22,0,21,0,previously sorted into 96 well plates ,CBAY0249_M_H_KFS,N/A,CBAY0249_M_B_KFS,N/A,,,,,,,,
+CBAY0250,Airport Road 3 Pond 1,Sample 2,N/A,05-Aug-25,S. Dworatzek,Sweep net,69.11241,-105.09043,34,Lentic,Mail,25-35,22332997,05-Aug-25,14:37,16.76,63.6,9.78,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Still very cloudy but not windy at all (mosquitoes went crazy again!);
+Bushes some small some large but very fragmented;
+Ground dry and dusty",Box 2,Guelph,11,18,11,18,previously sorted into 96 well plates ,CBAY0250_M_H,CBAY0250_BF_H,CBAY0250_M_B,CBAY0250_BF_B,,,,,,,,
+CBAY0251,River at Swimming hole ,Opportunistic ,N/A,04-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.1293,-104.99179,6,Lotic,Mail,N/A,22332997,04-Aug-25,13:27,22.41,51.78,12.02,N/A,30 ml of 100% ETOH,"Tall grasses, some of which are growing out of the large pond;
+Grass mostly green",Box 2,Guelph,14,7,14,7,previously sorted into 96 well plates ,CBAY0251_M_H,CBAY0251_BF_H,CBAY0251_M_B,CBAY0251_BF_B,,,,,,,,
+CBAY0253,Freshwater river,Sample 2,N/A,04-Aug-25,L. Chan,Sweep net,69.143178,-104.94794,82.6,Lotic,Mail,0-5,22332997,04-Aug-25,12:07,22.29,53.43,12.41,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Very windy and sun behind cloud;
+Fragmented bushes - some large and some small. Ground dry;
+Elevation likely taken on higher part of hill",Box 2,Guelph,0,500,0,500,never sorted in 96-well plate,NA,CBAY0253_BF_H,,CBAY0253_BF_B,,,,,,,,
+CBAY0254,In front of College ,Opportunistic ,N/A,04-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.12257,-105.05666,15,Lentic,Mail,N/A,22332997,04-Aug-25,17:15,18.37,59.53,10.36,N/A,30 ml of 100% ETOH,Still quite windy some mosquitoes and black flies but not many landing on us ,Box 1,Guelph,21,7,21,7,never sorted in 96-well plate,CBAY0254_M_H,CBAY0254_BF_H,CBAY0254_M_B,CBAY0254_BF_B,,,,,,,,
+CBAY0259,River at Swimming hole ,Sample 1,N/A,31-Jul-25,S. Dworatzek,Sweep net,69.12863,-104.98762,,Lotic,Mail,0-5,22332997,31-Jul-25,13:02,15.12,77.34,11.2,5 mins,30 ml of 100% ETOH,"Sampled on either side of river where Joey and I sampled last time, ground wet by river but dryer only a meter away, 
+very mossy on both wet and dry parts, bushes both small and large and somehwat fragmented, 
+started to get much windier and very windy when we were finishing up ",Box 3,Guelph,4,4,500,500,never sorted in 96-well plate,CBAY0259_M_H,CBAY0259_BF_H,CBAY0259_M_B,CBAY0259_BF_B,,,,,,,,
+CBAY0260,At KFS Cabin,Haphazard 1,N/A,30-Jul-25,Spencer,Sweep net,69.10388,-105.32737,-13,Terrestrial,Mail,N/A,22332997,30-Jul-25,19:56,15.11,57.22,6.72,N/A,"50 ml of 60% Propylene Glycol 
+(600 ml prop, 400 ml DI H20, 5 ml Dish soap
+- prepared July 19th 2025), 
+then ethanol apon collection","Sampling with KFS kids mainly taking the mosquitoes that were flying around in the air and some taking off of other people, 
+Started raining when children started sampling, ",Box 3,Guelph,5,2,3,2,previously sorted into 96 well plates ,CBAY0260_M_H_KFS,CBAY0260_BF_H_KFS,CBAY0260_M_B_KFS,CBAY0260_BF_B_KFS,,,,,,,,
+CBAY0263,Dew line Road 1,Sample 2,N/A,01-Aug-25,S. Dworatzek,Sweep net,69.13698,-105.17181,25,Lentic,Mail,0-5,22332997,01-Aug-25,15:32,17.67,50.76,7.33,5 mins,30 ml of 100% ETOH,"The coordinnates taken last time was very inaccurate;
+Bushes large and fragmented;
+Grounnd dry and grassy",Box 1,Guelph,29,2,31,2,never sorted in 96-well plate,CBAY0263_M_H,CBAY0263_BF_H,CBAY0263_M_B,CBAY0263_BF_B,,,,,,,,
+CBAY0264,Dew line Road next to station,Sample 3,N/A,01-Aug-25,L. Chan,Sweep net,69.11926,-105.12775,10,Lotic,Mail,0-10,22332997,01-Aug-25,16:13,16.26,55.61,7.37,5 mins,30 ml of 100% ETOH,"Same sampling site as last time;
+Ground wet, big continuous bishes",Box 2,Guelph,14,14,14,15,previously sorted into 96 well plates ,CBAY0264_M_H,CBAY0264_BF_H,CBAY0264_M_B,CBAY0264_BF_B,,,,,,,,
+CBAY0265,First Creek,Sample 1,N/A,01-Aug-25,L. Chan,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,0-5,22332997,01-Aug-25,13:43,15.43,56.77,6.91,5 mins,30 ml of 100% ETOH,"Sunny, not too windy;
+Continuous bushes;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22",Box 1,Guelph,7,3,7,3,previously sorted into 96 well plates ,CBAY0265_M_H,CBAY0265_BF_H,CBAY0265_M_B,CBAY0265_BF_B,,,,,,,,
+CBAY0267,Dew line Road next to station,Sample 4,N/A,01-Aug-25,S. Dworatzek,Sweep net,69.11926,-105.12775,10,Lotic,Mail,55-65,22332997,01-Aug-25,16:13,16.26,55.61,7.37,5 mins,30 ml of 100% ETOH,Same sampling site as last time;,Box 1,Guelph,29,89,31,90,never sorted in 96-well plate,CBAY0267_M_H,CBAY0267_BF_H,CBAY0267_M_B,CBAY0267_BF_B,,,,,,,,
+CBAY0268,Airport Road 3 Pond 2,Sample 3,N/A,03-Aug-25,S. Dworatzek,Sweep net,69.11241,-105.09043,34,Lentic,Mail,0-5,22332997,03-Aug-25,16:26,18.14,53.1,8.44,5 mins,30 ml of 100% ETOH,"Bushes mostly large but some small and fragmented, ground mostly dry and dusty with dust coming off bushes when sweeping, 
+sunny and pretty windy although slightly less windy than during sample 1 and 2 and when removing malaise traps;
+Distance from water measured on Aug 5, 2025",Box 1,Guelph,10,14,10,14,previously sorted into 96 well plates ,CBAY0268_M_H,CBAY0268_BF_H,CBAY0268_M_B,CBAY0268_BF_B,,,,,,,,
+CBAY0269,Dew line Road 1,Opportunistic ,N/A,01-Aug-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.13698,-105.17181,25,Lentic,Mail,N/A,22332997,01-Aug-25,15:32,17.67,50.76,7.33,N/A,30 ml of 100% ETOH,The coordinnates taken last time was very inaccurate,Box 1,Guelph,56,0,56,0,never sorted in 96-well plate,CBAY0269_M_H,N/A,CBAY0269_M_B,N/A,,,,,,,,
+CBAY0273,Dew line Road next to station,Opportunistic ,N/A,01-Aug-25,L. Chan,"Taking mosquitoes off 
+people with aspirator",69.11926,-105.12775,10,Lotic,Mail,N/A,22332997,01-Aug-25,16:13,16.26,55.61,7.37,N/A,30 ml of 100% ETOH,"Sunny, not too windy;",Box 1,Guelph,130,4,130,4,never sorted in 96-well plate,CBAY0273_M_H,CBAY0273_BF_H,CBAY0273_M_B,CBAY0273_BF_B,,,,,,,,
+CBAY0274,Dew line Road next to station,Sample 1,N/A,01-Aug-25,L. Chan,Sweep net,69.11926,-105.12775,10,Lotic,Mail,0-5,22332997,01-Aug-25,16:13,16.26,55.61,7.37,5 mins,30 ml of 100% ETOH,"Same sampling site as last time;
+Ground dry, large fragmented bushes",Box 1,Guelph,16,25,16,25,never sorted in 96-well plate,CBAY0274_M_H,CBAY0274_BF_H,CBAY0274_M_B,CBAY0274_BF_B,,,,,,,,
+CBAY0275,Dew line Road next to station,Sample 2,N/A,01-Aug-25,S. Dworatzek,Sweep net,69.11926,-105.12775,10,Lotic,Mail,0-5,22332997,01-Aug-25,16:13,16.26,55.61,7.37,5 mins,30 ml of 100% ETOH,"Same sampling site as last time;
+Bushes small and fragmented, ground dry",Box 1,Guelph,11,52,11,52,previously sorted into 96 well plates ,CBAY0275_M_H,CBAY0275_BF_H,CBAY0275_M_B,CBAY0275_BF_B,,,,,,,,
+CBAY0277,First Creek,Sample 2,N/A,01-Aug-25,S. Dworatzek,Sweep net,69.13284,-105.463245,-5,Lotic,Mail,5-10,22332997,01-Aug-25,13:43,15.43,56.77,6.91,5 mins,30 ml of 100% ETOH,"Sunny, not too windy;
+Bushes small annd quite fragmented;
+Original coordinates were incorrect. Changed to the coordinates taken in the same place on July 22",Box 1,Guelph,24,8,23,9,never sorted in 96-well plate,CBAY0277_M_H,CBAY0277_BF_H,CBAY0277_M_B,CBAY0277_BF_B,,,,,,,,
+CBAY0278,Airport Road 5,Sample 1,N/A,03-Aug-25,L. Chan,Sweep net,69.11612,-105.08044,10,Lentic,Mail,10-15,22332997,03-Aug-25,18:07,16.03,59.91,8.26,5 mins,30 ml of 100% ETOH,"Wind died down and a lot of mosquitoes came out;
+Bushes fragmented, some large and some small; ground dry in some parts and slightly wet in others, bushes very dusty
+Ground dry with small creek coming out of pond on the middle of sample 1, evidence of another one which dried up ",Box 3,Guelph,126,79,125,79,previously sorted into 96 well plates ,CBAY0278_M_H,CBAY0278_BF_H,CBAY0278_M_B,CBAY0278_BF_B,,,,,,,,
+CBAY0279,Freshwater river,Opportunistic ,N/A,04-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.143178,-104.94794,82.6,Lotic,Mail,N/A,22332997,04-Aug-25,12:07,22.29,53.43,12.41,N/A,30 ml of 100% ETOH,"Very windy and sun behind cloud;
+Elevation likely taken on higher part of hill",Box 1,Guelph,2,9,3,9,never sorted in 96-well plate,CBAY0279_M_H,CBAY0279_BF_H,CBAY0279_M_B,CBAY_0279_BF_B,,,,,,,,
+CBAY0280,Airport Road 5,Sample 2,N/A,03-Aug-25,S. Dworatzek,Sweep net,69.11612,-105.08044,10,Lentic,Mail,0-5,22332997,03-Aug-25,18:07,16.03,59.91,8.26,5 mins,30 ml of 100% ETOH,"Bushes fragmented, mostly small. Dry ground very dusty;
+Wind picked up again as we were leaving",Box 3,Guelph,44,23,41,23,previously sorted into 96 well plates ,CBAY0280_M_H,CBAY0280_BF_H,CBAY0280_M_B,CBAY0280_BF_B,,,,,,,,
+CBAY0281,Airport Road 3 Pond 2,Sample 4,N/A,03-Aug-25,L. Chan,Sweep net,69.11241,-105.09043,34,Lentic,Mail,10-20,22332997,03-Aug-25,16:26,18.14,53.1,8.44,5 mins,30 ml of 100% ETOH,"Bushes mostly large but some small and fragmented, ground mostly dry and dusty with dust coming off bushes when sweeping, 
+sunny and pretty windy although slightly less windy than during sample 1 and 2 and when removing malaise traps;
+Distance from water measured on Aug 5, 2025",Box 1,Guelph,7,49,7,49,never sorted in 96-well plate,CBAY0281_M_H,CBAY0281_BF_H,CBAY0281_M_B,CBAY0281_BF_B,,,,,,,,
+CBAY0282,Airport Road 3 Pond 1,Sample 1,N/A,03-Aug-25,S. Dworatzek,Sweep net,69.11241,-105.09043,34,Lentic,Mail,10-15,22332997,03-Aug-25,15:28,19.31,51.26,9.02,5 mins,30 ml of 100% ETOH,"A few large bushes and many very small bushes which are very fragmented, ground very dry and dusty, sunny but very windy, 
+not very many bugs in my sample I am not sure why ",Box 3,Guelph,0,0,0,0,,,,,,,,,,,,,
+CBAY0283,Construction Shop 3,Sample 2,N/A,02-Aug-25,L. Chan,Sweep net,69.12577,-105.03573,-6,Lentic,Mail,0-5,22332997,02-Aug-25,17:00,18.25,52.41,8.51,5 mins,30 ml of 100% ETOH,"Sunny but windy;
+bushes large and fragmented
+Some bushes growing right out of pond but other than that pretty dry",Box 1,Guelph,0,0,0,0,never sorted in 96-well plate,,,,,,,,,,,,
+CBAY0284,Behind OPS building in CHARS,Sample 2,N/A,02-Aug-25,L. Chan,Sweep net,69.12205,-105.04109,-7,Lentic,Mail,0-5,22332997,02-Aug-25,17:49,15.91,59.41,7.73,5 mins,30 ml of 100% ETOH,"Small and very fragmented bushes with some tall grasses, ground pretty dry",Box 2,Guelph,1,3,1,3,previously sorted into 96 well plates ,CBAY0284_M_H,CBAY0284_BF_H,CBAY0284_M_B,CBAY0284_BF_B,,,,,,,,
+CBAY0285,Airport Road 5,Opportunistic ,N/A,03-Aug-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.11612,-105.08044,10,Lentic,Mail,N/A,22332997,03-Aug-25,18:07,16.03,59.91,8.26,N/A,30 ml of 100% ETOH,"Wind died down and a lot of mosquitoes came out;
+Wind picked up again as we were leaving",Box 2,Guelph,191,2,190,2,never sorted in 96-well plate,CBAY0285_M_H,CBAY0285_BF_H,CBAY0285_M_B,CBAY_0285_BF_B,,,,,,,,
+CBAY0286,Airport Road 3 Pond 1,Sample 2,N/A,03-Aug-25,L. Chan,Sweep net,69.11241,-105.09043,34,Lentic,Mail,25-35,22332997,03-Aug-25,15:28,19.31,51.26,9.02,5 mins,30 ml of 100% ETOH,"Bushes smaller than large bushes in sample 1 but more continous, ground dry, sunny but very windy, ",Box 3,Guelph,12,1,12,1,previously sorted into 96 well plates ,CBAY0286_M_H,CBAY0286_BF_H,CBAY0286_M_B,CBAY0286_BF_B,,,,,,,,
+CBAY0287,Construction Shop 1,Sample 1,N/A,02-Aug-25,S. Dworatzek,Sweep net,69.12623,-105.03804,-12,Lentic,Mail,0-5,22332997,02-Aug-25,16:14,17.07,56.38,8.37,5 mins,30 ml of 100% ETOH,"Bushes very fragmented, ground mostly dry with tall grasses;
+A different GPS was used",Box 1,Guelph,0,0,0,0,never sorted in 96-well plate,N/A,N/A,N/A,N/A,,,,,,,,
+CBAY0288,Airport Road 4,Opportunistic ,N/A,03-Aug-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.11472,-105.08398,7,Lentic,Mail,N/A,22332997,03-Aug-25,16:48,18.3,54.07,8.86,N/A,30 ml of 100% ETOH,"Wind died down a lot for a few mins and mosquitoes came out. This was when we did the opportunistic sampling.
+Wind came back later but still much less windy than earlier in the day",Box 1,Guelph,67,0,67,0,never sorted in 96-well plate,CBAY0288_M_H,N/A,CBAY0288_M_B,N/A,,,,,,,,
+CBAY0289,Behind OPS building in CHARS,Opportunistic ,N/A,02-Aug-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.12205,-105.04109,-7,Lentic,Mail,N/A,22332997,02-Aug-25,17:49,15.91,59.41,7.73,N/A,30 ml of 100% ETOH,Sunny but windy,Box 1,Guelph,24,0,24,0,never sorted in 96-well plate,CBAY0289_M_H,NA,CBAY0289_M_B,NA,,,,,,,,
+CBAY0290,Construction Shop 1,Sample 2,N/A,02-Aug-25,L. Chan,Sweep net,69.12623,-105.03804,-12,Lentic,Mail,0-5,22332997,02-Aug-25,16:14,17.07,56.38,8.37,5 mins,30 ml of 100% ETOH,"Bushes small and very fragmented, ground very wet;
+A different GPS was used",Box 1,Guelph,0,0,0,0,never sorted in 96-well plate,NA,NA,NA,NA,,,,,,,,
+CBAY0291,Behind OPS building in CHARS,Sample 1,N/A,02-Aug-25,S. Dworatzek,Sweep net,69.12205,-105.04109,-7,Lentic,Mail,0,22332997,02-Aug-25,17:49,15.91,59.41,7.73,5 mins,30 ml of 100% ETOH,Sampled in plants that grow in the pond,Box 1,Guelph,0,0,0,0,never sorted in 96-well plate,NA,NA,NA,NA,,,,,,,,
+CBAY0292,Construction Shop 3,Sample 1,N/A,02-Aug-25,S. Dworatzek,Sweep net,69.12577,-105.03573,-6,Lentic,Mail,0-5,22332997,02-Aug-25,17:00,18.25,52.41,8.51,5 mins,30 ml of 100% ETOH,"Sunny but windy;
+Bushes small and fragmented in some places, continuous in others;
+Some bushes growing right out of pond but other than that pretty dry
+",Box 1,Guelph,1,0,1,0,never sorted in 96-well plate,CBAY0292_M_H,N/A,CBAY0292_M_B,N/A,,,,,,,,
+CBAY0293,Behind CHARS,Sample 1,N/A,03-Aug-25,L. Chan,Sweep net,69.12031,-105.04631,6,Lentic,Mail,0-10,22332997,03-Aug-25,19:18,15.18,63.82,8.38,5 mins,30 ml of 100% ETOH,"Wind died down lots of mosquitoes out and Chironomids mating, dogs came by and there were many mosquitoes on them 
+(cute puppies awe), 
+",Box 3,Guelph,25,2,25,2,previously sorted into 96 well plates ,CBAY0293_M_H,CBAY0293_BF_H,CBAY0293_M_H,CBAY0293_BF_B,,,,,,,,
+CBAY0294,Airport Road 3,Opportunistic ,N/A,05-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.11241,-105.09043,34,Lentic,Mail,N/A,22332997,05-Aug-25,14:37,16.76,63.6,9.78,N/A,30 ml of 100% ETOH,Wind died down a lot so many mosquitoes which seem to be biting more than usual;,Box 2,Guelph,97,4,97,4,never sorted in 96-well plate,CBAY0294_M_H,CBAY0294_BF_H,CBAY0294_M_B,CBAY0294_BF_B,,,,,,,,
+CBAY0295,Greiner Lake Inlet,Sample 2,N/A,04-Aug-25,S. Dworatzek,Sweep net,69.17868,-104.82275,5,Lotic,Mail,15-25,22332997,04-Aug-25,10:50,19.93,55.7,10.89,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Sunny and not very windy when sweeping;
+Bushes large and continuous, ground dry;
+We measured the distance from water again and we decided to use 15-25m instead",Box 1,Guelph,14,32,14,32,never sorted in 96-well plate,CBAY0295_M_H,CBAY0295_BF_H,CBAY0295_M_B,CBAY0295_BF_B,,,,,,,,
+CBAY0296,Behind CHARS,Opportunistic ,N/A,03-Aug-25,"L. Chan, 
+S.Dworatzek",Taking mosquitoes off people with aspirator,69.12031,-105.04631,6,Lentic,Mail,N/A,22332997,03-Aug-25,19:18,15.18,63.82,8.38,N/A,30 ml of 100% ETOH,"Wind died down lots of mosquitoes out and Chironomids mating, dogs came by and there were many mosquitoes on them 
+(cute puppies awe), 
+",Box 3,Guelph,124,1,124,1,never sorted in 96-well plate,CBAY0296_M_H,CBAY0296_BF_H,CBAY0296_M_B,CBAY0296_BF_B,,,,,,,,
+CBAY0297,Behind CHARS,Sample 2,N/A,03-Aug-25,S. Dworatzek,Sweep net,69.12031,-105.04631,6,Lentic,Mail,25-35,22332997,03-Aug-25,19:18,15.18,63.82,8.38,5 mins,30 ml of 100% ETOH,"Wind died down lots of mosquitoes out and Chironomids mating, dogs came by and there were many mosquitoes on them 
+(cute puppies awe), 
+",Box 3,Guelph,41,3,41,3,previously sorted into 96 well plates ,CBAY0297_M_H,CBAY0297_BF_H,CBAY0297_M_B,CBAY0297_BF_B,,,,,,,,
+CBAY0298,Greiner Lake Inlet,Opportunistic ,N/A,04-Aug-25,"L. Chan, 
+S.Dworatzek","Taking mosquitoes off 
+people with aspirator",69.17868,-104.82275,5,Lotic,Mail,N/A,22332997,04-Aug-25,10:50,19.93,55.7,10.89,N/A,30 ml of 100% ETOH,"Sunny and not very windy when sweeping;
+Wind picked up during opportunistic sampling, so less mosquitoes",Box 2,Guelph,7,0,7,0,previously sorted into 96 well plates ,CBAY0298_M_H,N/A,CBAY0298_M_B,N/A,,,,,,,,
+CBAY0299,Freshwater river,Sample 1,N/A,04-Aug-25,S. Dworatzek,Sweep net,69.143178,-104.94794,82.6,Lotic,Mail,5-10,22332997,04-Aug-25,12:07,22.29,53.43,12.41,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Very windy and sun behind cloud;
+Bushes large and mostly continuous;
+Swept in an area slightly more sheltered by the wind;
+Elevation likely taken on higher part of hill",Box 1,Guelph,,,,,,,CBAY0299_BF_H,,,,,,,,,,
+CBAY0300,Airport Road 3 Pond 1,Sample 1,N/A,05-Aug-25,L. Chan,Sweep net,69.11241,-105.09043,34,Lentic,Mail,10-15,22332997,05-Aug-25,14:37,16.76,63.6,9.78,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Still very cloudy but not windy at all (mosquitoes went crazy again!);
+Bushes large and very fragmented",Box 2,Guelph,26,122,26,122,previously sorted into 96 well plates,CBAY0300_M_H,CBAY0300_BF_H,CBAY0300_M_B,CBAY0300_BF_B,,,,,,,,
+CBAY0301,Airport Road 3 Pond 2,Sample 3,N/A,05-Aug-25,L. Chan,Sweep net,69.11241,-105.09043,34,Lentic,Mail,0-5,22332997,05-Aug-25,15:26,16.36,64.3,9.62,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Wind died down a lot so many mosquitoes which seem to be biting more than usual;
+Mostly large bushes but some bushes are small. Very grassy;
+Ground dry and dusty with dust coming off when sweeping",Box 2,Guelph,77,14,14,77,previously sorted into 96 well plates,CBAY0301_M_H,CBAY0301_BF_H,CBAY0301_M_B,CBAY0301_BF_B,,,,,,,,
+CBAY0302,Airport Road 3 Pond 2,Sample 4,N/A,05-Aug-25,S. Dworatzek,Sweep net,69.11241,-105.09043,34,Lentic,Mail,10-20,22332997,05-Aug-25,15:26,16.36,64.3,9.62,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Wind died down a lot so many mosquitoes which seem to be biting more than usual;
+Bushes mostly large but some small and fragmented;
+Ground dry and dusty with dust coming off when sweeping",Box 2,Guelph,62,28,61,28,previously sorted into 96 well plates,CBAY0302_M_H,CBAY0302_BF_H,CBAY0302_M_B,CBAY0302_BF_B,,,,,,,,
+CBAY0303,West Arm Beach,Sample 1,N/A,05-Aug-25,L. Chan,Sweep net,69.09205,-105.25403,3,Terrestrial,Mail,N/A,22332997,05-Aug-25, ,15.15,62.71,8.13,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Partially cloudy with some lighy breezes. Wind died down compared to how it was around 10am;
+Very tall grass in the middle of the road, dry ground",Box 2,Guelph,1,0,1,0,previously sorted into 96 well plates,CBAY0303_M_H,N/A,CBAY0303_M_B,N/A,,,,,,,,
+CBAY0304,West Arm Beach,Opportunistic ,N/A,05-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.09205,-105.25403,3,Terrestrial,Mail,N/A,22332997,05-Aug-25,11:19,15.15,62.71,8.13,N/A,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Partially cloudy with some lighy breezes. Wind died down compared to how it was around 10am
+",Box 2,Guelph,38,0,38,0,never sorted in 96-well plate,CBAY0304_M_H,N/A,CBAY0304_M_B,N/A,,,,,,,,
+CBAY0305,Airport Road 5,Opportunistic ,N/A,05-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.11612,-105.08144,10,Lentic,Mail,N/A,22332997,05-Aug-25,15:59,17.01,64.11,10.19,N/A,30 ml of 100% ETOH,,Box 2,Guelph,32,2,32,2,never sorted in 96-well plate,CBAY0305_M_H,CBAY0305_BF_H,CBAY0305_M_B,CBAY0305_BF_B,,,,,,,,
+CBAY0306,West Arm Hills ,Opportunistic ,N/A,05-Aug-25,"L. Chan and 
+S. Dworatzek",Taking mosquitoes off people with aspirator,69.10201,-105.24301,7,Lentic,Mail,N/A,22332997,05-Aug-25,12:15,16.52,63.22,9.59,N/A,30 ml of 100% ETOH,Wind died down and mosquitoes went crazy. Still pretty cloudy,Box 2,Guelph,297,2,297,2,never sorted in 96-well plate,CBAY0306_M_H,CBAY0306_BF_H,CBAY0306_M_B,CBAY0306_BF_B,,,,,,,,
+CBAY0307,West Arm Hills ,Sample 2,N/A,05-Aug-25,S. Dworatzek,Sweep net,69.10201,-105.24301,7,Terrestrial,Mail,95-105,22332997,05-Aug-25,12:15,16.52,63.22,9.59,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Bushes mostly large and fairly continuous but a little fragmented",Box 2,Guelph,216,9,216,10,never sorted in 96-well plate,CBAY0307_M_H,CBAY0307_BF_H,CBAY0307_M_B,CBAY0307_BF_B,,,,,,,,
+CBAY0308,West Arm Hills ,Sample 1,N/A,05-Aug-25,L. Chan,Sweep net,69.10201,-105.24301,7,Lentic,Mail,25-35,22332997,05-Aug-25,12:15,16.52,63.22,9.59,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Wind died down and mosquitoes went crazy. Still pretty cloudy;
+Bushes namely large and fragmented",Box 2,Guelph,135,5,132,5,previously sorted into 96 well plate ,CBAY0308_M_H,CBAY0308_BF_H,CBAY0308_M_B,CBAY0308_BF_B,,,,,,,,
+CBAY0309,Airport Road 5,Sample 2,N/A,05-Aug-25,L. Chan,Sweep net,69.11612,-105.08144,10,Lentic,Mail,0-5,22332997,05-Aug-25,15:59,17.01,64.11,10.19,5 mins,30 ml of 100% ETOH,"Samples taken in the same place as last time;
+Bushes fragmented, mostly small. Dry ground very dusty;",Box 2,Guelph,50,266,50,266,previously sorted into 96 well plate ,CBAY0309_M_H,CBAY0309_BF_H,CBAY0309_M_B,CBAY0309_BF_B,,,,,,,,
