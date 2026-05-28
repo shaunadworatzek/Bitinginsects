@@ -34,8 +34,65 @@ KGLTK2025_metadata <- read_csv(file = "raw-data2/KGLTK2025_metadata.csv")
 condensedsites <- read_csv(file = "raw-data2/condencedsites.csv")
 KBIMP2025_updatedspecies <- read_tsv(file = "processed-data/KBIMP2025_updatedspecies.tsv")
 KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspecies.tsv")
-kbimp2024_sampledata <- read_csv(file = "raw-data/KBIMP2024_specimendata.csv")
-kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data/KBIMP_meta_sitenamesfixed.csv")
+kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
+kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
+
+
+#### Invesitgating the number of black flies and mosquitoes from each year ----
+
+CBAY2025_metadata <- CBAY2025_metadata %>%
+  filter(!is.na(`Mosquito Head Abundance`))
+
+CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
+CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
+total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
+total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
+
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
+    CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+
+KGLTK2025_metadata  <- KGLTK2025_metadata %>%
+  filter(!is.na(`Mosquito Head Abundance`))
+
+KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
+KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
+total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
+total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
+
+
+sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance` , na.rm = TRUE)
+
+#### - combining 2024 and 2025 data into one dataset ----
+
+#fixing sample names and selecting for required columns 
+
+KBIMP2025_updatedclean <- KBIMP2025_updatedspecies %>%
+  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
+  mutate(Sample = str_extract(Sample, "^[A-Za-z]+_?\\d+"),
+         Sample = str_replace(Sample, "_", "")) %>%
+  select(Sample, Species, Family) 
+
+KBIMP2024_updatedclean <- KBIMP2024_updatedspecies %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>% 
+  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
+  select(FieldID, Species, Family) %>%
+  dplyr::rename(Sample = FieldID) 
+
+#combining by stacking rows 
+
+KBIMP_combined <- KBIMP2025_updatedclean %>%
+  bind_rows(KBIMP2024_updatedclean) %>%
+  distinct()
 
 #### - Preparing the site metadata for analysis ----
 
@@ -106,62 +163,18 @@ KGLTK2025_metadata <- KGLTK2025_metadata %>%
                                        orders = c("ymd", "mdy", "dmy", "dm")),
          Month = month(Date_parsed, label = TRUE))
 
+#setting up metadata for analysis 
 
-#### Invesitgating the number of black flies and mosquitoes from each year ----
+KGLTK2025_metadata <- KGLTK2025_metadata %>%
+  select(Sample, `Sample type collection method`, Month) 
 
-CBAY2025_metadata <- CBAY2025_metadata %>%
-  filter(!is.na(`Mosquito Head Abundance`))
-
-CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
-CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
-total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
-total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
-
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-    CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
-
-KGLTK2025_metadata  <- KGLTK2025_metadata %>%
-  filter(!is.na(`Mosquito Head Abundance`))
-
-KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
-KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
-
-
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance` , na.rm = TRUE)
-
-#### - combining 2024 and 2025 data into one dataset ----
-
-#fixing sample names and selecting for required columns 
-
-KBIMP2025_updatedclean <- KBIMP2025_updatedspecies %>%
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  mutate(Sample = str_extract(Sample, "^[A-Za-z]+_?\\d+"),
-         Sample = str_replace(Sample, "_", "")) %>%
-  select(Sample, Species, Family) 
-
-KBIMP2024_updatedclean <- KBIMP2024_updatedspecies %>%
-  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>% 
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  select(FieldID, Species, Family) %>%
-  dplyr::rename(Sample = FieldID) 
-
-#combining by stacking rows 
-
-KBIMP_combined <- KBIMP2025_updatedclean %>%
-  bind_rows(KBIMP2024_updatedclean) %>%
-  distinct()
+KBIMP2025_metadata <- CBAY2025_metadata %>% 
+  select(Sample, `Sample type collection method`, Month) %>%
+  rbind(KGLTK2025_metadata) %>%
+  filter(!is.na(Sample)) %>%
+  mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
+  mutate(Year = 2025) %>%
+  dplyr::rename(SamplingMethod = `Sample type collection method`) 
 
 
 ####  Making iNEXT graph ----
@@ -357,14 +370,22 @@ iNext_mos <- ggiNEXT(em.inext.cul)+
 ggsave("plots/inext2025moscbay.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 
-##### determining if sampling extend was okay in August for mosquitoes #####
+##### determining if sampling extent was okay in August for mosquitoes #####
 
-Augsamples <- multi_en_data %>%
+en_data <- kbimp2024_sampledata %>%
+  dplyr::rename(Sample = FieldID) %>%
+  dplyr::rename(Lat = Lat.x) %>%
+  select(Sample, SamplingMethod, Sector, Month) %>%
+  mutate(Year = 2024) %>%
+  bind_rows(KBIMP2025_metadata) %>%
+  distinct() 
+
+Augsamples <- en_data %>%
   filter(Month == "Aug")
 
 iNEXT_cul <- KBIMP_combined %>%
   filter(Family == "Culicidae")%>%
-  filter(Sample %in% multi_en_data$Sample) %>%
+  filter(Sample %in% Augsamples$Sample) %>%
   select(Sample, Species) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
   dplyr::count(region, Sample, Species, name = "Abundance") %>% 
@@ -381,7 +402,7 @@ Augsamples %>%
   filter(Sector == "CBAY") %>%
   nrow()
 
-multi_en_data %>%
+en_data %>%
   filter(Sector == "KGLTK") %>%
   nrow()
 
@@ -403,7 +424,7 @@ ggsave("plots/inext2025mos.png", iNext_mos , width = 6, height = 5, dpi = 300, b
 
 #### - Investigating differences since 2012 ----
 
-sr_2012 <- read.csv(file = "raw-data/schafer_2012.csv")
+sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 
 ##### venn diagram/ determining which species are different #####
 
@@ -594,7 +615,7 @@ ggsave("plots/vectorchangekug.png", vectorchangekug , width = 8, height = 4, dpi
 
 #create data set by coutning the number of each species in each sample
 
-multi_en_data <- kbimp2024_sampledata %>%
+alpha_en_data <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -611,8 +632,8 @@ multi_en_data <- kbimp2024_sampledata %>%
 families <- c("Culicidae", "Simuliidae") 
 
 speciesrich_CBAYvs_KGLTK <- KBIMP_combined %>%
-  filter(Sample %in% multi_en_data$Sample) %>%
-  inner_join(multi_en_data) %>%
+  filter(Sample %in% alpha_en_data$Sample) %>%
+  inner_join(alpha_en_data) %>%
   filter(!Month %in% c("Jun", "Sep")) %>%
   group_by(Sector, Sample, Month, Year, Family) %>%
   summarise(Speciessum = n_distinct(Species, na.rm = TRUE), .groups = "drop") %>%
@@ -645,8 +666,8 @@ modeluniqspsample
 #creating data set of total per month for plot
 
 speciesrich_CBAYvs_KGLTK <- KBIMP_combined %>%
-  filter(Sample %in% multi_en_data$Sample) %>%
-  inner_join(multi_en_data) %>%
+  filter(Sample %in% alpha_en_data$Sample) %>%
+  inner_join(alpha_en_data) %>%
   filter(!Month %in% c("Jun", "Sep")) %>%
   group_by(Sector, Month, Family) %>%
   summarise(Speciessum = n_distinct(Species, na.rm = TRUE), .groups = "drop") %>%
@@ -702,19 +723,6 @@ ggsave("plots/lineSRtotalSRcbayvskug.png", speciesrichplot , width = 10, height 
 
 #### - Multidimentional 2024 and 2025 ----
 
-#setting up metadata for NMDS analysis 
-
-KGLTK2025_metadata <- KGLTK2025_metadata %>%
-  select(Sample, `Sample type collection method`, Month) 
-
-KBIMP2025_metadata <- CBAY2025_metadata %>% 
-  select(Sample, `Sample type collection method`, Month) %>%
-  rbind(KGLTK2025_metadata) %>%
-  filter(!is.na(Sample)) %>%
-  mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
-  mutate(Year = 2025) %>%
-  dplyr::rename(SamplingMethod = `Sample type collection method`) 
-
 ##### Just mosquitoes -----
 
 KBIMP_speciesmatrix_mosquitoes <- KBIMP_combined %>%
@@ -725,7 +733,7 @@ KBIMP_speciesmatrix_mosquitoes <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
+multi_en_data_mos <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -743,7 +751,7 @@ multi_en_data <- kbimp2024_sampledata %>%
 #making sure only the samples we filtered above are in the species matrix 
 
 KBIMP_speciesmatrix_mosquitoes <- KBIMP_speciesmatrix_mosquitoes %>%
-  filter(rownames(KBIMP_speciesmatrix_mosquitoes) %in% multi_en_data$Sample) 
+  filter(rownames(KBIMP_speciesmatrix_mosquitoes) %in% multi_en_data_mos$Sample) 
 
 # Order species matrix
 
@@ -751,7 +759,7 @@ KBIMP_speciesmatrix_mosquitoes <- KBIMP_speciesmatrix_mosquitoes[order(rownames(
 
 # Order environmental data
 
-multi_en_data <- multi_en_data %>% arrange(Sample) 
+multi_en_data_mos <- multi_en_data_mos %>% arrange(Sample) 
 
 # Bray-Curtis dissimilarity
 
@@ -760,7 +768,7 @@ bray_dist <- vegdist(KBIMP_speciesmatrix_mosquitoes, method = "bray")
 #permanova 
 
 adonis2(bray_dist ~ Sector + Year + SamplingMethod + Month,
-        data = multi_en_data, permutations = 999, by="margin")
+        data = multi_en_data_mos, permutations = 999, by="margin")
 
 #multidimensonal scaling
 
@@ -770,30 +778,34 @@ NMDS$stress
 
 #anosim for Sector
 
-anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data$Sector ,
+anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data_mos$Sector ,
        permutations = 999,distance = "bray", strata = NULL)
 
 #anosim for Year
 
-anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data$Year ,
+anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data_mos$Year ,
        permutations = 999,distance = "bray", strata = NULL)
 
 #anosim for Sampling method 
 
-anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data$SamplingMethod ,
+anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data_mos$SamplingMethod ,
        permutations = 999,distance = "bray", strata = NULL)
 
 #anosim for Month
 
-anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data$Month ,
+anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data_mos$Month ,
        permutations = 999,distance = "bray", strata = NULL)
+
+# Fit environmental vector for CollectionWeek
+env_fit <- envfit(NMDS, multi_en_data_mos, permutations = 999)
+
 
 #extracting the nmds data into a dataframe 
 
 nmds_scores <- as.data.frame(vegan::scores(NMDS, display = "sites"))
 nmds_scores$Sample <- rownames(nmds_scores)
 nmds_scores <- nmds_scores %>%
-  full_join(multi_en_data)
+  full_join(multi_en_data_mos)
 en_coord_cat <- as.data.frame(vegan::scores(env_fit, "factors")) * ordiArrowMul(env_fit)
 
 # Apply the function to each group to create the polygons on the ggplot nmds 
@@ -838,7 +850,7 @@ KBIMP_speciesmatrix_blackflies <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
+multi_en_data_bf <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -854,7 +866,7 @@ multi_en_data <- kbimp2024_sampledata %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) 
 
 KBIMP_speciesmatrix_blackflies <- KBIMP_speciesmatrix_blackflies %>%
-  filter(rownames(KBIMP_speciesmatrix_blackflies) %in% multi_en_data$Sample) 
+  filter(rownames(KBIMP_speciesmatrix_blackflies) %in% multi_en_data_bf$Sample) 
 
 # Order species matrix
 
@@ -862,40 +874,40 @@ KBIMP_speciesmatrix_blackflies <- KBIMP_speciesmatrix_blackflies[order(rownames(
 
 # Order environmental data
 
-multi_en_data <- multi_en_data %>% arrange(Sample) 
+multi_en_data_bf <- multi_en_data_bf %>% arrange(Sample) 
 
 # Bray-Curtis dissimilarity
 
 bray_dist <- vegdist(KBIMP_speciesmatrix_blackflies, method = "bray")
 
 adonis2(bray_dist ~ Sector + Year + SamplingMethod + Month,
-        data = multi_en_data, permutations = 999, by="margin")
+        data = multi_en_data_bf, permutations = 999, by="margin")
 
 NMDS <- metaMDS(KBIMP_speciesmatrix_blackflies, k=3)
 
 NMDS$stress
 
-anosim(KBIMP_speciesmatrix_blackflies, multi_en_data$Sector ,
+anosim(KBIMP_speciesmatrix_blackflies, multi_en_data_bf$Sector ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies, multi_en_data$Year ,
+anosim(KBIMP_speciesmatrix_blackflies, multi_en_data_bf$Year ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies, multi_en_data$SamplingMethod ,
+anosim(KBIMP_speciesmatrix_blackflies, multi_en_data_bf$SamplingMethod ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies, multi_en_data$Month ,
+anosim(KBIMP_speciesmatrix_blackflies, multi_en_data_bf$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 # Fit environmental vector for CollectionWeek
-env_fit <- envfit(NMDS, multi_en_data, permutations = 999)
+env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999)
 
 #convert the data from nmds into a dataframe for plotting 
 
 nmds_scores <- as.data.frame(vegan::scores(NMDS, display = "sites"))
 nmds_scores$Sample <- rownames(nmds_scores)
 nmds_scores <- nmds_scores %>%
-  full_join(multi_en_data)
+  full_join(multi_en_data_bf)
 en_coord_cat <- as.data.frame(vegan::scores(env_fit, "factors")) * ordiArrowMul(env_fit)
 
 
@@ -943,7 +955,7 @@ KBIMP_speciesmatrix_blackflies2 <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
+multi_en_data_bf <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -960,44 +972,44 @@ multi_en_data <- kbimp2024_sampledata %>%
   filter(!Sample %in% c("KGLTK0137", "KGLTK0103"))
 
 KBIMP_speciesmatrix_blackflies2 <- KBIMP_speciesmatrix_blackflies2 %>%
-  filter(rownames(KBIMP_speciesmatrix_blackflies2) %in% multi_en_data$Sample) 
+  filter(rownames(KBIMP_speciesmatrix_blackflies2) %in% multi_en_data_bf$Sample) 
 
 # Order species matrix
 KBIMP_speciesmatrix_blackflies2 <- KBIMP_speciesmatrix_blackflies2[order(rownames(KBIMP_speciesmatrix_blackflies2)), ]
 
 # Order environmental data
-multi_en_data <- multi_en_data %>% arrange(Sample) 
+multi_en_data_bf <- multi_en_data_bf %>% arrange(Sample) 
 
 # Bray-Curtis dissimilarity
 bray_dist <- vegdist(KBIMP_speciesmatrix_blackflies2, method = "bray")
 
 adonis2(bray_dist ~ Sector + Year + SamplingMethod + Month,
-        data = multi_en_data, permutations = 999, by="margin")
+        data = multi_en_data_bf, permutations = 999, by="margin")
 
 NMDS <- metaMDS(KBIMP_speciesmatrix_blackflies2, k=3)
 
 NMDS$stress
 
-anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data$Sector ,
+anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data_bf$Sector ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data$Year ,
+anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data_bf$Year ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data$SamplingMethod ,
+anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data_bf$SamplingMethod ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data$Month ,
+anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data_bf$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 # Fit environmental vector for CollectionWeek
-env_fit <- envfit(NMDS, multi_en_data, permutations = 999)
+env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999)
 
 #converting the nmds data to a dataframe for plotting
 nmds_scores <- as.data.frame(vegan::scores(NMDS, display = "sites"))
 nmds_scores$Sample <- rownames(nmds_scores)
 nmds_scores <- nmds_scores %>%
-  full_join(multi_en_data)
+  full_join(multi_en_data_bf)
 en_coord_cat <- as.data.frame(vegan::scores(env_fit, "factors")) * ordiArrowMul(env_fit)
 
 # Apply the function to each group to create the polygons on the ggplot nmds 
@@ -1039,7 +1051,7 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
+multi_en_data_swn <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -1055,31 +1067,31 @@ multi_en_data <- kbimp2024_sampledata %>%
   filter(SamplingMethod %in% c("Sweep Net")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
-  filter(rownames(KBIMP_speciesmatrix_everything) %in% multi_en_data$Sample) 
+  filter(rownames(KBIMP_speciesmatrix_everything) %in% multi_en_data_swn$Sample) 
 
 # Order species matrix
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything[order(rownames(KBIMP_speciesmatrix_everything)), ]
 
 # Order environmental data
-multi_en_data <- multi_en_data %>% arrange(Sample) 
+multi_en_data_swn <- multi_en_data_swn %>% arrange(Sample) 
 
 # Bray-Curtis dissimilarity
 bray_dist <- vegdist(KBIMP_speciesmatrix_everything, method = "bray")
 
 adonis2(bray_dist ~ Sector + Year + Month,
-        data = multi_en_data, permutations = 999, by="margin")
+        data = multi_en_data_swn, permutations = 999, by="margin")
 
 NMDS <- metaMDS(KBIMP_speciesmatrix_everything, k=4)
 
 NMDS$stress
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Sector ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_swn$Sector ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Year ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_swn$Year ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Month ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_swn$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 ##### mosquitoes and black flies just malaise traps  -----
@@ -1091,7 +1103,7 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
+multi_en_data_mat <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
   select(Sample, SamplingMethod, Sector, Month) %>%
@@ -1107,31 +1119,31 @@ multi_en_data <- kbimp2024_sampledata %>%
   filter(SamplingMethod %in% c("Malaise Trap")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
-  filter(rownames(KBIMP_speciesmatrix_everything) %in% multi_en_data$Sample) 
+  filter(rownames(KBIMP_speciesmatrix_everything) %in% multi_en_data_mat$Sample) 
 
 # Order species matrix
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything[order(rownames(KBIMP_speciesmatrix_everything)), ]
 
 # Order environmental data
-multi_en_data <- multi_en_data %>% arrange(Sample) 
+multi_en_data_mat <- multi_en_data_mat %>% arrange(Sample) 
 
 # Bray-Curtis dissimilarity
 bray_dist <- vegdist(KBIMP_speciesmatrix_everything, method = "bray")
 
 adonis2(bray_dist ~ Sector + Year + Month,
-        data = multi_en_data, permutations = 999, by="margin")
+        data = multi_en_data_mat, permutations = 999, by="margin")
 
 NMDS <- metaMDS(KBIMP_speciesmatrix_everything, k=5)
 
 NMDS$stress
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Sector ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_mat$Sector ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Year ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_mat$Year ,
        permutations = 999,distance = "bray", strata = NULL)
 
-anosim(KBIMP_speciesmatrix_everything, multi_en_data$Month ,
+anosim(KBIMP_speciesmatrix_everything, multi_en_data_mat$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 ##### both sampling methods mosqutioes and black flies combined  -----
