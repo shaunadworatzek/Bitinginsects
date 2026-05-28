@@ -3,10 +3,23 @@
 #the output files will be the updated species file and the two 
 #phylogenies which are PNGs 
 
+library(stringr)
+library(tidyverse)
+library(readr)
+library(viridis)
+library(Biostrings) 
+library(ape)     
+library(muscle) 
+library(phangorn) 
+library(parallel) 
+library(ggplot2)    
+library(ggtree)     
+library(seqinr)
+library(DECIPHER)
 
 
-KBIMP2024 <- read_tsv(file = "../processed-data/KBIMP2024_filteredCOI.tsv")
-Outgroup <- read_csv(file = "../raw-data2/Outgroup.csv")
+KBIMP2024 <- read_tsv(file = "processed-data/KBIMP2024_filteredCOI.tsv")
+Outgroup <- read_csv(file = "raw-data2/Outgroup.csv")
 #### PART 1 - Phylogenetic analysis and resolution of undefined Mosquito species ---- 
 
 #filtering for Culicidae, and defining the root as a chiromidae sequence in the data set 
@@ -195,7 +208,7 @@ plot(mosquitotree2024)
 
 #save the tree
 
-ggsave("../plots/mosphylomoregroups.png", plot = mosquitotree2024, width = 10, height = 4, dpi = 300)
+ggsave("plots/mosphylomoregroups.png", plot = mosquitotree2024, width = 10, height = 4, dpi = 300)
 
 
 
@@ -404,7 +417,7 @@ bftree2024 <- (ggtree(rooted.bstree.bf, layout = 'rectangular', branch.length = 
 
 bftree2024
 
-ggsave("../plots/bfphylo.png", plot = bftree2024, width = 10, height = 5, dpi = 300)
+ggsave("plots/bfphylo.png", plot = bftree2024, width = 10, height = 5, dpi = 300)
 
 
 seqs_con_bf <- alighned_kbimpbf_DNA[names(groups)[groups == 13]]
@@ -428,7 +441,7 @@ KBIMP2024_updatedspecies <- KBIMP_updatedspecies_mos_2024 %>%
   filter(!Species == "unknown")
 
 
-write_tsv(KBIMP2024_updatedspecies, "../processed-data/KBIMP2024_updatedspecies.tsv")
+write_tsv(KBIMP2024_updatedspecies, "processed-data/KBIMP2024_updatedspecies.tsv")
 
 rm(alighned_kbimpbf_DNA, alighned_kbimpmos_DNA, bs, bs.bf, hc, hc_bf, kbimp_bf_DNA_df,
    kbimp_bf_DNA, kbimp_mos_phydat, kbimp_mos_DNA, kbimp_bf_DNA_df, kbimp_mos_phydat, 
