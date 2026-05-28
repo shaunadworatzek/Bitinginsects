@@ -72,7 +72,7 @@ sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
 sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
       KGLTK2025_metadata$`Blackfly Head Abundance` , na.rm = TRUE)
 
-#### - combining 2024 and 2025 data into one dataset ----
+#### - combining 2024 and 2025 data into one data set ----
 
 #fixing sample names and selecting for required columns 
 
