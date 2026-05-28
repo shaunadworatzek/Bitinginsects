@@ -111,12 +111,12 @@ speciesdata <- KBIMP2024%>%
 
   mutate(ID = NA_character_) %>%
   
-  mutate(Species = if_else(Sample == "KBIMP-_005_B1", "Aedes nigripes", Species)) %>% #92.31 nigripes on bold, 100% on NCBI
+  mutate(Species = if_else(Sample == "KBIMP-_005_B1", "Aedes nigripes/impiger", Species)) %>% #92.31 nigripes on bold, 100% on NCBI
   mutate(Species = if_else(Sample == "KBIMP_004_F7", "Aedes punctor/Aedes hexodontus", Species)) %>%
-  mutate(Species = if_else(Sample == "KBIMP-_006_G1", "Aedes impiger", Species)) %>% #100% impeger on NCBI slightly less sure on BOLD
+  mutate(Species = if_else(Sample == "KBIMP-_006_G1", "Aedes nigripes/impiger", Species)) %>% #100% impeger on NCBI slightly less sure on BOLD
   mutate(Species = if_else(Sample == "KBIMP-_005_D8", "Aedes punctor/Aedes hexodontus", Species)) %>%
   mutate(Species = if_else(Sample == "KBIMP-_007_C6", "Aedes excrucians", Species)) %>%
-  mutate(Species = if_else(Sample == "KBIMP-_006_B4", "Aedes impiger", Species)) %>%
+  mutate(Species = if_else(Sample == "KBIMP-_006_B4", "Aedes nigripes/impiger", Species)) %>%
   mutate(Species = if_else(Sample == "KBIMP-_008_A1", "Aedes excrucians", Species)) %>%
   mutate(Species = if_else(Sample == "KBIMP-_007_F2", "Aedes excrucians", Species)) %>%
   mutate(Species = if_else(Sample == "KBIMP-_008_E3", "Aedes excrucians", Species)) %>%
