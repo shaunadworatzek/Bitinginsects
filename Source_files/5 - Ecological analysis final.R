@@ -36,6 +36,7 @@ KBIMP2025_updatedspecies <- read_tsv(file = "processed-data/KBIMP2025_updatedspe
 KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspecies.tsv")
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
+kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
 
 
 #### Invesitgating the number of black flies and mosquitoes from each year ----
@@ -49,12 +50,25 @@ total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
 total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
 
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
 sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-    CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+
+
 
 KGLTK2025_metadata  <- KGLTK2025_metadata %>%
   filter(!is.na(`Mosquito Head Abundance`))
@@ -65,12 +79,23 @@ total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
 total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
 
 
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+
 sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
 sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
 sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
 sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance` , na.rm = TRUE)
+
 
 #### - combining 2024 and 2025 data into one data set ----
 
@@ -175,6 +200,21 @@ KBIMP2025_metadata <- CBAY2025_metadata %>%
   mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
   mutate(Year = 2025) %>%
   dplyr::rename(SamplingMethod = `Sample type collection method`) 
+
+##### combining 2024 and 2025 data into one metadata file ----- 
+
+meta_data <- kbimp2024_sampledata %>%
+  dplyr::rename(Sample = FieldID) %>%
+  dplyr::rename(Lat = Lat.x) %>%
+  select(Sample, SamplingMethod, Sector, Month) %>%
+  mutate(Year = 2024) %>%
+  bind_rows(KBIMP2025_metadata) %>%
+  distinct() %>%
+  mutate(SamplingMethod = case_when(
+    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
+    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
+    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
+    TRUE ~ SamplingMethod)) 
 
 
 ####  Making iNEXT graph ----
@@ -613,20 +653,9 @@ ggsave("plots/vectorchangekug.png", vectorchangekug , width = 8, height = 4, dpi
 #### - Alpha div analysis ----
 
 
-#create data set by coutning the number of each species in each sample
+#create data set by counting the number of each species in each sample
 
-alpha_en_data <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
-  distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
+alpha_en_data <- meta_data %>%
   filter(SamplingMethod %in% c("Malaise Trap", "Sweep Net")) 
 
 families <- c("Culicidae", "Simuliidae") 
@@ -733,19 +762,9 @@ KBIMP_speciesmatrix_mosquitoes <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data_mos <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
+multi_en_data_mos <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_mosquitoes)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) 
 
 #making sure only the samples we filtered above are in the species matrix 
@@ -850,19 +869,9 @@ KBIMP_speciesmatrix_blackflies <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data_bf <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
+multi_en_data_bf <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_blackflies)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) 
 
 KBIMP_speciesmatrix_blackflies <- KBIMP_speciesmatrix_blackflies %>%
@@ -955,19 +964,9 @@ KBIMP_speciesmatrix_blackflies2 <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data_bf <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
-  filter(Sample %in% rownames(KBIMP_speciesmatrix_blackflies2)) %>%
+multi_en_data_bf <- meta_data %>%
+  filter(Sample %in% rownames(KBIMP_speciesmatrix_blackflies)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) %>%
   filter(!Sample %in% c("KGLTK0137", "KGLTK0103"))
 
@@ -1051,19 +1050,9 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data_swn <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
+multi_en_data_swn <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_everything)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Sweep Net")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
@@ -1103,19 +1092,9 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data_mat <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
+multi_en_data_mat <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_everything)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
@@ -1155,19 +1134,9 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
-multi_en_data <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
+multi_en_data <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_everything)) %>%
   distinct() %>%
-  mutate(SamplingMethod = case_when(
-    grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
-    grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
-    grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap", "Sweep Net")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
@@ -1218,5 +1187,9 @@ betacommunties <- beta.pair(species_matrix_communties, index.family = "sorensen"
 print(betacommunties$beta.sim)
 print(betacommunties$beta.sne)
 print(betacommunties$beta.sor)
+
+#### - Number of insects etc ---- 
+
+
 
 
