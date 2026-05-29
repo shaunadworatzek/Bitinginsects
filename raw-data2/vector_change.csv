@@ -1,7 +1,13 @@
-Year,Count,Type
-2012,3,Vector
-24/25,6,Vector
-2012,12,Non-Vector
-24/25,9,Non-Vector
-2012,15,Total
-24/25,15,Total
+Species ,Family
+Aedes punctor/Aedes hexodontus,Culicidae
+Aedes nigripes/impiger,Culicidae
+Aedes excrucians,Culicidae
+Aedes communis,Culicidae
+Simulium decorum,Simuliidae
+Simulium noelleri,Simuliidae
+Simulium venustum,Simuliidae
+Simulium tescorum,Simuliidae
+Simulium vittatum,Simuliidae
+Simulium clarum,Simuliidae
+Simulium arcticum,Simuliidae
+Simulium tribulatum,Simuliidae
