@@ -38,6 +38,7 @@ kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
 kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
 sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
+vector_change <- read_csv(file = "raw-data2/vector_change.csv")
 
 #### Invesitgating the number of black flies and mosquitoes from each year ----
 
@@ -304,6 +305,15 @@ iNEXT <- KBIMP_combined %>%
 em.inext <- iNEXT(iNEXT, q=0, datatype="incidence_freq")
 
 em.inext$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_total <- as.data.frame(em.inext$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) 
+
 em.inext$DataInfo
 
 ##### iNEXT both places, just black flies both months #####  
@@ -532,6 +542,10 @@ em.inext.cul$DataInfo
 
 ##### venn diagram/ determining which species are different #####
 
+sr_2012 <- sr_2012 %>%
+  mutate(taxon = if_else(taxon == "Aedes nigripes", "Aedes nigripes/Aedes impiger", taxon)) %>%
+  filter(!taxon == "Aedes impiger")
+
 venndiagramspecieslist <- KBIMP_combined  %>%
   mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
   mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
@@ -561,17 +575,10 @@ venncbay <- venndiagramspecieslist %>%
   summarise(species_list = list(unique(Species))) %>%
   deframe()
 
-
 setdiff(venncbay$CBAY, venncbay$CbB)
 setdiff(venncbay$CbB, venncbay$CBAY)
 
 names(venncbay) <- c("CBAY" = "Cambridge Bay 2024and 2025", "CbB" = "Cambridge Bay 2012")
-
-venncbay <- ggvenn(venncbay, 
-                   fill_color = c("#000099", "#FFC000"),
-                   set_name_size = 2, stroke_size = 0.6, text_size = 3)
-
-ggsave("plots/venncbay.png", venncbay, width = 4, height = 2, dpi = 300)
 
 vennkug <- venndiagramspecieslist %>%
   select(KGLTK,Kug, Species) %>%
@@ -588,20 +595,90 @@ vennkug <- venndiagramspecieslist %>%
 setdiff(vennkug$KGLTK, vennkug$Kug)
 setdiff(vennkug$Kug, vennkug$KGLTK)
 
-names(vennkug) <- c("KGLTK"  = "Kugluktuk 2024 and 2025", "Kug" = "Kugluktuk 2012")
-
-vennkug <- ggvenn(vennkug, 
-                  fill_color = c("#000099", "#FFC000"),
-                  set_name_size = 2, stroke_size = 0.6, text_size = 3)
-
 ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
 
 ##### making the figure for the change in the number of vectors #####
 
-vector_change <- read_csv(file = "raw-data2/vector_change.csv")
+#getting the confidence intervals for vectors 
 
-vector2012 <- vector_change %>%
-  mutate(Count = ifelse(Year == "24/25", NA, Count))
+iNEXT_vectors <- KBIMP_combined %>%
+  select(Sample, Species) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  filter(Species %in% vector_change$Species) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 233,
+          KGLTK = 122, .before = 1) %>%
+  column_to_rownames(var = "Species")
+
+em.inext_vectors <- iNEXT(iNEXT_vectors, q=0, datatype="incidence_freq")
+
+em.inext_vectors$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_vectors <- as.data.frame(em.inext_vectors$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) 
+
+em.inext_vectors$DataInfo
+
+#getting the confidence intervals for non-vectors 
+
+iNEXT_nonvectors <- KBIMP_combined %>%
+  select(Sample, Species) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  filter(!Species %in% vector_change$Species) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 233,
+          KGLTK = 122, .before = 1) %>%
+  column_to_rownames(var = "Species")
+
+em.inext_nonvectors <- iNEXT(iNEXT_nonvectors, q=0, datatype="incidence_freq")
+
+em.inext_nonvectors$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_nonvectors <- as.data.frame(em.inext_nonvectors$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) 
+
+em.inext_nonvectors$DataInfo
+
+#getting the vector, non-vector, total data from the 2012 dataset
+
+  
+vector2012 <- sr_2012 %>%
+  
+  pivot_longer(
+    cols = -taxon,
+    names_to = "Site",
+    values_to = "Presence") %>%
+  
+  filter(Presence == 1) %>%
+
+  mutate(InList = taxon %in% vector_change$Species) %>%
+  
+  group_by(Site) %>%
+  summarise(
+    Total_species = n(),
+    vector_species = sum(InList),
+    nonvector_species = sum(!InList))
+
 
 #figure with both years for cbay
 
