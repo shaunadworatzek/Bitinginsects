@@ -604,6 +604,9 @@ ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
 
 iNEXT_vectors <- KBIMP_combined %>%
   select(Sample, Species) %>%
+  mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
+  mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
+  mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
   dplyr::count(region, Sample, Species, name = "Abundance") %>% 
   mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
@@ -635,6 +638,9 @@ em.inext_vectors$DataInfo
 
 iNEXT_nonvectors <- KBIMP_combined %>%
   select(Sample, Species) %>%
+  mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
+  mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
+  mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
   dplyr::count(region, Sample, Species, name = "Abundance") %>% 
   mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
