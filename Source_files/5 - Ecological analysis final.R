@@ -36,10 +36,36 @@ KBIMP2025_updatedspecies <- read_tsv(file = "processed-data/KBIMP2025_updatedspe
 KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspecies.tsv")
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
-kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
+kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
 
 
 #### Invesitgating the number of black flies and mosquitoes from each year ----
+
+#### 2024 ####
+
+sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+     ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+##### 2025 #####
 
 CBAY2025_metadata <- CBAY2025_metadata %>%
   filter(!is.na(`Mosquito Head Abundance`))
