@@ -312,7 +312,8 @@ confidenceinterval_total <- as.data.frame(em.inext$iNextEst$size_based) %>%
   filter(Method == "Observed") %>%
   select(Assemblage, qD, qD.LCL, qD.UCL) %>%
   mutate(x = "total") %>%
-  rename_with(~"Sector", contains("Assemblage")) 
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(type = "Total")
 
 em.inext$DataInfo
 
@@ -625,7 +626,8 @@ confidenceinterval_vectors <- as.data.frame(em.inext_vectors$iNextEst$size_based
   filter(Method == "Observed") %>%
   select(Assemblage, qD, qD.LCL, qD.UCL) %>%
   mutate(x = "total") %>%
-  rename_with(~"Sector", contains("Assemblage")) 
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(type = "Vectors")
 
 em.inext_vectors$DataInfo
 
@@ -655,7 +657,8 @@ confidenceinterval_nonvectors <- as.data.frame(em.inext_nonvectors$iNextEst$size
   filter(Method == "Observed") %>%
   select(Assemblage, qD, qD.LCL, qD.UCL) %>%
   mutate(x = "total") %>%
-  rename_with(~"Sector", contains("Assemblage")) 
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(type = "Non-vectors")
 
 em.inext_nonvectors$DataInfo
 
@@ -675,9 +678,22 @@ vector2012 <- sr_2012 %>%
   
   group_by(Site) %>%
   summarise(
-    Total_species = n(),
-    vector_species = sum(InList),
-    nonvector_species = sum(!InList))
+    Total = n(),
+    Vectors = sum(InList),
+    Nonvectors = sum(!InList)) %>%
+  
+  mutate(
+    Site = dplyr::recode(
+      Site,
+      "CbB" = "CBAY",
+      "Kug" = "KGLTK")) %>%
+  
+  pivot_longer(
+    cols = c(Total,
+             Vectors,
+             Nonvectors),
+    names_to = "Type",
+    values_to = "SpeciesSum")
 
 
 #figure with both years for cbay
