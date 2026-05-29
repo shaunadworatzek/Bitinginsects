@@ -37,11 +37,13 @@ KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspe
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
 kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
-
+sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 
 #### Invesitgating the number of black flies and mosquitoes from each year ----
 
 #### 2024 ####
+
+#CBAY
 
 sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
 
@@ -61,6 +63,30 @@ sum(kbimp2024_abundence$Sector == "CBAY" &
     ,na.rm = TRUE)
 
 sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+#Kugluktuk
+
+sum(kbimp2024_abundence$Sector == "KGLTK" ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
       kbimp2024_abundence$blackfly_abun == 0 & 
       kbimp2024_abundence$mosquito_abun == 0
     ,na.rm = TRUE)
@@ -242,6 +268,21 @@ meta_data <- kbimp2024_sampledata %>%
     grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
     TRUE ~ SamplingMethod)) 
 
+sum(meta_data$Month == "Jul" &
+      meta_data$Sector == "CBAY",
+    na.rm = TRUE)
+
+sum(meta_data$Month == "Jul" &
+      meta_data$Sector == "KGLTK",
+    na.rm = TRUE)
+
+sum(meta_data$Month == "Aug" &
+      meta_data$Sector == "CBAY",
+    na.rm = TRUE)
+
+sum(meta_data$Month == "Aug" &
+      meta_data$Sector == "KGLTK",
+    na.rm = TRUE)
 
 ####  Making iNEXT graph ----
 
@@ -256,23 +297,14 @@ iNEXT <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 160,
-          KGLTK = 60, .before = 1) %>%
+          CBAY = 233,
+          KGLTK = 122, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext <- iNEXT(iNEXT, q=0, datatype="incidence_freq")
 
 em.inext$iNextEst
 em.inext$DataInfo
-
-iNext <- ggiNEXT(em.inext)+
-  theme_bw(base_size = 20)+
-  scale_color_manual( values = c("#6C8AB2", "#E69F00" ))+
-  scale_fill_manual( values = c("#6C8AB2", "#E69F00" )) +
-  scale_shape_manual( values = c(15, 16, 17, 18))
-
-
-ggsave("plots/inext2025and2024.png", iNext , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 ##### iNEXT both places, just black flies both months #####  
 
@@ -286,8 +318,8 @@ iNEXT_sim <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 160,
-          KGLTK = 60, .before = 1) %>%
+          CBAY = 233,
+          KGLTK = 122, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 
@@ -305,7 +337,6 @@ confidenceinterval_bf <- as.data.frame(em.inext.sim$iNextEst$size_based) %>%
   rename_with(~"Sector", contains("Assemblage")) 
 
 
-
 em.inext.sim$DataInfo
 
 iNext_bf <- ggiNEXT(em.inext.sim)+
@@ -320,47 +351,6 @@ iNext_bf <- ggiNEXT(em.inext.sim)+
 
 ggsave("plots/inext2025bf.png", iNext_bf , width = 6, height = 5, dpi = 300, bg = "transparent")
 
-##### Just CBAY, just black flies for presentation graphic #####
-
-iNEXT_sim_cbay <- KBIMP_combined %>%
-  filter(Family == "Simuliidae" )%>%
-  select(Sample, Species) %>%
-  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
-  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
-  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
-  dplyr::count(region, Species, name = "Incidence") %>%
-  pivot_wider(names_from = region, values_from = Incidence) %>%
-  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
-  select(Species, CBAY) %>%
-  add_row(Species = "sampling_extent",
-          CBAY = 160, .before = 1) %>%
-  column_to_rownames(var = "Species")
-
-
-em.inext.sim <- iNEXT(iNEXT_sim_cbay, q=0, datatype="incidence_freq")
-
-em.inext.sim$iNextEst
-
-confidenceinterval_bf_cbay <- as.data.frame(em.inext.sim$iNextEst) %>%
-  filter(size_based.Method == "Observed") %>%
-  select(coverage_based.qD, coverage_based.qD.LCL, coverage_based.qD.UCL)
-
-
-em.inext.sim$DataInfo
-
-iNext_bf <- ggiNEXT(em.inext.sim)+
-  theme_bw(base_size = 20)+
-  scale_colour_manual(values = c("CBAY" = "#000099"), 
-                      breaks = c("CBAY"), labels = c( "CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)\n"),
-                      name = "Region") +
-  scale_fill_manual(values = c("CBAY" = "#000099"), 
-                    breaks = c("CBAY"), labels = c( "CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)\n"),
-                    name = "Region") +
-  scale_shape_manual( values = c(15, 16, 17, 18)) +
-  scale_y_continuous(limits = c(0, 30))
-
-ggsave("plots/inext2025bfcbay.png", iNext_bf , width = 6, height = 4, dpi = 300, bg = "transparent")
-
 ##### Both places, mosquitoes, both months #####
 
 iNEXT_cul <- KBIMP_combined %>%
@@ -373,8 +363,8 @@ iNEXT_cul <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 176,
-          KGLTK = 117, .before = 1) %>%
+          CBAY = 233,
+          KGLTK = 122, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 
@@ -399,13 +389,16 @@ iNext_mos <- ggiNEXT(em.inext.cul)+
   scale_fill_manual( values = c("#000099", "#FFC000")) +
   scale_shape_manual( values = c(15, 16, 17, 18))
 
-
 ggsave("plots/inext2025mos.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
 
-##### Just CBAY, just mosquitoes for presentation graphic #####
+##### Both places, just mosquitoes, just july #####
 
-iNEXT_cul_cbay <- KBIMP_combined %>%
+Julsamples <- meta_data %>%
+  filter(Month == "Jul")
+
+iNEXT_cul_jul <- KBIMP_combined %>%
   filter(Family == "Culicidae")%>%
+  filter(Sample %in% Julsamples$Sample) %>%
   select(Sample, Species) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
   dplyr::count(region, Sample, Species, name = "Abundance") %>% 
@@ -413,43 +406,64 @@ iNEXT_cul_cbay <- KBIMP_combined %>%
   dplyr::count(region, Species, name = "Incidence") %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
-  select(Species, CBAY) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 176, .before = 1) %>%
+          CBAY = 127,
+          KGLTK = 32, .before = 1) %>%
   column_to_rownames(var = "Species")
 
+em.inext.cul.jul <- iNEXT(iNEXT_cul_jul, q=0, datatype="incidence_freq")
 
-em.inext.cul <- iNEXT(iNEXT_cul_cbay, q=0, datatype="incidence_freq")
+em.inext.cul.jul$iNextEst
 
-em.inext.cul$iNextEst
+#isolating the data on confidence intervals for the observed data set 
 
-em.inext.cul$DataInfo
+confidenceinterval_mos_jul <- as.data.frame(em.inext.cul.jul$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(Family = "Culicidae") %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(Month = "July")
 
-iNext_mos <- ggiNEXT(em.inext.cul)+
-  theme_bw(base_size = 20)+
-  scale_colour_manual(values = c("#000099", "#FFC000")) +
-  scale_fill_manual( values = c("#000099", "#FFC000")) +
-  scale_shape_manual( values = c(15, 16, 17, 18)) +
-  scale_y_continuous(limits = c(0, 8))
+##### Both places, just blackflies, just july #####
 
+iNEXT_bf_jul <- KBIMP_combined %>%
+  filter(Family == "Simuliidae")%>%
+  filter(Sample %in% Julsamples$Sample) %>%
+  select(Sample, Species) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 127,
+          KGLTK = 32, .before = 1) %>%
+  column_to_rownames(var = "Species")
 
-ggsave("plots/inext2025moscbay.png", iNext_mos , width = 6, height = 4, dpi = 300, bg = "transparent")
+em.inext.bf.jul <- iNEXT(iNEXT_bf_jul, q=0, datatype="incidence_freq")
 
+em.inext.bf.jul$iNextEst
 
-##### determining if sampling extent was okay in August for mosquitoes #####
+#isolating the data on confidence intervals for the observed data set 
 
-en_data <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
-  mutate(Year = 2024) %>%
-  bind_rows(KBIMP2025_metadata) %>%
-  distinct() 
+confidenceinterval_bf_jul <- as.data.frame(em.inext.bf.jul$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(Family = "Simuliidae") %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(Month = "July")
 
-Augsamples <- en_data %>%
+em.inext.bf.jul$DataInfo
+
+##### Both places, just mosquitoes, just august #####
+
+Augsamples <- meta_data %>%
   filter(Month == "Aug")
 
-iNEXT_cul <- KBIMP_combined %>%
+iNEXT_cul_aug <- KBIMP_combined %>%
   filter(Family == "Culicidae")%>%
   filter(Sample %in% Augsamples$Sample) %>%
   select(Sample, Species) %>%
@@ -460,37 +474,61 @@ iNEXT_cul <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 69,
-          KGLTK = 56, .before = 1) %>%
+          CBAY = 84,
+          KGLTK = 54, .before = 1) %>%
   column_to_rownames(var = "Species")
 
-Augsamples %>%
-  filter(Sector == "CBAY") %>%
-  nrow()
-
-en_data %>%
-  filter(Sector == "KGLTK") %>%
-  nrow()
-
-em.inext.cul <- iNEXT(iNEXT_cul, q=0, datatype="incidence_freq")
+em.inext.cul.aug <- iNEXT(iNEXT_cul_aug, q=0, datatype="incidence_freq")
 
 em.inext.cul$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_mos_aug <- as.data.frame(em.inext.cul.aug$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(Family = "Culicidae") %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(Month = "August")
+
 em.inext.cul$DataInfo
 
-iNext_mos <- ggiNEXT(em.inext.cul)+
-  theme_bw(base_size = 20)+
-  scale_colour_manual(values = c("#000099", "#FFC000")) +
-  scale_fill_manual( values = c("#000099", "#FFC000")) +
-  scale_shape_manual( values = c(15, 16, 17, 18))
 
+##### Both places, just blackflies, just august #####
 
-ggsave("plots/inext2025mos.png", iNext_mos , width = 6, height = 5, dpi = 300, bg = "transparent")
+iNEXT_bf_aug <- KBIMP_combined %>%
+  filter(Family == "Simuliidae")%>%
+  filter(Sample %in% Augsamples$Sample) %>%
+  select(Sample, Species) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 84,
+          KGLTK = 54, .before = 1) %>%
+  column_to_rownames(var = "Species")
 
+em.inext.bf.aug <- iNEXT(iNEXT_bf_aug, q=0, datatype="incidence_freq")
 
+em.inext.bf.aug$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_bf_aug <- as.data.frame(em.inext.bf.aug$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(Family = "Simuliidae") %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(Month = "August")
+
+em.inext.cul$DataInfo
 
 #### - Investigating differences since 2012 ----
-
-sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 
 ##### venn diagram/ determining which species are different #####
 
@@ -560,68 +598,10 @@ ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
 
 ##### making the figure for the change in the number of vectors #####
 
-
 vector_change <- read_csv(file = "raw-data2/vector_change.csv")
 
 vector2012 <- vector_change %>%
   mutate(Count = ifelse(Year == "24/25", NA, Count))
-
-#figure for cbay with just the 2012 data for the power point
-
-vectorchange <- ggplot(vector2012, aes(x = Year, y =  Count, group = Type, colour =  Type)) +
-  geom_point() +
-  scale_x_discrete(drop = FALSE) +
-  scale_colour_manual(
-    aesthetics = c("colour", "fill"),
-    values = c("Vector" = "#000099", "Non-Vector" =  "#FFC000", "Total" = "Black"),
-    name = "Type") +
-  theme_bw(base_size = 15) +
-  xlab("Year") +
-  ylab("Total Species") +
-  theme(
-    axis.text.x = element_text(angle = 0, size = 10, color = "black"),
-    axis.text.y = element_text(angle = 0, size = 10, color = "black"),
-    axis.title.x = element_text(size = 14, face = "bold"),
-    axis.title.y = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 14, face = "bold"),
-    legend.text = element_text(size = 12),
-    plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
-    strip.background = element_rect(fill = NA, color = NA),
-    strip.text  = element_text(face = "bold", size = 14)) 
-
-
-ggsave("plots/vectorchangecbay1.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
-
-vector_change_kug <- read_csv(file = "raw-data2/vector_change_kug.csv")
-
-vectorkug2012 <- vector_change_kug %>%
-  mutate(Count = ifelse(Year == "24/25", NA, Count))
-
-#figure for kugluktuk with just the 2012 data for the power point
-
-vectorchangekug <- ggplot(vectorkug2012, aes(x = Year, y =  Count, group = Type, colour =  Type)) +
-  geom_point() +
-  scale_x_discrete(drop = FALSE) +
-  scale_colour_manual(
-    aesthetics = c("colour", "fill"),
-    values = c("Vector" = "#000099", "Non-Vector" =  "#FFC000", "Total" = "Black"),
-    name = "Type") +
-  theme_bw(base_size = 15) +
-  xlab("Year") +
-  ylab("Total Species") +
-  theme(
-    axis.text.x = element_text(angle = 0, size = 10, color = "black"),
-    axis.text.y = element_text(angle = 0, size = 10, color = "black"),
-    axis.title.x = element_text(size = 14, face = "bold"),
-    axis.title.y = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 14, face = "bold"),
-    legend.text = element_text(size = 12),
-    plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
-    strip.background = element_rect(fill = NA, color = NA),
-    strip.text  = element_text(face = "bold", size = 14)) 
-
-
-ggsave("plots/vectorchangekug1.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
 
 #figure with both years for cbay
 
@@ -720,17 +700,14 @@ modeluniqspsample
 
 #creating data set of total per month for plot
 
-speciesrich_CBAYvs_KGLTK <- KBIMP_combined %>%
-  filter(Sample %in% alpha_en_data$Sample) %>%
-  inner_join(alpha_en_data) %>%
-  filter(!Month %in% c("Jun", "Sep")) %>%
-  group_by(Sector, Month, Family) %>%
-  summarise(Speciessum = n_distinct(Species, na.rm = TRUE), .groups = "drop") %>%
-  ungroup() 
+confidence_month <- bind_rows(confidenceinterval_mos_jul, 
+                              confidenceinterval_bf_jul, 
+                              confidenceinterval_mos_aug,
+                              confidenceinterval_bf_aug)
 
-speciesrich_CBAYvs_KGLTK$Month <- factor(
-  speciesrich_CBAYvs_KGLTK$Month,
-  levels = c("Jul", "Aug")) 
+confidence_month$Month <- factor(
+  confidence_month$Month,
+  levels = c("July", "August")) 
 
 #creating data set with total over all and confidence intverals for plot
 
@@ -740,11 +717,14 @@ confidence <- bind_rows(confidenceinterval_bf, confidenceinterval_mos)
 
 speciesrichplot <- ggplot() +
   
-  geom_line(data = speciesrich_CBAYvs_KGLTK,
-    aes(x = Month, y = Speciessum, colour = Sector, group = Sector)) +
+  geom_line(data = confidence_month,
+    aes(x = Month, y = qD, colour = Sector, group = Sector)) +
   
-  geom_point(data = speciesrich_CBAYvs_KGLTK, aes(x = Month, y = Speciessum, colour = Sector),
+  geom_point(data = confidence_month, aes(x = Month, y = qD, colour = Sector),
     size = 3) +
+  
+  geom_errorbar(data = confidence_month, aes(x = Month, ymin = qD.LCL, ymax = qD.UCL, colour = Sector),
+                width = 0.15) +
   
   geom_point(data = confidence, aes(x = x, y = qD, colour = Sector),
     shape = 17, size = 3) +
