@@ -1308,6 +1308,45 @@ print(betacommunties$beta.sim)
 print(betacommunties$beta.sne)
 print(betacommunties$beta.sor)
 
+#temporal beta diversity analysis
+
+species_matrix_communties <- KBIMP_speciesmatrix_everything %>%
+  rownames_to_column(var = "Sample") %>%
+  full_join(multi_en_data, join_by(Sample == Sample)) %>%
+  filter(Sector == "KGLTK") %>%
+  select(-Year, -SamplingMethod, -Sector) %>%
+  group_by(Month) %>%
+  summarise(across(-Sample, max), .groups = "drop") %>%
+  column_to_rownames(var = "Month")
+
+#run beatdiverity analysis 
+
+betacommunties <- beta.pair(species_matrix_communties, index.family = "sorensen")  
+
+print(betacommunties$beta.sim)
+print(betacommunties$beta.sne)
+print(betacommunties$beta.sor)
+
+
+#temporal beta diversity analysis
+
+species_matrix_communties <- KBIMP_speciesmatrix_everything %>%
+  rownames_to_column(var = "Sample") %>%
+  full_join(multi_en_data, join_by(Sample == Sample)) %>%
+  filter(Sector == "CBAY") %>%
+  select(-Year, -SamplingMethod, -Sector) %>%
+  group_by(Month) %>%
+  summarise(across(-Sample, max), .groups = "drop") %>%
+  column_to_rownames(var = "Month")
+
+#run beatdiverity analysis 
+
+betacommunties <- beta.pair(species_matrix_communties, index.family = "sorensen")  
+
+print(betacommunties$beta.sim)
+print(betacommunties$beta.sne)
+print(betacommunties$beta.sor)
+
 #### - Number of insects etc ---- 
 
 
