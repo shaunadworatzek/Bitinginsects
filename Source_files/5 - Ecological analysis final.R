@@ -675,85 +675,75 @@ vector2012 <- sr_2012 %>%
   
   pivot_longer(
     cols = -taxon,
-    names_to = "Site",
+    names_to = "Sector",
     values_to = "Presence") %>%
   
   filter(Presence == 1) %>%
 
   mutate(InList = taxon %in% vector_change$Species) %>%
   
-  group_by(Site) %>%
+  group_by(Sector) %>%
   summarise(
     Total = n(),
     Vectors = sum(InList),
-    Nonvectors = sum(!InList)) %>%
+    'Non-vectors' = sum(!InList)) %>%
   
   mutate(
-    Site = dplyr::recode(
-      Site,
+    Sector = dplyr::recode(
+      Sector,
       "CbB" = "CBAY",
       "Kug" = "KGLTK")) %>%
   
   pivot_longer(
     cols = c(Total,
              Vectors,
-             Nonvectors),
-    names_to = "Type",
-    values_to = "SpeciesSum")
+             'Non-vectors'),
+    names_to = "type",
+    values_to = "qD") %>%
+  
+  mutate(Year = "2010-2012")
 
+vector2024 <- bind_rows(confidenceinterval_nonvectors, 
+                        confidenceinterval_total, 
+                        confidenceinterval_vectors)
+
+vector2024 <- vector2024 %>%
+  mutate(Year = "2024-2025")
+
+vectorall <- bind_rows(vector2012, vector2024)
 
 #figure with both years for cbay
 
-vectorchange <- ggplot(vector_change, aes(x = Year, y =  Count, group = Type, colour =  Type)) +
-  geom_line() +
-  geom_point() +
+vectorchange <- ggplot() +
+  
+  geom_point(data = vectorall,
+            aes(x = Year, y = qD, colour = type, group = type), size = 3) +
+
+  geom_errorbar(data = vector2024, aes(x = Year, ymin = qD.LCL, ymax = qD.UCL, colour = type),
+                width = 0.15) +
+  
+  geom_line(data = vectorall, aes(x = Year, y = qD, colour = type, group = type))+
+  
   scale_colour_manual(
-    aesthetics = c("colour", "fill"),
-    values = c("Vector" = "#000099", "Non-Vector" =  "#FFC000", "Total" = "Black"),
-    name = "Type") +
+    values = c("Vectors" = "#000099", "Non-vectors" =  "#FFC000", "Total" = "black"))  +
+  
   theme_bw(base_size = 15) +
-  xlab("Year") +
-  ylab("Total Species") +
-  theme(
-    axis.text.x = element_text(angle = 0, size = 10, color = "black"),
-    axis.text.y = element_text(angle = 0, size = 10, color = "black"),
-    axis.title.x = element_text(size = 14, face = "bold"),
-    axis.title.y = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 14, face = "bold"),
-    legend.text = element_text(size = 12),
-    plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
-    strip.background = element_rect(fill = NA, color = NA),
-    strip.text  = element_text(face = "bold", size = 14)) 
+  xlab("Sampling Years") +
+  ylab("Total Species Richness") +
+  
+  theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14)) +
+  
+  facet_wrap(~Sector) 
 
-
-ggsave("plots/vectorchangecbay.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
-
-#figure with both years for kugluktuk 
-
-vectorchangekug <- ggplot(vector_change_kug, aes(x = Year, y =  Count, group = Type, colour =  Type)) +
-  geom_line() +
-  geom_point() +
-  scale_colour_manual(
-    aesthetics = c("colour", "fill"),
-    values = c("Vector" = "#000099", "Non-Vector" =  "#FFC000", "Total" = "Black"),
-    name = "Type") +
-  theme_bw(base_size = 15) +
-  xlab("Year") +
-  ylab("Total Species") +
-  theme(
-    axis.text.x = element_text(angle = 0, size = 10, color = "black"),
-    axis.text.y = element_text(angle = 0, size = 10, color = "black"),
-    axis.title.x = element_text(size = 14, face = "bold"),
-    axis.title.y = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 14, face = "bold"),
-    legend.text = element_text(size = 12),
-    plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
-    strip.background = element_rect(fill = NA, color = NA),
-    strip.text  = element_text(face = "bold", size = 14)) 
-
-
-ggsave("plots/vectorchangekug.png", vectorchangekug , width = 8, height = 4, dpi = 300, bg = "transparent")
-
+ggsave("plots/vectorchange.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
 
 #### - Alpha div analysis ----
 
@@ -786,11 +776,36 @@ speciesrich_CBAYvs_KGLTK <- KBIMP_combined %>%
 leveneTest(Speciessum ~ Sector, data = speciesrich_CBAYvs_KGLTK) #p-value greater than 0.05 - vairances equal 
 shapiro.test(speciesrich_CBAYvs_KGLTK$Speciessum) #p-value less than 0.05 - data not normal
 
+
+
 #running a non-parmetric test because the data did not meet the above requirements
 
-m <- art(Speciessum ~ factor(Sector) * factor(Month) * factor(Family) + Error(factor(Year)),
+m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
          data = speciesrich_CBAYvs_KGLTK)
 anova(m)
+
+#seperating based on the family 
+
+speciesrich_CBAYvs_KGLTK_bf <- speciesrich_CBAYvs_KGLTK %>%
+  filter(Family == "Simuliidae")
+
+m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
+         data = speciesrich_CBAYvs_KGLTK_bf)
+anova(m)
+
+
+speciesrich_CBAYvs_KGLTK_mos <- speciesrich_CBAYvs_KGLTK %>%
+  filter(Family == "Culicidae")
+
+m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
+         data = speciesrich_CBAYvs_KGLTK_mos)
+anova(m)
+
+marginal = art.con(m, "Sector")
+
+marginal
+
+
 
 modeluniqspsample <- kruskal.test(Speciessum ~ Sector, data = speciesrich_CBAYvs_KGLTK)
 
