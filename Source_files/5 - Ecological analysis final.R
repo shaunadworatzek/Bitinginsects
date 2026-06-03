@@ -26,6 +26,9 @@ library(lmerTest)
 library(patchwork)
 library(brms)
 library(ggvenn)
+library(maps)
+library(ggmap)
+library(sf)
 
 #opening the required data 
 
@@ -39,138 +42,6 @@ kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixe
 kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
 sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 vector_change <- read_csv(file = "raw-data2/vector_change.csv")
-
-#### Invesitgating the number of black flies and mosquitoes from each year ----
-
-#### 2024 ####
-
-#CBAY
-
-sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-     ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-#Kugluktuk
-
-sum(kbimp2024_abundence$Sector == "KGLTK" ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-##### 2025 #####
-
-CBAY2025_metadata <- CBAY2025_metadata %>%
-  filter(!is.na(`Mosquito Head Abundance`))
-
-CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
-CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
-total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
-total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
-
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-
-sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
-
-
-
-KGLTK2025_metadata  <- KGLTK2025_metadata %>%
-  filter(!is.na(`Mosquito Head Abundance`))
-
-KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
-KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
-
-
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
-
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
-
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
-
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
-
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
-
-
-#### - combining 2024 and 2025 data into one data set ----
-
-#fixing sample names and selecting for required columns 
-
-KBIMP2025_updatedclean <- KBIMP2025_updatedspecies %>%
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  mutate(Sample = str_extract(Sample, "^[A-Za-z]+_?\\d+"),
-         Sample = str_replace(Sample, "_", "")) %>%
-  select(Sample, Species, Family) 
-
-KBIMP2024_updatedclean <- KBIMP2024_updatedspecies %>%
-  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>% 
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  select(FieldID, Species, Family) %>%
-  dplyr::rename(Sample = FieldID) 
-
-#combining by stacking rows 
-
-KBIMP_combined <- KBIMP2025_updatedclean %>%
-  bind_rows(KBIMP2024_updatedclean) %>%
-  distinct()
 
 #### - Preparing the site metadata for analysis ----
 
@@ -232,22 +103,24 @@ CBAY2025_metadata <- CBAY2025_metadata %>%
                                        orders = c("ymd", "mdy", "dmy")),
          Month = month(Date_parsed, label = TRUE))%>%
   select(Month, Sample, Site, `Sample Replicate`, `Sample type collection method`,
-         Lat, Lon, `Habitat type`, `Distance from water (m)`, `Mosquito Head Abundance`, 
+         Lon, Lat, `Habitat type`, `Distance from water (m)`, `Mosquito Head Abundance`, 
          `Blackfly Head Abundance`, `Temp C (Sweep)`, `Relative Humidity (Sweep)`) %>%
+  filter(!is.na(`Mosquito Head Abundance`)) %>%
   right_join(condensedsites)
 
 KGLTK2025_metadata <- KGLTK2025_metadata %>%
   mutate(Date_parsed = parse_date_time(`Date set`,
                                        orders = c("ymd", "mdy", "dmy", "dm")),
-         Month = month(Date_parsed, label = TRUE))
+         Month = month(Date_parsed, label = TRUE)) %>%
+  filter(!is.na(`Mosquito Head Abundance`))
 
 #setting up metadata for analysis 
 
 KGLTK2025_metadata <- KGLTK2025_metadata %>%
-  select(Sample, `Sample type collection method`, Month) 
+  select(Sample, `Sample type collection method`, Month, Lon, Lat) 
 
 KBIMP2025_metadata <- CBAY2025_metadata %>% 
-  select(Sample, `Sample type collection method`, Month) %>%
+  select(Sample, `Sample type collection method`, Month, Lon, Lat) %>%
   rbind(KGLTK2025_metadata) %>%
   filter(!is.na(Sample)) %>%
   mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
@@ -259,7 +132,7 @@ KBIMP2025_metadata <- CBAY2025_metadata %>%
 meta_data <- kbimp2024_sampledata %>%
   dplyr::rename(Sample = FieldID) %>%
   dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month) %>%
+  select(Sample, SamplingMethod, Sector, Month, Lon, Lat) %>%
   mutate(Year = 2024) %>%
   bind_rows(KBIMP2025_metadata) %>%
   distinct() %>%
@@ -267,7 +140,159 @@ meta_data <- kbimp2024_sampledata %>%
     grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
     grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
     grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
-    TRUE ~ SamplingMethod)) 
+    TRUE ~ SamplingMethod)) %>%
+  filter(SamplingMethod %in% c("Malaise Trap", "Sweep Net", "Aspirator"))
+
+
+#### - combining 2024 and 2025 data into one data set ----
+
+#fixing sample names and selecting for required columns 
+
+KBIMP2025_updatedclean <- KBIMP2025_updatedspecies %>%
+  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
+  mutate(Sample = str_extract(Sample, "^[A-Za-z]+_?\\d+"),
+         Sample = str_replace(Sample, "_", "")) %>%
+  select(Sample, Species, Family) 
+
+KBIMP2024_updatedclean <- KBIMP2024_updatedspecies %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>% 
+  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
+  select(FieldID, Species, Family) %>%
+  dplyr::rename(Sample = FieldID) 
+
+#combining by stacking rows 
+
+KBIMP_combined <- KBIMP2025_updatedclean %>%
+  bind_rows(KBIMP2024_updatedclean) %>%
+  distinct()
+
+
+#### Invesitgating the number of black flies and mosquitoes from each year ----
+
+##### 2024 #####
+
+#CBAY - for the number of specimens
+
+sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample))
+
+sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample) &  
+      KBIMP2024_updatedclean$Family == "Simuliidae")
+
+sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample) &  
+      KBIMP2024_updatedclean$Family == "Culicidae")
+
+
+#CBAY - for the number of samples 
+
+sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+     ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "CBAY" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+#Kugluktuk  - for the number of specimens
+
+sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample))
+
+sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample) &  
+      KBIMP2024_updatedclean$Family == "Simuliidae")
+
+sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample) &  
+      KBIMP2024_updatedclean$Family == "Culicidae")
+
+
+#Kugluktuk - for the number of samples 
+
+sum(kbimp2024_abundence$Sector == "KGLTK" ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun != 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun != 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+sum(kbimp2024_abundence$Sector == "KGLTK" &
+      kbimp2024_abundence$blackfly_abun == 0 & 
+      kbimp2024_abundence$mosquito_abun == 0
+    ,na.rm = TRUE)
+
+##### 2025 #####
+
+CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
+CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
+total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
+total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
+
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
+      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+
+sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+
+#Kugluktuk
+
+KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
+KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
+total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
+total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
+
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
+      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+
+sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+
+#looking at the number of samples each month for iNEXT
 
 sum(meta_data$Month == "Jul" &
       meta_data$Sector == "CBAY",
@@ -1347,7 +1372,323 @@ print(betacommunties$beta.sim)
 print(betacommunties$beta.sne)
 print(betacommunties$beta.sor)
 
-#### - Number of insects etc ---- 
+#### Making the map figure ----
+
+##### Map for kugluktuk #####
+
+kugluktuk_mapdata <- meta_data %>%
+  filter(Sector == "KGLTK") %>%
+  mutate(Lat = clean_coords(Lat)) %>%
+  mutate(Lon = clean_coords(Lon)) %>%
+  mutate(Lat = gsub("^[^ ]* ", "", Lat), 
+         Lat = as.numeric(Lat), Lat = if_else(Sector == "KGLTK", 67 + (Lat / 60), Lat), 
+         Lon = gsub("^[^ ]* ", "", Lon), Lon = as.numeric(Lon),
+         Lon = if_else(Sector == "KGLTK", -(115 + (Lon / 60)), Lon)) %>%
+  filter(!is.na(Lat), !is.na(Lon)) %>%
+  mutate(Year = as.character(Year)) %>%
+  filter(!Sample == "KGLTK0271")
+
+Coord_images<- kugluktuk_mapdata %>%
+  group_by(Lon, Lat)%>%
+  summarise(coord= n())%>%
+  filter(!is.na(Lat))%>%
+  filter(!is.na(Lon))
+
+world_map <- map_data("world")
+
+map_data_cr <- map_data('world')[map_data('world')$region == "Nunavut",]
+p <- ggplot() + coord_fixed(1.3, xlim = c(-107, -105), ylim = c(65, 69))
+
+
+
+base_world_messy <- p + 
+  geom_polygon(data=world_map, aes(x=long, y=lat, group=group), 
+               colour="Gainsboro", fill="Gainsboro")+
+  geom_polygon(data = map_data_cr, aes(x=long, y=lat, group = group),
+               colour = 'red', fill = 'pink')
+
+cleanup <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+                 panel.background = element_rect(fill = 'white', colour = 'white'), 
+                 axis.line = element_line(colour = "white"), legend.position="none",
+                 axis.ticks=element_blank(), axis.text.x=element_blank(),
+                 axis.text.y=element_blank())
+
+base_world <- base_world_messy + cleanup
+base_world+
+  geom_point(data=Coord_images, aes(x= Lon, y= Lat), colour="Dim Gray", fill="Dim Gray", size=3)
+
+
+ll_means <- sapply(kugluktuk_mapdata[5:6], mean)
+sq_map2 <- get_map(location = ll_means,  maptype = "satellite", source = "google", zoom = 11)
+
+
+map <- ggmap(sq_map2) + 
+  geom_point(data = kugluktuk_mapdata , aes(x = Lon, y = Lat, colour = Sector), size = 2, shape = 19) +
+  scale_color_manual(values = c("#FFC000" )) +  
+  xlab("Longitude") + 
+  ylab("Latitude") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),  # Remove x-axis label
+        axis.text.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(), 
+        legend.text = element_text(size = 10), legend.title = element_text(size = 10, face = "bold"))   # Remove y-axis label
+
+map
+
+ggsave("plots/map_kugluktuk.png", map, width = 4, height = 3, dpi = 300)
+
+##### Map for CBAY #####
+
+cbay_mapdata <- meta_data  %>%
+  filter(Sector == "CBAY") %>%
+  filter(!is.na(Lat), !is.na(Lon)) %>%
+  mutate(Lon = as.numeric(Lon)) %>%
+  mutate(Lat = as.numeric(Lat))
+
+Coord_images<- cbay_mapdata %>%
+  group_by(Lon, Lat)%>%
+  summarise(coord= n())
+
+world_map <- map_data("world")
+
+map_data_cr <- map_data('world')[map_data('world')$region == "Nunavut",]
+p <- ggplot() + coord_fixed(1.3, xlim = c(-106, -104), ylim = c(67, 70))
+
+
+
+base_world_messy <- p + 
+  geom_polygon(data=world_map, aes(x=long, y=lat, group=group), 
+               colour="Gainsboro", fill="Gainsboro")+
+  geom_polygon(data = map_data_cr, aes(x=long, y=lat, group = group),
+               colour = 'red', fill = 'pink')
+
+cleanup <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+                 panel.background = element_rect(fill = 'white', colour = 'white'), 
+                 axis.line = element_line(colour = "white"), legend.position="none",
+                 axis.ticks=element_blank(), axis.text.x=element_blank(),
+                 axis.text.y=element_blank())
+
+base_world <- base_world_messy + cleanup + 
+  geom_point(data=Coord_images, aes(x= Lon, y= Lat), colour="Dim Gray", fill="Dim Gray", size=3)
+
+
+ll_means <- sapply(cbay_mapdata[5:6], mean)
+sq_map2 <- get_map(location = ll_means,  maptype = "satellite", source = "google", zoom = 10)
+
+
+map <- ggmap(sq_map2) + 
+  geom_point(data = cbay_mapdata , aes(x = Lon, y = Lat, colour = Sector), size = 2, shape = 19) +
+  scale_color_manual(values = c("#000099")) +  
+  xlab("Longitude") + 
+  ylab("Latitude") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),  # Remove x-axis label
+        axis.text.y = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(), 
+        legend.text = element_text(size = 10), legend.title = element_text(size = 10, face = "bold"))   # Remove y-axis label
+
+map
+
+ggsave("plots/map_cbay.png", map, width = 4, height = 3, dpi = 300)
+
+
+##### Circumpolar map #####
+
+both_mapdata <- meta_data  %>%
+  filter(Sample %in% c("KGLTK0056", "CBAY0040")) %>%
+  mutate(Lat = clean_coords(Lat)) %>%
+  mutate(Lon = clean_coords(Lon)) %>%
+  mutate(Lat = gsub("^[^ ]* ", "", Lat), 
+         Lat = as.numeric(Lat), Lat = if_else(Sector == "KGLTK", 67 + (Lat / 60), Lat), 
+         Lon = gsub("^[^ ]* ", "", Lon), Lon = as.numeric(Lon),
+         Lon = if_else(Sector == "KGLTK", -(115 + (Lon / 60)), Lon)) %>%
+  mutate(Lon = as.numeric(Lon)) %>%
+  mutate(Lat = as.numeric(Lat)) 
+
+Coord_images<- both_mapdata %>%
+  group_by(Lon, Lat)%>%
+  summarise(coord= n())
+
+world_map <- map_data("world")
+
+# World map as sf
+world_sf <- st_as_sf(map_data("world"), coords = c("long", "lat"), crs = 4326, agr = "constant") %>%
+  group_by(group) %>%
+  summarise(do_union = FALSE) %>%
+  st_cast("POLYGON")
+
+# Your points as sf
+points_sf <- st_as_sf(both_mapdata, coords = c("Lon", "Lat"), crs = 4326)
+
+arctic_circle <- data.frame(
+  Lon = seq(-180, 180, length.out = 1000),
+  Lat = 66.56
+)
+
+arctic_circle_sf <- st_as_sf(arctic_circle, coords = c("Lon", "Lat"), crs = 4326) %>%
+  summarise() %>%
+  st_cast("LINESTRING")
+
+
+polar_crs <- 3995  # Arctic polar stereographic
+
+
+# ✅ Get clean world polygons (better than map_data)
+world_sf <- ne_countries(scale = "medium", returnclass = "sf")
+
+# ✅ Keep only Arctic region (clip at 66.56°N)
+arctic_boundary <- st_sfc(
+  st_polygon(list(cbind(
+    c(-180, 180, 180, -180, -180),
+    c(66.56, 66.56, 90, 90, 66.56)
+  ))),
+  crs = 4326
+)
+
+world_arctic <- st_intersection(world_sf, arctic_boundary)
+
+world_arctic <- st_crop(
+  world_sf,
+  xmin = -180, xmax = 180,
+  ymin = 60, ymax = 90   # try 60–90 to give a nice buffer
+)
+
+# ✅ Clean world polygons
+world_sf <- ne_countries(scale = "medium", returnclass = "sf")
+
+# ✅ Convert to lat/lon explicitly
+world_sf <- st_transform(world_sf, 4326)
+
+# ✅ Keep only features that extend into Arctic
+world_arctic <- world_sf %>%
+  filter(st_bbox(.)[["ymax"]] >= 66.56)
+
+# Points
+points_sf <- st_as_sf(both_mapdata, coords = c("Lon", "Lat"), crs = 4326)
+
+# Arctic Circle line
+arctic_circle <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, length.out = 1000), rep(66.56, 1000))),
+  crs = 4326
+)
+
+# Plot
+circumpolarmap <- ggplot() +
+  geom_sf(data = world_arctic, fill = "grey85", color = "grey40", linewidth = 0.2) +
+  geom_sf(data = arctic_circle, color = "black", linewidth = 1) +
+  geom_sf(data = points_sf, aes(color = Sector), size = 3, alpha = 0.8) +
+  
+  coord_sf(crs = 3995, ylim = c(-3e6, 3e6), xlim = c(-3e6, 3e6)) +
+  
+  scale_colour_manual(
+    values = c("CBAY" = "#000099", "KGLTK" =  "#FFC000"),
+    breaks = c("CBAY", "KGLTK"),
+    labels = c( "CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)\n",
+                "KGLTK" = "Kugluktuk\n(Qurluqtuq)\n"), name = "Region") +
+  
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank()
+  )
+
+
+
+png("plots/circumpolarmap.png", width = 1400, height = 1400, res = 300)
+
+print(circumpolarmap)
+
+dev.off()
+
+#### Temperature data figure ----
+
+##### Cambridge Bay #####
+
+temp_cbay <- list.files(
+  path = "raw-data2/temp_data_cbay",
+  pattern = "\\.csv$", full.names = TRUE)
+
+temp_cbay_data <- do.call(rbind, lapply(temp_cbay, read.csv))
+
+temp_cbay_avgmonthly <- temp_cbay_data %>%
+  select(Date.Time, Year, Month, Max.Temp...C., Min.Temp...C., Mean.Temp...C.) %>%
+  filter(Month %in% c( "7", "8")) %>%
+  group_by(Year) %>%
+  summarise(avg_monthly_temp = mean(Mean.Temp...C., na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(Sector = "CBAY")
+
+
+ggplot(temp_cbay_avgmonthly, aes(x = Year, y = avg_monthly_temp)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+
+
+model <- lm(avg_monthly_temp ~ Year, data = temp_cbay_avgmonthly)
+temp_cbay_avgmonthly$trend <- predict(model)
+
+###### Kugluktuk #####
+
+
+temp_kug <- list.files(
+  path = "raw-data2/temp_data_kug",
+  pattern = "\\.csv$", full.names = TRUE)
+
+temp_kug_data <- do.call(rbind, lapply(temp_kug, read.csv))
+
+temp_kug_avgmonthly <- temp_kug_data %>%
+  select(Date.Time, Year, Month, Max.Temp...C., Min.Temp...C., Mean.Temp...C.) %>%
+  filter(Month %in% c( "7", "8")) %>%
+  group_by(Year) %>%
+  summarise(avg_monthly_temp = mean(Mean.Temp...C., na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(Sector = "KUG")
+
+
+ggplot(temp_kug_avgmonthly, aes(x = Year, y = avg_monthly_temp)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+
+
+model <- lm(avg_monthly_temp ~ Year, data = temp_kug_avgmonthly)
+temp_kug_avgmonthly$trend <- predict(model)
+
+##### combined plot #####
+
+temp_avgmonthly <- bind_rows(temp_cbay_avgmonthly, temp_kug_avgmonthly)
+
+
+
+increasingtemp <- ggplot(temp_avgmonthly, aes(x = Year, y = avg_monthly_temp, 
+                                              colour = Sector, group = Sector)) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_colour_manual(
+    values = c("CBAY" = "#000099", "KUG" =  "#FFC000"),
+    breaks = c("CBAY", "KUG"),
+    labels = c( "CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)\n",
+                "KUG" = "Kugluktuk\n(Qurluqtuq)\n"), name = "Region") +
+  
+  theme_bw(base_size = 15) +
+  ylab("Average Summer Temperature") +
+  theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14)) 
+
+
+ggsave("plots/increasingtemps.png", increasingtemp , width = 8, height = 4, dpi = 300, bg = "transparent")
+
+
+
 
 
 

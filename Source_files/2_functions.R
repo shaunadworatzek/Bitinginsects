@@ -33,3 +33,11 @@ get_binary_trait_matrix <- function(seq_data) {
 calculate_hull <- function(data) {
   data[chull(data$NMDS1, data$NMDS2), ]  # Select convex hull points
 }
+
+#function to fix coordinates
+
+lean_coords <- function(x) {
+  x %>%
+    str_replace_all("\\.\\s+", ".") %>%  # fix ". 4827" → ".4827"
+    str_replace("^([0-9]+\\s+[0-9]+)\\s+([0-9]+)$", "\\1.\\2")  # add missing period
+}
