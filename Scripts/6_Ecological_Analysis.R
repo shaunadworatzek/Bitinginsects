@@ -39,8 +39,7 @@ library(paletteer)
 CBAY2025_metadata <- read_csv(file = "raw-data2/CBAY2025_metadata.csv")
 KGLTK2025_metadata <- read_csv(file = "raw-data2/KGLTK2025_metadata.csv")
 condensedsites <- read_csv(file = "raw-data2/condencedsites.csv")
-KBIMP2025_updatedspecies <- read_tsv(file = "processed-data/KBIMP2025_updatedspecies.tsv")
-KBIMP2024_updatedspecies <- read_tsv(file = "processed-data/KBIMP2024_updatedspecies.tsv")
+KBIMP_combined <- read_tsv(file = "processed-data/KBIMP_updatedspecies.tsv")
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
 kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
@@ -147,37 +146,24 @@ meta_data <- kbimp2024_sampledata %>%
     TRUE ~ SamplingMethod)) %>%
   filter(SamplingMethod %in% c("Malaise Trap", "Sweep Net", "Aspirator"))
 
-
-#### - combining 2024 and 2025 data into one data set ----
-
-#fixing sample names and selecting for required columns 
-
-KBIMP2025_updatedclean <- KBIMP2025_updatedspecies %>%
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  mutate(Sample = str_extract(Sample, "^[A-Za-z]+_?\\d+"),
-         Sample = str_replace(Sample, "_", "")) %>%
-  select(Sample, Species, Family) 
-
-KBIMP2024_updatedclean <- KBIMP2024_updatedspecies %>%
-  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>% 
-  filter(Sample != "Outgroup", Family %in% c("Culicidae", "Simuliidae")) %>%
-  select(FieldID, Species, Family) %>%
-  dplyr::rename(Sample = FieldID) 
-
-#combining by stacking rows 
-
-KBIMP_combined <- KBIMP2025_updatedclean %>%
-  bind_rows(KBIMP2024_updatedclean) %>%
-  distinct()
-
-
 #### Invesitgating the number of black flies and mosquitoes from each year ----
 
 ##### 2024 #####
 
+samples2024cbay <- meta_data %>%
+  filter(Year == "2024") %>%
+  filter(Sector == "CBAY")
+
+KBIMP2024cbay <- KBIMP_combined %>%
+  filter(Sample %in% samples2024cbay$Sample) 
+
+KBIMP2024counts <- KBIMP2024 %>%
+  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) 
+  
+
 #CBAY - for the number of specimens
 
-sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample))
+sum(grepl("^CBAY", KBIMP2024cbay$Sample))
 
 sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample) &  
       KBIMP2024_updatedclean$Family == "Simuliidae")
@@ -193,7 +179,7 @@ sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
 sum(kbimp2024_abundence$Sector == "CBAY" &
       kbimp2024_abundence$blackfly_abun != 0 & 
       kbimp2024_abundence$mosquito_abun != 0
-     ,na.rm = TRUE)
+    ,na.rm = TRUE)
 
 sum(kbimp2024_abundence$Sector == "CBAY" &
       kbimp2024_abundence$blackfly_abun == 0 & 
@@ -249,9 +235,8 @@ sum(kbimp2024_abundence$Sector == "KGLTK" &
 
 CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
 CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
-total <- sum(CBAY2025_metadata$`Blackfly Head Abundance`)
-total <- sum(CBAY2025_metadata$`Mosquito Head Abundance`)
-
+sum(CBAY2025_metadata$`Blackfly Head Abundance`, na.rm = TRUE)
+sum(CBAY2025_metadata$`Mosquito Head Abundance`, na.rm = TRUE)
 
 sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
       CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
@@ -275,8 +260,8 @@ sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
 
 KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
 KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Blackfly Head Abundance`)
-total <- sum(KGLTK2025_metadata$`Mosquito Head Abundance`)
+sum(KGLTK2025_metadata$`Blackfly Head Abundance`, na.rm = TRUE)
+sum(KGLTK2025_metadata$`Mosquito Head Abundance`, na.rm = TRUE)
 
 
 sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
@@ -579,7 +564,6 @@ sr_2012 <- sr_2012 %>%
 venndiagramspecieslist <- KBIMP_combined  %>%
   mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
   mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
-  separate_rows(Species, sep = "/") %>%
   mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
   mutate(Species = str_replace(Species, "Simulium verecundum complex sp", "Simulium verecundum complex")) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
@@ -627,7 +611,7 @@ setdiff(vennkug$Kug, vennkug$KGLTK)
 
 ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
 
-##### making the figure for the change in the number of vectors #####
+#### making the figure for the change in the number of vectors ----
 
 #getting the confidence intervals for vectors 
 
@@ -699,7 +683,7 @@ em.inext_nonvectors$DataInfo
 
 #getting the vector, non-vector, total data from the 2012 dataset
 
-  
+
 vector2012 <- sr_2012 %>%
   
   pivot_longer(
@@ -708,7 +692,7 @@ vector2012 <- sr_2012 %>%
     values_to = "Presence") %>%
   
   filter(Presence == 1) %>%
-
+  
   mutate(InList = taxon %in% vector_change$Species) %>%
   
   group_by(Sector) %>%
@@ -746,8 +730,8 @@ vectorall <- bind_rows(vector2012, vector2024)
 vectorchange <- ggplot() +
   
   geom_point(data = vectorall,
-            aes(x = Year, y = qD, colour = type, group = type), size = 3) +
-
+             aes(x = Year, y = qD, colour = type, group = type), size = 3) +
+  
   geom_errorbar(data = vector2024, aes(x = Year, ymin = qD.LCL, ymax = qD.UCL, colour = type),
                 width = 0.15) +
   
@@ -861,19 +845,19 @@ confidence <- bind_rows(confidenceinterval_bf, confidenceinterval_mos)
 speciesrichplot <- ggplot() +
   
   geom_line(data = confidence_month,
-    aes(x = Month, y = qD, colour = Sector, group = Sector)) +
+            aes(x = Month, y = qD, colour = Sector, group = Sector)) +
   
   geom_point(data = confidence_month, aes(x = Month, y = qD, colour = Sector),
-    size = 3) +
+             size = 3) +
   
   geom_errorbar(data = confidence_month, aes(x = Month, ymin = qD.LCL, ymax = qD.UCL, colour = Sector),
                 width = 0.15) +
   
   geom_point(data = confidence, aes(x = x, y = qD, colour = Sector),
-    shape = 17, size = 3) +
+             shape = 17, size = 3) +
   
   geom_errorbar(data = confidence, aes(x = x, ymin = qD.LCL, ymax = qD.UCL, colour = Sector),
-    width = 0.15) +
+                width = 0.15) +
   
   scale_colour_manual(
     values = c("CBAY" = "#000099", "KGLTK" =  "#FFC000"),
@@ -886,14 +870,14 @@ speciesrichplot <- ggplot() +
   ylab("Species Richness") +
   
   theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"),
-    axis.text.y = element_text(angle = 0, size = 10, color = "black"),
-    axis.title.x = element_text(size = 14, face = "bold"),
-    axis.title.y = element_text(size = 14, face = "bold"),
-    legend.title = element_text(size = 14, face = "bold"),
-    legend.text = element_text(size = 12),
-    plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
-    strip.background = element_rect(fill = NA, color = NA),
-    strip.text  = element_text(face = "bold", size = 14)) +
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14)) +
   
   facet_wrap(~Family) 
 

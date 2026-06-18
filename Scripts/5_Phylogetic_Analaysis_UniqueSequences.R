@@ -457,41 +457,26 @@ BOLDresults <- bind_rows(BOLDID_mos2, BOLDID_bf2, BOLDID_bfnotsim2)
 
 BOLDresults <- BOLDresults %>%
   filter(!Query.ID == "Outgroup") %>%
-  filter(!is.na(Query.ID)) 
+  filter(!is.na(Query.ID)) %>%
+  select(Query.ID, BOLDID)
 
 KBIMP_updatedspecies2 <- KBIMP %>%
-  
   filter(Family %in% c("Culicidae", "Simuliidae")) %>%
-  
-  mutate(Species = str_replace(Species, "Simulium tuberosum", "Simulium tuberosum complex")) %>%
-  
   mutate(Species = str_replace(Species, "Aedes punctor", "Aedes punctor/Aedes hexodontus")) %>%
-  
   left_join(BOLDresults, join_by("Sample" =="Query.ID")) %>%
-  
   group_by(Sequence) %>%
-  
-  mutate(
-    BOLDID = ifelse(
-      any(!is.na(BOLDID)),        
-      na.omit(BOLDID)[1], NA)) %>%
-  
+  mutate(BOLDID = ifelse(any(!is.na(BOLDID)), na.omit(BOLDID)[1], NA)) %>%
   ungroup() %>%
-  
   left_join(BOLDIDspecies) %>%
-  
-  
-  mutate(
-    Species = ifelse(Species.x == "unknown" | is.na(Species.x), Species_BOLDID, Species.x),
-    
-    update_flag = case_when(
-      Species.x == "unknown" | is.na(Species.x) ~ "Sequence Simularity",
+  mutate(update_flag = case_when(
+      Species == "unknown" | is.na(Species) ~ "Sequence Simularity",
       TRUE ~ "Probabolistic")) %>%
-  
-  select(Sample, Species) %>%
-  
+    mutate(Species = coalesce(Species_BOLDID, Species)) %>%
+    select(-Species_BOLDID) %>%
+    filter(!Species == "unknown") %>%
+  select(Sample, Species, Family, update_flag) %>%
   mutate(Sample = str_remove(Sample, "_.*")) %>%
-  
   filter(!is.na(Species)) %>% 
-  
-  distinct()
+  distinct(across(-update_flag), .keep_all = TRUE)
+
+write_tsv(KBIMP_updatedspecies2, "processed-data/KBIMP_updatedspecies.tsv")

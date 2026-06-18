@@ -23,6 +23,10 @@ KGLKTK2024_COI <- read_tsv(file = "raw-data2/KGLKTK_2024_OTUDetails.tsv")
 CBAY2024_plates12456 <- read_tsv(file = "raw-data2/CBAY2024_AllPlates_OTUDetails.tsv")
 CBAY2024_plate3 <- read_tsv(file = "raw-data2/Shauna_CBAY2024_Plate3_OTUDetails.tsv")
 problemsamples <- read_csv(file = "raw-data2/problemsamples.csv")
+KBIMP2025_COI <- read_tsv(file = "raw-data2/KBIMP2025_insectCOI_OTUDetails.tsv")
+df_extractioncontrols <- read_csv(file = "raw-data2/extractiondata2025.csv")
+df_PCRcontrols <- read_csv(file = "raw-data2/PCRcontrol_data.csv")
+kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 
 length(KGLKTK2024_COI$Sample) #232
 length(CBAY2024_plates12456$Sample) #635
@@ -45,6 +49,9 @@ CBAY2024_plate3_fil <- CBAY2024_plate3 %>%
 
 #negative controls on plate 1,2,4,5,6
 
+sampletypes <- kbimp2024_sampledata %>%
+  select(SampleID, SamplingProtocol)
+
 CBAY2024_plates12456_fil <- CBAY2024_plates12456 %>%
   filter(!Sample %in% c("KBIMP_004_H11", "KBIMP_004_D12", "KBIMP_004_E12", "KBIMP-_006_G4",
                         "KBIMP_004_F12", "KBIMP_004_G12", "KBIMP_004_H10", "KBIMP-_006_H1",
@@ -64,8 +71,11 @@ CBAY2024_plates12456_fil <- CBAY2024_plates12456 %>%
   ungroup() %>%
   filter(Read_Count > 3) %>%
   filter(Barcode_Status == "target") %>%
+  left_join(sampletypes, join_by(Sample == SampleID)) %>%
+  filter(!SamplingProtocol %in% c("Dipnet", "Surber net")) %>%
   select(Sample, Read_Count, Kingdom, Phylum, Class, Order, Family, Genus, 
-         Species, Probability_Genus, Probability_Species, Sequence)
+         Species, Probability_Genus, Probability_Species, Sequence) 
+
 
 #negative controls for Kugluktuk plate 
 
@@ -169,8 +179,6 @@ rm(KBIMP2024_mosquitoes, CBAY2024, problemsamples,
 
 
 #### - PART 2 - Filtering of 2025 metabarcoding data -----
-
-KBIMP2025_COI <- read_tsv(file = "raw-data2/KBIMP2025_insectCOI_OTUDetails.tsv")
 
 ##### Filtering for negative controls #####
 
