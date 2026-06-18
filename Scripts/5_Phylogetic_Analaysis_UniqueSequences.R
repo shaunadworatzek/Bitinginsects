@@ -54,7 +54,7 @@ writeXStringSet(unique_seqsmos,
 
 kbimp_mos_phydat <- as.phyDat(unique_seqsmos, type = "DNA")
 class(kbimp_mos_phydat) # is a "phyDat" object
-length(kbimp_mos_phydat) # 68 has the  species as seen before
+length(kbimp_mos_phydat) # 113 has the  species as seen before
 
 ###### Building the tree ######
 
