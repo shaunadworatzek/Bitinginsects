@@ -29,7 +29,8 @@ KBIMP2024 <- KBIMP2024 %>%
 
 kbimp_mos_DNA_df <- KBIMP2024 %>%
   filter(Family %in% c("Culicidae", "Outgroup")) %>%
-  select(Sample, Sequence) 
+  select(Sample, Sequence) %>%
+  
   
 
 #preforming the alignment and converting to a PhyDat
@@ -42,7 +43,9 @@ alighned_kbimpmos_DNA <- DNAStringSet(muscle::muscle(kbimp_mos_DNA))
 
 kbimp_mos_phydat <- as.phyDat(alighned_kbimpmos_DNA, type = "DNA")
 class(kbimp_mos_phydat) # is a "phyDat" object
-length(kbimp_mos_phydat) # 192 has the  species as seen before
+length(kbimp_mos_phydat) # 201 has the  species as seen before 
+
+#here before I do model testing I would do a visualization step to visualize the alignment 
 
 ###### determining medoid sequences ######
 
@@ -56,7 +59,12 @@ dist.kbimp.mos <- dist.ml(kbimp_mos_phydat, ratio = TRUE, model = "JC69")
 hc <- hclust(dist.kbimp.mos)
 
 groups <- cutree(hc, k = 15) 
-#done multiple times to determine the optimal number of groups based on my data 
+#done multiple times to determine the optimal number of groups based on my data - 
+#What criteria did I use to determine the optimum number of clusters 
+#- internal criteria of cluster cohesion - external measures like by comparing to species labels 
+#Do the internal test to show this because it can be the case that some species have more 
+#variability and the 
+
 
 table(groups) #number of sequences in each group
 
@@ -66,6 +74,10 @@ medoids_2024 <- sapply(unique(groups), function(g) {
   members <- names(groups[groups == g])
   find_medoid(dist.kbimp.mos, members)
 })
+#Identifying a single sequence which is the most central of the group instead 
+#of making a new average sequence - If I were defining species grouping de novo - there is an argument to make to be that the 
+#equivalent of blasting to each individual to each individual unique sequence - an alternative approach would be filtering to unique sequences 
+#and then comparing unique sequences to a data base - when I am assigning biological data I am relying on using species names and studies of vector status - don't delete just compare and see if I get consistent results across the two at least in appendex how many total sequences do I have, how many total sequences do I have - what the min and max divergence - not expecting 10-15% within a species probably 2-4% - cite numbers from the literature. 
 
 medoid_phy_2024 <- kbimp_mos_phydat[medoids_2024]
 

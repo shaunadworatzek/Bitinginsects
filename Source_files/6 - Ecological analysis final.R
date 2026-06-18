@@ -29,6 +29,10 @@ library(ggvenn)
 library(maps)
 library(ggmap)
 library(sf)
+library(rgbif)
+library(rnaturalearth)
+library(paletteer)
+
 
 #opening the required data 
 
@@ -1686,6 +1690,405 @@ increasingtemp <- ggplot(temp_avgmonthly, aes(x = Year, y = avg_monthly_temp,
 
 
 ggsave("plots/increasingtemps.png", increasingtemp , width = 8, height = 4, dpi = 300, bg = "transparent")
+
+
+#### Creating range maps for vector species ----
+
+aedesexcrucians_schaefer <- read_csv(file = "raw-data2/aedes_excrucians_locations_schaefer.csv")
+aedescommunis_schaefer <- read_csv(file = "raw-data2/aedes_communis_locations_schaefer.csv")
+decorum_schaefer <- read_csv(file = "raw-data2/Decorum_locations_schaefer.csv")
+vittinum_schaefer <- read_csv(file = "raw-data2/Vittinum_locations_schaefer.csv")
+noelleri_schaefer <- read_csv(file = "raw-data2/noelleri_locations_schaefer.csv")
+user <- "sdworatz"
+pwd <- "A81unsLD$420"
+email <- "sdworatz@uoguelph.ca"
+
+##### preparing ecozone data #####
+
+world <- ne_download(scale = "large", type = "land", category = "physical", returnclass = "sf")
+
+canada <- ne_countries(country = "Canada", returnclass = "sf")
+
+url <- "https://services.arcgis.com/lGOekm0RsNxYnT3j/ArcGIS/rest/services/National_ecological_framework_of_Canada_ecozones/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
+
+ecozones <- st_read(url)
+
+
+
+land <- ne_download(
+  scale = "medium",
+  type = "land",
+  category = "physical",
+  returnclass = "sf"
+)
+
+canada <- ne_countries(country = "Canada", returnclass = "sf")
+
+# Clip land to Canada
+canada_land <- st_intersection(land, canada)
+
+
+canada_land <- st_transform(canada_land, st_crs(ecozone))
+
+ecozones_land <- st_intersection(ecozones, canada_land)
+
+ecozones2 <- ecozones_land %>%
+  mutate(ECOZONE_NAME_EN = case_when(ECOZONE_NAME_EN %in% c("Taiga Shield","Taiga Plains","Taiga Cordillera") ~ "Taiga" , 
+                                     ECOZONE_NAME_EN %in% c("Southern Arctic", "Arctic Cordillera", "Northern Arctic") ~ "Arctic",
+                                     ECOZONE_NAME_EN %in% c("Boreal Cordillera",
+                                                            "Boreal Plains",
+                                                            "Boreal Shield") ~ "Boreal",
+                                     ECOZONE_NAME_EN %in% c("Atlantic Maritime",
+                                                            "Pacific Maritime") ~ "Maritime", TRUE ~ ECOZONE_NAME_EN))
+
+taiga <- ecozones_land %>%
+  filter(ECOZONE_NAME_EN %in% c(
+    "Taiga Shield",
+    "Taiga Plains",
+    "Taiga Cordillera")) %>%
+  summarise() 
+
+arctic <- ecozones_land %>%
+  filter(ECOZONE_NAME_EN %in% c(
+    "Southern Arctic", 
+    "Arctic Cordillera"
+  )) %>%
+  summarise()
+
+arctic <- st_boundary(arctic)
+taiga <- st_boundary(taiga)
+taiga <- st_make_valid(taiga)
+arctic <- st_make_valid(arctic)
+
+treeline <- st_intersection(
+  st_union(st_buffer(taiga, 3000)),
+  st_union(st_buffer(arctic, 3000))
+) %>%
+  st_boundary()
+
+
+my_colors <- paletteer_d("ggthemes::Tableau_20")
+
+
+##### Aedes excrucians #####
+
+aedesexcrucians_schaefer <- aedesexcrucians_schaefer %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+#find the user key for Insecta (with gbif it is likely easier to download all of the data for insecta in Canada and then filter for the required species groups rather than creating many usage keys)
+
+x <- name_backbone("Aedes excrucians")
+x$usageKey
+
+(gbif_download <- occ_download(
+  pred("country", "CA"),   #selecting for data measured in Canada 
+  pred("taxonKey", x$usageKey), #for Insecta which I previously set as my usage key 
+  pred("hasGeospatialIssue", FALSE), #make sure none of the data I download has a geospatial issue 
+  pred("hasCoordinate", TRUE),  #make sure all the data has coordinates 
+  pred("occurrenceStatus", "PRESENT"), #make sure that it is occurrence data focusing on presence rather than absence 
+  pred_gte("year", 2000),  #from the year 2000 till the present 
+  pred_not(pred_in("basisOfRecord",c("FOSSIL_SPECIMEN"))), #exclude fossil records to try and make sure we are getting live specimens
+  user = user, pwd = pwd, email = email,
+  format = "SIMPLE_CSV")) #log in information and download format
+
+occ_download_wait(gbif_download)
+
+
+aedesexcrucians_binf <- occ_download_get(gbif_download, "..", overwrite = TRUE) |> #open this data into R?? make sure this works if the data isnt being downloaded 
+  occ_download_import()
+
+aedesexcrucians_binf <- aedesexcrucians_binf %>%
+  distinct(decimalLatitude, decimalLongitude, .keep_all = TRUE) %>%
+  mutate(data_type = "GBIF") %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+aedesexcrucians_histdata <- bind_rows(aedesexcrucians_binf, aedesexcrucians_schaefer)
+
+aedesexcrucians_histdata <- aedesexcrucians_histdata %>%
+  mutate(period = ifelse(year <= 2012, "Before 2012", "After 2012"))
+
+
+aedesexcruciansmap <- ggplot() +
+  geom_sf(data = ecozones2, aes(fill = ECOZONE_NAME_EN)) +
+  geom_sf(data = treeline, color = "green4", size = 1.2) +
+  geom_point(data = aedesexcrucians_histdata , aes(x = decimalLongitude, y = decimalLatitude, colour = period, shape = data_type), size = 2) +
+  scale_fill_manual(values= my_colors) +
+  scale_colour_manual(values = c("After 2012" = "red", "Before 2012" = "black")) +
+  scale_shape_manual(values = c("Our data" = 17, "GBIF" = 16, "Schaefer" = 18), 
+                     labels = c( "GBIF"  = "GBIF",
+                                 "Schaefer" = "Schaefer 2012",
+                                 "Our data" = "Our Data")) +
+  
+  labs( fill = "Ecozone", shape = "Data source", color = "Time Frame", title = "Aedes excrucians") +
+  
+  theme_bw() +
+  theme(title = element_text(face = "italic"),
+        axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), 
+        legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14))
+
+
+###### Simulium decorum #####
+
+x3 <- name_backbone("Simulium decorum")
+x3$usageKey
+
+(gbif_decorum <- occ_download(
+  pred("country", "CA"),   #selecting for data measured in Canada 
+  pred("taxonKey", x3$usageKey), #for Insecta which I previously set as my usage key 
+  pred("hasGeospatialIssue", FALSE), #make sure none of the data I download has a geospatial issue 
+  pred("hasCoordinate", TRUE),  #make sure all the data has coordinates 
+  pred("occurrenceStatus", "PRESENT"), #make sure that it is occurrence data focusing on presence rather than absence 
+  pred_gte("year", 2000),  #from the year 2000 till the present 
+  pred_not(pred_in("basisOfRecord",c("FOSSIL_SPECIMEN"))), #exclude fossil records to try and make sure we are getting live specimens
+  user = user, pwd = pwd, email = email,
+  format = "SIMPLE_CSV")) #log in information and download format
+
+occ_download_wait(gbif_decorum)
+
+
+decorum_binf <- occ_download_get(gbif_decorum, "..", overwrite = TRUE) |> #open this data into R?? make sure this works if the data isnt being downloaded 
+  occ_download_import()
+
+decorum_binf  <- decorum_binf  %>%
+  distinct(decimalLatitude, decimalLongitude, .keep_all = TRUE) %>%
+  mutate(data_type = "GBIF") %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+decorum_schaefer <- decorum_schaefer %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+decorum_histdata <- bind_rows(decorum_binf, decorum_schaefer)
+
+decorum_histdata <- decorum_histdata %>%
+  mutate(period = ifelse(year <= 2012, "Before 2012", "After 2012"))
+
+decorummap <- ggplot() +
+  geom_sf(data = ecozones2, aes(fill = ECOZONE_NAME_EN)) +
+  geom_sf(data = treeline, color = "green4", size = 1.2) +
+  geom_point(data = decorum_histdata , aes(x = decimalLongitude, y = decimalLatitude, colour = period, shape = data_type), size = 2) +
+  scale_fill_manual(values= my_colors) +
+  scale_colour_manual(values = c("After 2012" = "red", "Before 2012" = "black")) +
+  scale_shape_manual(values = c("Our data" = 17, "GBIF" = 16, "Schaefer" = 18), 
+                     labels = c( "GBIF"  = "GBIF",
+                                 "Schaefer" = "Schaefer 2012",
+                                 "Our data" = "Our Data")) +
+  
+  labs( fill = "Ecozone", shape = "Data source",  color = "Time Frame",title = "Simulium decorum") +
+  
+  theme_bw() +
+  theme(title = element_text(face = "italic"),
+        axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), 
+        legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14))
+
+
+##### Aedes communis #####
+
+x2 <- name_backbone("Aedes communis")
+x2$usageKey
+
+(gbif_aedescommuis <- occ_download(
+  pred("country", "CA"),   #selecting for data measured in Canada 
+  pred("taxonKey", x2$usageKey), #for Insecta which I previously set as my usage key 
+  pred("hasGeospatialIssue", FALSE), #make sure none of the data I download has a geospatial issue 
+  pred("hasCoordinate", TRUE),  #make sure all the data has coordinates 
+  pred("occurrenceStatus", "PRESENT"), #make sure that it is occurrence data focusing on presence rather than absence 
+  pred_gte("year", 2000),  #from the year 2000 till the present 
+  pred_not(pred_in("basisOfRecord",c("FOSSIL_SPECIMEN"))), #exclude fossil records to try and make sure we are getting live specimens
+  user = user, pwd = pwd, email = email,
+  format = "SIMPLE_CSV")) #log in information and download format
+
+occ_download_wait(gbif_aedescommuis)
+
+
+aedescommunis_binf <- occ_download_get(gbif_aedescommuis, "..", overwrite = TRUE) |> #open this data into R?? make sure this works if the data isnt being downloaded 
+  occ_download_import()
+
+aedescommunis_binf  <- aedescommunis_binf  %>%
+  distinct(decimalLatitude, decimalLongitude, .keep_all = TRUE) %>%
+  mutate(data_type = "GBIF") %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+aedescommunis_histdata <- bind_rows(aedescommunis_binf, aedescommunis_schaefer)
+
+aedescommunis_histdata <- aedescommunis_histdata %>%
+  mutate(period = ifelse(year <= 2012, "Before 2012", "After 2012"))
+
+aedescommunismap <- ggplot() +
+  geom_sf(data = ecozones2, aes(fill = ECOZONE_NAME_EN)) +
+  geom_sf(data = treeline, color = "green4", size = 1.2) +
+  geom_point(data = aedescommunis_histdata , aes(x = decimalLongitude, y = decimalLatitude, colour = period, shape = data_type), size = 2) +
+  scale_fill_manual(values= my_colors) +
+  scale_colour_manual(values = c("After 2012" = "red", "Before 2012" = "black")) +
+  scale_shape_manual(values = c("Our data" = 17, "GBIF" = 16, "Schaefer" = 18), 
+                     labels = c( "GBIF"  = "GBIF",
+                                 "Schaefer" = "Schaefer 2012",
+                                 "Our data" = "Our Data")) +
+  
+  labs( fill = "Ecozone", shape = "Data source", color = "Time Frame", title = "Aedes communis") +
+  
+  theme_bw() +
+  theme(title = element_text(face = "italic"),
+        axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), 
+        legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14))
+
+
+##### Simulium vittatum #####
+
+x4 <- name_backbone("Simulium vittatum")
+x4$usageKey
+
+(gbif_vittatum <- occ_download(
+  pred("country", "CA"),   #selecting for data measured in Canada 
+  pred("taxonKey", x4$usageKey), #for Insecta which I previously set as my usage key 
+  pred("hasGeospatialIssue", FALSE), #make sure none of the data I download has a geospatial issue 
+  pred("hasCoordinate", TRUE),  #make sure all the data has coordinates 
+  pred("occurrenceStatus", "PRESENT"), #make sure that it is occurrence data focusing on presence rather than absence 
+  pred_gte("year", 2000),  #from the year 2000 till the present 
+  pred_not(pred_in("basisOfRecord",c("FOSSIL_SPECIMEN"))), #exclude fossil records to try and make sure we are getting live specimens
+  user = user, pwd = pwd, email = email,
+  format = "SIMPLE_CSV")) #log in information and download format
+
+occ_download_wait(gbif_vittatum)
+
+
+vittatum_binf <- occ_download_get(gbif_vittatum, "..", overwrite = TRUE) |> #open this data into R?? make sure this works if the data isnt being downloaded 
+  occ_download_import()
+
+vittatum_binf  <- vittatum_binf  %>%
+  distinct(decimalLatitude, decimalLongitude, .keep_all = TRUE) %>%
+  mutate(data_type = "GBIF") %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+vittinum_schaefer <- vittinum_schaefer%>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+vittinum_histdata <- bind_rows(vittatum_binf, vittinum_schaefer)
+
+vittinum_histdata <- vittinum_histdata %>%
+  mutate(period = ifelse(year <= 2012, "Before 2012", "After 2012"))
+
+vittinummap <- ggplot() +
+  geom_sf(data = ecozones2, aes(fill = ECOZONE_NAME_EN)) +
+  geom_sf(data = treeline, color = "green4", size = 1.2) +
+  geom_point(data = vittinum_histdata , aes(x = decimalLongitude, y = decimalLatitude, colour = period, shape = data_type), size = 2) +
+  scale_fill_manual(values= my_colors) +
+  scale_colour_manual(values = c("After 2012" = "red", "Before 2012" = "black")) +
+  scale_shape_manual(values = c("Our data" = 17, "GBIF" = 16, "Schaefer" = 18), 
+                     labels = c( "GBIF"  = "GBIF",
+                                 "Schaefer" = "Schaefer 2012",
+                                 "Our data" = "Our Data")) +
+  
+  labs( fill = "Ecozone", shape = "Data source", color = "Time Frame", title = "Simulium vittatum") +
+  
+  theme_bw() +
+  theme(title = element_text(face = "italic"),
+        axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), 
+        legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14))
+
+##### Simulium norelli #####
+
+x5 <- name_backbone("Simulium noelleri")
+x5$usageKey
+
+(gbif_noelleri <- occ_download(
+  pred("country", "CA"),   #selecting for data measured in Canada 
+  pred("taxonKey", x5$usageKey), #for Insecta which I previously set as my usage key 
+  pred("hasGeospatialIssue", FALSE), #make sure none of the data I download has a geospatial issue 
+  pred("hasCoordinate", TRUE),  #make sure all the data has coordinates 
+  pred("occurrenceStatus", "PRESENT"), #make sure that it is occurrence data focusing on presence rather than absence 
+  pred_gte("year", 2000),  #from the year 2000 till the present 
+  pred_not(pred_in("basisOfRecord",c("FOSSIL_SPECIMEN"))), #exclude fossil records to try and make sure we are getting live specimens
+  user = user, pwd = pwd, email = email,
+  format = "SIMPLE_CSV")) #log in information and download format
+
+occ_download_wait(gbif_noelleri)
+
+
+noelleri_binf <- occ_download_get(gbif_noelleri, "..", overwrite = TRUE) |> #open this data into R?? make sure this works if the data isnt being downloaded 
+  occ_download_import()
+
+noelleri_binf  <- noelleri_binf  %>%
+  distinct(decimalLatitude, decimalLongitude, .keep_all = TRUE) %>%
+  mutate(data_type = "GBIF") %>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+noelleri_schaefer <- noelleri_schaefer%>%
+  select(decimalLatitude, decimalLongitude, data_type, year)
+
+noelleri_histdata <- bind_rows(noelleri_binf, noelleri_schaefer)
+
+noelleri_histdata <- noelleri_histdata %>%
+  mutate(period = ifelse(year <= 2012, "Before 2012", "After 2012"))
+
+noellerimap <- ggplot() +
+  geom_sf(data = ecozones2, aes(fill = ECOZONE_NAME_EN)) +
+  geom_sf(data = treeline, color = "green4", size = 1.2) +
+  geom_point(data = noelleri_histdata , aes(x = decimalLongitude, y = decimalLatitude, colour = period, shape = data_type), size = 2) +
+  scale_fill_manual(values= my_colors) +
+  scale_colour_manual(values = c("After 2012" = "red", "Before 2012" = "black")) +
+  scale_shape_manual(values = c("Our data" = 17, "GBIF" = 16, "Schaefer" = 18), 
+                     labels = c( "GBIF"  = "GBIF",
+                                 "Schaefer" = "Schaefer 2012",
+                                 "Our data" = "Our Data")) +
+  
+  labs( fill = "Ecozone", shape = "Data source", color = "Time Frame", title = "Simulium noelleri") +
+  
+  theme_bw() +
+  theme(title = element_text(face = "italic"),
+        axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), 
+        legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14))
+
+##### combing plots #####
+
+combined_plot <- (aedesexcruciansmap + aedescommunismap + decorummap + vittinummap + noellerimap) +
+  plot_layout(guides = "collect") 
+
+png("plots/histmaps.png", width = 3000, height = 2000, res = 300)
+
+print(combined_plot)
+
+dev.off()
+
 
 
 

@@ -3,8 +3,8 @@
 #phylogenies 
 
 
-KBIMP2025 <- read_tsv(file = "../processed-data/KBIMP2025_filteredCOI.tsv")
-Outgroup <- read_csv(file = "../raw-data2/Outgroup.csv")
+KBIMP2025 <- read_tsv(file = "processed-data/KBIMP2025_filteredCOI.tsv")
+Outgroup <- read_csv(file = "raw-data2/Outgroup.csv")
 #### PART 1 - Phylogenetic analysis and resolution of undefined Mosquito species ---- 
 
 #filtering for Culicidae, and defining the root as a chiromidae sequence in the data set 
