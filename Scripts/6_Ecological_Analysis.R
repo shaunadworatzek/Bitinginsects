@@ -38,282 +38,308 @@ library(paletteer)
 
 CBAY2025_metadata <- read_csv(file = "raw-data2/CBAY2025_metadata.csv")
 KGLTK2025_metadata <- read_csv(file = "raw-data2/KGLTK2025_metadata.csv")
-condensedsites <- read_csv(file = "raw-data2/condencedsites.csv")
 KBIMP_combined <- read_tsv(file = "processed-data/KBIMP_updatedspecies.tsv")
-kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
-kbimp2024_sitesnamesfixed <- read_csv(file = "raw-data2/KBIMP_meta_sitenamesfixed.csv")
-kbimp2024_abundence <- read_csv(file = "raw-data2/KBIMP2024_abundence.csv")
 sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 vector_change <- read_csv(file = "raw-data2/vector_change.csv")
+kbimp2024_sampledata_clean <- read_csv(file = "processed-data/kbimp2024_sampledata_clean.csv")
+
+
 
 #### - Preparing the site metadata for analysis ----
 
-##### 2024 sample data #####
+##### preparing the 2025 data #####
 
-#looking at the site names
-
-KBIMP_2024_siteslook <- kbimp2024_sampledata %>%
-  group_by(Site) %>%
-  summarise(countsites = n_distinct(FieldID)) 
-
-ggplot(KBIMP_2024_siteslook, aes(y= countsites, x= Site)) +
-  geom_col(fill = "skyblue3") +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 45)) # we have 5 different sites after combing
-
-rm(KBIMP_2024_siteslook)
-
-#combine good sites sheet with other sampledata sheet and adding in the sample month
-
-kbimp2024_sampledata <- kbimp2024_sampledata %>%
-  inner_join(kbimp2024_sitesnamesfixed, join_by(FieldID == FieldID)) %>%
-  mutate(
-    date_parts = str_split(`Collection Date`, "-"),
-    end_date_raw = sapply(date_parts, `[`, 2),
-    end_date_raw = ifelse(is.na(end_date_raw), `Collection Date`, end_date_raw),
-    Date_parsed = parse_date_time(end_date_raw,
-                                  orders = c("ymd", "mdy", "dmy", "dm", "md", "m")),
-    Month = month(Date_parsed, label = TRUE))
-
-#looking at the new site names 
-
-KBIMP_2024_siteslook <- kbimp2024_sampledata %>%
-  group_by(ExactSite) %>%
-  summarise(countsites = n_distinct(FieldID)) 
-
-
-ggplot(KBIMP_2024_siteslook, aes(y= countsites, x= ExactSite)) +
-  geom_col(fill = "skyblue3") +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 45)) # we have 5 different sites after combing
-
-rm(KBIMP_2024_siteslook)
-
-#fixing the samples which were switched during extractions (based on lab notes)
-
-kbimp2024_sampledata <- kbimp2024_sampledata %>%
-  mutate(SampleID= gsub("KBIMP_004_H11", "KBIMP-_006_G3", SampleID)) %>%
-  mutate(SampleID= gsub("KBIMP_004_D12", "KBIMP-_006_G4", SampleID)) %>%
-  mutate(SampleID= gsub("KBIMP_004_E12", "KBIMP-_006_G5", SampleID)) %>%
-  mutate(SampleID= gsub("KBIMP_004_F12", "KBIMP-_006_G6", SampleID)) %>%
-  mutate(SampleID= gsub("KBIMP_004_G12", "KBIMP-_006_G7", SampleID)) %>%
-  mutate(SampleID= gsub("KBIMP_004_H10", "KBIMP-_006_G2", SampleID)) 
-
-##### prearing the 2025 data #####
-
-CBAY2025_metadata <- CBAY2025_metadata %>%
-  mutate(Date_parsed = parse_date_time(`Date collected`,
-                                       orders = c("ymd", "mdy", "dmy")),
-         Month = month(Date_parsed, label = TRUE))%>%
-  select(Month, Sample, Site, `Sample Replicate`, `Sample type collection method`,
-         Lon, Lat, `Habitat type`, `Distance from water (m)`, `Mosquito Head Abundance`, 
-         `Blackfly Head Abundance`, `Temp C (Sweep)`, `Relative Humidity (Sweep)`) %>%
-  filter(!is.na(`Mosquito Head Abundance`)) %>%
-  right_join(condensedsites)
-
-KGLTK2025_metadata <- KGLTK2025_metadata %>%
-  mutate(Date_parsed = parse_date_time(`Date set`,
-                                       orders = c("ymd", "mdy", "dmy", "dm")),
+CBAY2025_metadata_clean <- CBAY2025_metadata %>%
+  mutate(Date_parsed = 
+          parse_date_time(`Date collected`,
+          orders = c("dmy")),
          Month = month(Date_parsed, label = TRUE)) %>%
-  filter(!is.na(`Mosquito Head Abundance`))
+  select(Month, Sample, Site,  `Sample type collection method`,
+         Lon, Lat, `Habitat type`,  `Mosquito Head Abundance`, 
+         `Blackfly Head Abundance`) %>%
+  filter(!is.na(`Mosquito Head Abundance`)) 
+
+KGLTK2025_metadata_clean <- KGLTK2025_metadata %>%
+  mutate(Date_parsed = 
+           parse_date_time(`Date set`,
+            orders = c("ymd", "mdy", "dmy", "dm")),
+         Month = month(Date_parsed, label = TRUE)) %>% #some of the dates are parsed incorrectly but we doubled checked that the correct months were pulled. 
+  filter(!is.na(`Mosquito Head Abundance`)) %>%
+  select(Month, Sample, Site, `Sample type collection method`,
+         Lon, Lat, `Habitat type`,  `Mosquito Head Abundance`, 
+         `Blackfly Head Abundance`)
 
 #setting up metadata for analysis 
 
-KGLTK2025_metadata <- KGLTK2025_metadata %>%
-  select(Sample, `Sample type collection method`, Month, Lon, Lat) 
-
-KBIMP2025_metadata <- CBAY2025_metadata %>% 
-  select(Sample, `Sample type collection method`, Month, Lon, Lat) %>%
-  rbind(KGLTK2025_metadata) %>%
-  filter(!is.na(Sample)) %>%
+KBIMP2025_metadata <- CBAY2025_metadata_clean %>% 
+  rbind(KGLTK2025_metadata_clean) %>%
   mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
   mutate(Year = 2025) %>%
   dplyr::rename(SamplingMethod = `Sample type collection method`) 
 
+KBIMP2024_metadata <- kbimp2024_sampledata_clean %>%
+  rename(SamplingMethod = SamplingProtocol) %>%
+  dplyr::rename(Sample = FieldID) %>%
+  select(Sample, SamplingMethod, Sector, Month, Lon, Lat) %>%
+  distinct(Sample, .keep_all = TRUE)
+
 ##### combining 2024 and 2025 data into one metadata file ----- 
 
-meta_data <- kbimp2024_sampledata %>%
-  dplyr::rename(Sample = FieldID) %>%
-  dplyr::rename(Lat = Lat.x) %>%
-  select(Sample, SamplingMethod, Sector, Month, Lon, Lat) %>%
+meta_data <- KBIMP2024_metadata %>%
   mutate(Year = 2024) %>%
   bind_rows(KBIMP2025_metadata) %>%
-  distinct() %>%
   mutate(SamplingMethod = case_when(
     grepl("malaise", SamplingMethod, ignore.case = TRUE) ~ "Malaise Trap",
     grepl("sweep", SamplingMethod, ignore.case = TRUE) ~ "Sweep Net",
     grepl("aspirator|people", SamplingMethod, ignore.case = TRUE) ~ "Aspirator",
     TRUE ~ SamplingMethod)) %>%
-  filter(SamplingMethod %in% c("Malaise Trap", "Sweep Net", "Aspirator"))
+  filter(SamplingMethod %in% 
+           c("Malaise Trap", "Sweep Net", "Aspirator")) %>%
+  select(Sample, SamplingMethod, Sector, Month, Lon, Lat, Year) 
 
-#### Invesitgating the number of black flies and mosquitoes from each year ----
+#removing the outgroup from the data
+KBIMP_combined <- KBIMP_combined %>%
+  filter(Sample != "Outgroup")
+
+#### Investigating the number of black flies and mosquitoes from each year ----
 
 ##### 2024 #####
 
-samples2024cbay <- meta_data %>%
-  filter(Year == "2024") %>%
-  filter(Sector == "CBAY")
+#number of samples 
 
-KBIMP2024cbay <- KBIMP_combined %>%
-  filter(Sample %in% samples2024cbay$Sample) 
+tabledata2 <- KBIMP2024_metadata %>%
+  left_join(KBIMP_combined, join_by(Sample == Sample)) %>%
+  select(Sample, Sector, Family) %>%
+  group_by(Sample, Sector) %>%
+  summarise(has_mosquito = any(Family == "Culicidae", na.rm = TRUE),
+    has_blackfly = any(Family == "Simuliidae", na.rm = TRUE),
+    .groups = "drop") %>%
+  mutate(
+    has_mosquito = as.integer(has_mosquito),
+    has_blackfly = as.integer(has_blackfly)) %>%
+ mutate(category = case_when(
+    has_mosquito != 0 & has_blackfly != 0  ~ "Both",
+    has_mosquito != 0 & has_blackfly == 0 ~ "Mosquito only",
+    has_mosquito == 0 & has_blackfly != 0 ~ "Black fly only",
+    has_mosquito == 0 & has_blackfly == 0 ~ "Neither")) %>%
+  group_by(Sector, category) %>%
+  summarise(value = n_distinct(Sample)) %>%
+  ungroup() 
 
-KBIMP2024counts <- KBIMP2024 %>%
-  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) 
+#total number of samples
+
+total_row <- tabledata2 %>%
+  group_by(Sector) %>%
+    summarise(
+      category = "Total",
+      value = sum(value)) %>%
+    ungroup()
+
+#combing into one for 2024 data
   
+sample_table_2024 <- bind_rows(tabledata2, total_row) %>%
+  mutate(year = 2024)
+  
+#number of individuals 
 
-#CBAY - for the number of specimens
-
-sum(grepl("^CBAY", KBIMP2024cbay$Sample))
-
-sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample) &  
-      KBIMP2024_updatedclean$Family == "Simuliidae")
-
-sum(grepl("^CBAY", KBIMP2024_updatedclean$Sample) &  
-      KBIMP2024_updatedclean$Family == "Culicidae")
-
-
-#CBAY - for the number of samples 
-
-sum(kbimp2024_abundence$Sector == "CBAY" ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "CBAY" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-#Kugluktuk  - for the number of specimens
-
-sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample))
-
-sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample) &  
-      KBIMP2024_updatedclean$Family == "Simuliidae")
-
-sum(grepl("^KGLTK", KBIMP2024_updatedclean$Sample) &  
-      KBIMP2024_updatedclean$Family == "Culicidae")
-
-
-#Kugluktuk - for the number of samples 
-
-sum(kbimp2024_abundence$Sector == "KGLTK" ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun != 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun != 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
-
-sum(kbimp2024_abundence$Sector == "KGLTK" &
-      kbimp2024_abundence$blackfly_abun == 0 & 
-      kbimp2024_abundence$mosquito_abun == 0
-    ,na.rm = TRUE)
+individual_table_2024 <- KBIMP2024 %>%
+  mutate(Sector = 
+           str_extract(Sample, "^[A-Za-z]+")) %>%
+  select(Sample, Sector, Family) %>%
+  group_by(Sector) %>%
+  summarise(Blackflies = sum(Family == "Simuliidae", 
+                         na.rm = TRUE),
+            Mosquitoes = sum(Family == "Culicidae", 
+                         na.rm = TRUE)) %>%
+  pivot_longer(cols = c("Blackflies", "Mosquitoes"), values_to = "value", names_to = "category") %>%
+  mutate(year = 2024)
 
 ##### 2025 #####
 
-CBAY2025_metadata$`Blackfly Head Abundance` <- as.numeric(CBAY2025_metadata$`Blackfly Head Abundance`)
-CBAY2025_metadata$`Mosquito Head Abundance` <- as.numeric(CBAY2025_metadata$`Mosquito Head Abundance`)
-sum(CBAY2025_metadata$`Blackfly Head Abundance`, na.rm = TRUE)
-sum(CBAY2025_metadata$`Mosquito Head Abundance`, na.rm = TRUE)
+# number of individuals 
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+individuals_table2025 <- KBIMP2025_metadata %>%
+  mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
+  select(Sector, `Mosquito Head Abundance`,`Blackfly Head Abundance`) %>%
+  rename("Mosquitoes" = "Mosquito Head Abundance", 
+         "Blackflies" = "Blackfly Head Abundance") %>%
+  pivot_longer(cols = c("Mosquitoes", "Blackflies"), values_to = "value", names_to = "category") %>%
+  group_by(Sector, category) %>%
+summarise(
+  value = sum(value)) %>%
+  ungroup() %>%
+  mutate(year = 2025)
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`!= 0,na.rm = TRUE)
+#number of samples 
+  
+samples_table2025 <- KBIMP2025_metadata %>%
+  mutate(Sector = str_extract(Sample, "^[A-Za-z]+")) %>%
+  left_join(KBIMP_combined, join_by(Sample == Sample)) %>%
+  select(Sample, Sector, Family) %>%
+  group_by(Sample, Sector) %>%
+  summarise(has_mosquito = any(Family == "Culicidae", na.rm = TRUE),
+            has_blackfly = any(Family == "Simuliidae", na.rm = TRUE),
+            .groups = "drop") %>%
+  mutate(
+    has_mosquito = as.integer(has_mosquito),
+    has_blackfly = as.integer(has_blackfly)) %>%
+  mutate(category = case_when(
+    has_mosquito != 0 & has_blackfly != 0  ~ "Both",
+    has_mosquito != 0 & has_blackfly == 0 ~ "Mosquito only",
+    has_mosquito == 0 & has_blackfly != 0 ~ "Black fly only",
+    has_mosquito == 0 & has_blackfly == 0 ~ "Neither")) %>%
+  group_by(Sector, category) %>%
+  summarise(value = n_distinct(Sample)) %>%
+  ungroup() 
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` == 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+#total number of samples 
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0 &
-      CBAY2025_metadata$`Mosquito Head Abundance`== 0,na.rm = TRUE)
+total_row2025 <- samples_table2025 %>%
+  group_by(Sector) %>%
+  summarise(
+    category = "Total",
+    value = sum(value)) %>%
+  ungroup()
 
-sum(CBAY2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
+#combining into one for 2025
 
-sum(CBAY2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
+samples_table2025 <- bind_rows(samples_table2025, total_row2025) %>%
+  mutate(year = 2025) 
 
-sum(CBAY2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+##### individuals table final for both years #####
 
-#Kugluktuk
+individuals_table <- 
+  bind_rows(individual_table_2024, individuals_table2025) %>%
+  pivot_wider(names_from = "Sector", values_from = "value") %>%
+  rename("Cambridge Bay\n(Iqaluktuuttiaq)\n" = "CBAY", 
+         "Kugluktuk\n(Qurluqtuq)\n" = "KGLTK")
 
-KGLTK2025_metadata $`Blackfly Head Abundance` <- as.numeric(KGLTK2025_metadata $`Blackfly Head Abundance`)
-KGLTK2025_metadata $`Mosquito Head Abundance` <- as.numeric(KGLTK2025_metadata $`Mosquito Head Abundance`)
-sum(KGLTK2025_metadata$`Blackfly Head Abundance`, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance`, na.rm = TRUE)
+individuals_gtable <- individuals_table %>%
+  gt(rowname_col = "category", groupname_col = "year") %>%
+  tab_header(title = md("")) %>%
+  tab_footnote(footnote = md("")) %>%
+  tab_options(
+    table.border.top.width = px(0),
+    table.border.bottom.width = px(0),
+    column_labels.border.top.width = px(0),
+    column_labels.border.bottom.width = px(0),
+    table_body.hlines.width = px(0),
+    table_body.vlines.width = px(0),
+    row_group.border.top.width = px(0),
+    row_group.border.bottom.width = px(0),
+    stub.border.style = "none") %>%
+  tab_style(style = cell_text(weight = "bold"),
+    locations = list(cells_column_labels(),
+      cells_row_groups())) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_title()) %>%
+    tab_style(style = cell_borders(sides = c("top"),
+             color = "black", weight = px(2)),
+              locations = cells_footnotes()) %>%
+  tab_style(style = cell_borders(
+    sides = c("top", "bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_row_groups()) %>%
+  tab_options(data_row.padding = px(5)) %>%
+  cols_width("Cambridge Bay\n(Iqaluktuuttiaq)\n" 
+             ~ px(300), 
+             "Kugluktuk\n(Qurluqtuq)\n" ~ px(300))
+
+gtsave(data = individuals_gtable, 
+       filename = "plots/individualstable.png")
+
+##### samples table final for both years #####
+
+samples_table <- bind_rows(sample_table_2024, samples_table2025) %>%
+  pivot_wider(names_from = "Sector", values_from = "value") %>%
+  rename("Cambridge Bay\n(Iqaluktuuttiaq)\n" = "CBAY", 
+         "Kugluktuk\n(Qurluqtuq)\n" = "KGLTK") %>%
+  mutate(category = factor(category, 
+        levels = c("Total", "Black fly only", 
+                   "Mosquito only", "Both", "Neither"))) %>%
+  arrange(category)
 
 
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+samples_gtable <- samples_table %>%
+  gt(rowname_col = "category", groupname_col = "year") %>%
+  tab_header(title = md("")) %>%
+  tab_footnote(footnote = md("")) %>%
+  cols_align(align = "right",
+    columns = everything()) %>%
+  tab_options(
+    table.border.top.width = px(0),
+    table.border.bottom.width = px(0),
+    column_labels.border.top.width = px(0),
+    column_labels.border.bottom.width = px(0),
+    table_body.hlines.width = px(0),
+    table_body.vlines.width = px(0),
+    row_group.border.top.width = px(0),
+    row_group.border.bottom.width = px(0),
+    stub.border.style = "none") %>%
+  tab_style(style = cell_text(weight = "bold"),
+            locations = list(cells_column_labels(),
+                             cells_row_groups())) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_title()) %>%
+  tab_style(style = cell_borders(sides = c("top"),
+             color = "black", weight = px(2)),
+            locations = cells_footnotes()) %>%
+  tab_style(style = cell_borders(sides = c("top", "bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_row_groups()) %>%
+  tab_options(data_row.padding = px(5)) %>%
+  cols_width("Cambridge Bay\n(Iqaluktuuttiaq)\n" 
+             ~ px(300), 
+             "Kugluktuk\n(Qurluqtuq)\n" ~ px(300))
 
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+gtsave(data = samples_gtable, 
+       filename = "plots/samples_gtable.png")
 
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`!= 0 , na.rm = TRUE)
+#getting at the number of samples  for iNEXT
 
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0 &
-      KGLTK2025_metadata$`Blackfly Head Abundance`== 0 , na.rm = TRUE)
+SamplesCBAY <- sum(meta_data$Sector == "CBAY",
+                      na.rm = TRUE)
 
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Blackfly Head Abundance` != 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` == 0, na.rm = TRUE)
-sum(KGLTK2025_metadata$`Mosquito Head Abundance` != 0, na.rm = TRUE)
+SamplesKGLTK <- sum(meta_data$Sector == "KGLTK",
+                na.rm = TRUE)
 
-#looking at the number of samples each month for iNEXT
-
-sum(meta_data$Month == "Jul" &
+SamplesJulCBAY <- sum(meta_data$Month == "Jul" &
       meta_data$Sector == "CBAY",
     na.rm = TRUE)
 
-sum(meta_data$Month == "Jul" &
+SamplesJulKGLTK <- sum(meta_data$Month == "Jul" &
       meta_data$Sector == "KGLTK",
     na.rm = TRUE)
 
-sum(meta_data$Month == "Aug" &
+SamplesAugCBAY <- sum(meta_data$Month == "Aug" &
       meta_data$Sector == "CBAY",
     na.rm = TRUE)
 
-sum(meta_data$Month == "Aug" &
+SamplesAugKGLTK <- sum(meta_data$Month == "Aug" &
       meta_data$Sector == "KGLTK",
     na.rm = TRUE)
 
-####  Making iNEXT graph ----
+####  Running iNEXT analysis and generating graph from results  ----
 
 ##### iNEXT both places, both families #####  
+
+#reorganizing data into format needed for iNEXT (incidence of each species by region with total number of samples as the first row)
 
 iNEXT <- KBIMP_combined %>%
   select(Sample, Species) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
-  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
-  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Sample, Species, name = "Presence") %>% 
+  #assigning 1 to all species/ sample combos for presence in a sample
   dplyr::count(region, Species, name = "Incidence") %>%
+  #summing all the presence values by region and species to get incidence of each species 
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  #here we are replacing NAs with 0 because some of the species are present in CBAY but not KGLTK and vise versa so this makes the incidence of those species in those regions 0. 
   add_row(Species = "sampling_extent",
-          CBAY = 233,
-          KGLTK = 122, .before = 1) %>%
+          CBAY = SamplesCBAY,
+          KGLTK = SamplesKGLTK, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext <- iNEXT(iNEXT, q=0, datatype="incidence_freq")
@@ -337,14 +363,15 @@ iNEXT_sim <- KBIMP_combined %>%
   filter(Family == "Simuliidae" )%>%
   select(Sample, Species) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
-  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
-  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Sample, Species, name = "Presence") %>% 
+  #assigning 1 to all species/ sample combos for presence in a sample
   dplyr::count(region, Species, name = "Incidence") %>%
+  #summing all the presence values by region and species to get incidence of each species 
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 233,
-          KGLTK = 122, .before = 1) %>%
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 
@@ -374,7 +401,7 @@ iNext_bf <- ggiNEXT(em.inext.sim)+
                     name = "Region") +
   scale_shape_manual( values = c(15, 16, 17, 18))
 
-ggsave("plots/inext2025bf.png", iNext_bf , width = 6, height = 5, dpi = 300, bg = "transparent")
+ggsave("plots/inext2025bf.png", iNext_bf , width = 6, height = 4, dpi = 300, bg = "transparent")
 
 ##### Both places, mosquitoes, both months #####
 
@@ -388,8 +415,8 @@ iNEXT_cul <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 233,
-          KGLTK = 122, .before = 1) %>%
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 
@@ -432,7 +459,7 @@ iNEXT_cul_jul <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 127,
+          CBAY = 120,
           KGLTK = 32, .before = 1) %>%
   column_to_rownames(var = "Species")
 
@@ -463,7 +490,7 @@ iNEXT_bf_jul <- KBIMP_combined %>%
   pivot_wider(names_from = region, values_from = Incidence) %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 127,
+          CBAY = 120,
           KGLTK = 32, .before = 1) %>%
   column_to_rownames(var = "Species")
 
@@ -500,7 +527,7 @@ iNEXT_cul_aug <- KBIMP_combined %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
           CBAY = 84,
-          KGLTK = 54, .before = 1) %>%
+          KGLTK = 56, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext.cul.aug <- iNEXT(iNEXT_cul_aug, q=0, datatype="incidence_freq")
@@ -534,7 +561,7 @@ iNEXT_bf_aug <- KBIMP_combined %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   add_row(Species = "sampling_extent",
           CBAY = 84,
-          KGLTK = 54, .before = 1) %>%
+          KGLTK = 56, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext.bf.aug <- iNEXT(iNEXT_bf_aug, q=0, datatype="incidence_freq")
@@ -557,31 +584,97 @@ em.inext.cul$DataInfo
 
 ##### venn diagram/ determining which species are different #####
 
-sr_2012 <- sr_2012 %>%
+sr_2012_namesfixed <- sr_2012 %>%
   mutate(taxon = if_else(taxon == "Aedes nigripes", "Aedes nigripes/Aedes impiger", taxon)) %>%
-  filter(!taxon == "Aedes impiger")
+  mutate(taxon = str_replace(taxon,  "Aedes hexodontus",
+                        "Aedes punctor/Aedes hexodontus")) %>%
+  filter(!taxon == "Aedes impiger") #This loses a row becase I am combining Aedes impiger and Aedes nigripes into one as seen in my data set
+  
 
 venndiagramspecieslist <- KBIMP_combined  %>%
-  mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
   mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
-  mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
-  mutate(Species = str_replace(Species, "Simulium verecundum complex sp", "Simulium verecundum complex")) %>%
   mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
   mutate(presence = 1) %>%
-  select(-Sample, -Family) %>%
-  distinct() %>%
-  group_by(Species, region) %>% 
-  summarise(across(everything(), ~ as.integer(any(.x == 1))), .groups = "drop") %>%
-  ungroup() %>%
-  pivot_wider(names_from = "region", values_from = "presence") %>%
-  full_join(sr_2012, join_by(Species == taxon)) %>%
-  mutate(across(everything(), ~ ifelse(is.na(.), 0, .))) 
+  select(-Sample, -Family, -update_flag) %>%
+  distinct() %>% #I think I fixed the issue with the code you pointed out here - I get the same result but I think this is the better way of doing this 
+  pivot_wider(names_from = "region", 
+              values_from = "presence", 
+              values_fill = 0) %>%
+  full_join(sr_2012_namesfixed, join_by("Species" == "taxon")) %>%
+  mutate(across(everything(), ~ ifelse(is.na(.), 0, .))) %>%
+  rename("Cambridge Bay 2024-2025" = "CBAY", 
+         "Kugluktuk 2024-2025" = "KGLTK", 
+         "Cambridge Bay 2010-2012" = "CbB", 
+         "Kugluktuk 2010-2012" = "Kug") %>%
+  filter(!if_all(-Species, ~ . == 0)) %>%
+  mutate(Family = if_else(Species %in% 
+                  c("Aedes communis",
+                    "Aedes excrucians",
+                    "Aedes nigripes/Aedes impiger",
+                    "Aedes punctor/Aedes hexodontus",
+                    "Culiseta alaskaensis",
+                    "Culiseta inornata"),
+        "Mosquitoes","Black flies"))
+
+
+
+
+#creating a table of the presence absence across both years 
+change_gtable <- venndiagramspecieslist %>%
+  gt(rowname_col = "Species", groupname_col = "Family") %>%
+  tab_spanner("Cambridge Bay", 
+              c("Cambridge Bay 2010-2012",
+                "Cambridge Bay 2024-2025")) %>%
+  tab_spanner("Kugluktuk", 
+              c("Kugluktuk 2010-2012", 
+                "Kugluktuk 2024-2025")) %>%
+  cols_label(
+    "Cambridge Bay 2010-2012" = "2010-2012",
+    "Cambridge Bay 2024-2025" = "2024-2025",
+    "Kugluktuk 2010-2012" = "2010-2012",
+    "Kugluktuk 2024-2025" = "2024-2025") %>%
+  tab_stubhead(label = md("")) %>%
+  tab_header(title = md("")) %>%
+  tab_footnote(footnote = md("")) %>%
+  tab_options(
+    table.border.top.width = px(0),
+    table.border.bottom.width = px(0),
+    column_labels.border.top.width = px(0),
+    column_labels.border.bottom.width = px(0),
+    table_body.hlines.width = px(0),
+    table_body.vlines.width = px(0),
+    row_group.border.top.width = px(0),
+    row_group.border.bottom.width = px(0),
+    stub.border.style = "none") %>%
+  tab_style(style = cell_text(weight = "bold"),
+            locations = list(cells_column_spanners(), 
+                             cells_row_groups())) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_title()) %>%
+  tab_style(style = cell_borders(sides = c("top"),
+            color = "black", weight = px(2)),
+            locations = cells_footnotes()) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+            color = "black", weight = px(2)),
+            locations = list(cells_column_labels(), 
+                             cells_stubhead())) %>%
+  tab_style(style = cell_borders(
+            sides = c("top", "bottom"),
+            color = "black", weight = px(2)),
+            locations = cells_row_groups()) %>%
+  tab_options(data_row.padding = px(5)) %>%
+  cols_width("Cambridge Bay 2010-2012" ~ px(150), 
+             "Cambridge Bay 2024-2025" ~ px(150),
+             "Kugluktuk 2010-2012"  ~ px(150), 
+             "Kugluktuk 2024-2025" ~ px(150))
+
+
+gtsave(data = change_gtable, 
+       filename = "plots/change_gtable.png")
 
 venncbay <- venndiagramspecieslist %>%
-  select(CBAY, CbB, Species) %>%
-  column_to_rownames(var = "Species") %>%
-  filter(rowSums(across(everything())) > 0) %>%
-  rownames_to_column(var = "Species") %>%
+  select(`Cambridge Bay 2010-2012`, `Cambridge Bay 2024-2025`, Species) %>%
   pivot_longer(-Species, names_to = "sector", values_to = "presence") %>%
   filter(presence == 1) %>%
   select(sector, Species) %>%
@@ -589,16 +682,14 @@ venncbay <- venndiagramspecieslist %>%
   summarise(species_list = list(unique(Species))) %>%
   deframe()
 
-setdiff(venncbay$CBAY, venncbay$CbB)
-setdiff(venncbay$CbB, venncbay$CBAY)
-
-names(venncbay) <- c("CBAY" = "Cambridge Bay 2024and 2025", "CbB" = "Cambridge Bay 2012")
+setdiff(venncbay$`Cambridge Bay 2024-2025`, 
+        venncbay$`Cambridge Bay 2010-2012`)
+setdiff(venncbay$`Cambridge Bay 2010-2012`, 
+        venncbay$`Cambridge Bay 2024-2025`)
 
 vennkug <- venndiagramspecieslist %>%
-  select(KGLTK,Kug, Species) %>%
-  column_to_rownames(var = "Species") %>%
-  filter(rowSums(across(everything())) > 0) %>%
-  rownames_to_column(var = "Species") %>%
+  select(`Kugluktuk 2024-2025`, 
+         `Kugluktuk 2010-2012`, Species) %>%
   pivot_longer(-Species, names_to = "sector", values_to = "presence") %>%
   filter(presence == 1) %>%
   select(sector, Species) %>%
@@ -606,10 +697,10 @@ vennkug <- venndiagramspecieslist %>%
   summarise(species_list = list(unique(Species))) %>%
   deframe()
 
-setdiff(vennkug$KGLTK, vennkug$Kug)
-setdiff(vennkug$Kug, vennkug$KGLTK)
-
-ggsave("plots/vennkug.png", vennkug, width = 4, height = 2, dpi = 300)
+setdiff(vennkug$`Kugluktuk 2010-2012`, 
+        vennkug$`Kugluktuk 2024-2025`)
+setdiff(vennkug$`Kugluktuk 2024-2025`, 
+        vennkug$`Kugluktuk 2010-2012`)
 
 #### making the figure for the change in the number of vectors ----
 
@@ -628,8 +719,8 @@ iNEXT_vectors <- KBIMP_combined %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   filter(Species %in% vector_change$Species) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 233,
-          KGLTK = 122, .before = 1) %>%
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext_vectors <- iNEXT(iNEXT_vectors, q=0, datatype="incidence_freq")
@@ -662,8 +753,8 @@ iNEXT_nonvectors <- KBIMP_combined %>%
   mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
   filter(!Species %in% vector_change$Species) %>%
   add_row(Species = "sampling_extent",
-          CBAY = 233,
-          KGLTK = 122, .before = 1) %>%
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
   column_to_rownames(var = "Species")
 
 em.inext_nonvectors <- iNEXT(iNEXT_nonvectors, q=0, datatype="incidence_freq")
@@ -738,7 +829,7 @@ vectorchange <- ggplot() +
   geom_line(data = vectorall, aes(x = Year, y = qD, colour = type, group = type))+
   
   scale_colour_manual(
-    values = c("Vectors" = "#000099", "Non-vectors" =  "#FFC000", "Total" = "black"))  +
+    values = c("Vectors" = "#9D5C63", "Non-vectors" =  "#78BC61", "Total" = "black"))  +
   
   theme_bw(base_size = 15) +
   xlab("Sampling Years") +
@@ -754,7 +845,8 @@ vectorchange <- ggplot() +
         strip.background = element_rect(fill = NA, color = NA),
         strip.text  = element_text(face = "bold", size = 14)) +
   
-  facet_wrap(~Sector) 
+  facet_wrap(~Sector, labeller = labeller(Sector = 
+  c("CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)",                    "KGLTK" = "Kugluktuk\n(Qurluqtuq)")))
 
 ggsave("plots/vectorchange.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
 
@@ -769,61 +861,46 @@ alpha_en_data <- meta_data %>%
 families <- c("Culicidae", "Simuliidae") 
 
 speciesrich_CBAYvs_KGLTK <- KBIMP_combined %>%
-  filter(Sample %in% alpha_en_data$Sample) %>%
-  inner_join(alpha_en_data) %>%
-  filter(!Month %in% c("Jun", "Sep")) %>%
+  inner_join(alpha_en_data) %>% #I think I fixed the problem here so we do not gain any rows we inner join so that we only keep the Malaise and Sweep nets filter in alpha_en_data and the samples with black flies/mosquitoes in KBIMP_combined
+  filter(!Month %in% c("Jun", "Sep")) %>% 
   group_by(Sector, Sample, Month, Year, Family) %>%
-  summarise(Speciessum = n_distinct(Species, na.rm = TRUE), .groups = "drop") %>%
+  summarise(Speciessum = n_distinct(Species, na.rm = TRUE), 
+            .groups = "drop") %>% #you should go back to double check the issue here to make sure its resolved
   ungroup() %>%
   group_by(Sector, Sample, Year, Month) %>%  
   complete(
     Family = families,
-    fill = list(Speciessum = 0)
-  ) %>%
-  ungroup() %>%
-  filter(!Sample == "KGLTK") %>%
-  filter(!is.na(Family))
+    fill = list(Speciessum = 0)) %>%
+  ungroup() 
 
 #exploring data for normality and equality of variance
 
-leveneTest(Speciessum ~ Sector, data = speciesrich_CBAYvs_KGLTK) #p-value greater than 0.05 - vairances equal 
+leveneTest(Speciessum ~ Sector, data = speciesrich_CBAYvs_KGLTK) #p-value lesss than 0.05 - variances not equal 
 shapiro.test(speciesrich_CBAYvs_KGLTK$Speciessum) #p-value less than 0.05 - data not normal
 
+#running a non-parametric test because the data did not meet the above requirements to determine if species richness varies across sector and month while considering year as an additional factor 
 
-
-#running a non-parmetric test because the data did not meet the above requirements
-
-m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
+SR_model_bothfam <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
          data = speciesrich_CBAYvs_KGLTK)
-anova(m)
+anova(SR_model_bothfam)
 
-#seperating based on the family 
+#separating based on the family 
 
 speciesrich_CBAYvs_KGLTK_bf <- speciesrich_CBAYvs_KGLTK %>%
   filter(Family == "Simuliidae")
 
-m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
+SR_model_bf <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
          data = speciesrich_CBAYvs_KGLTK_bf)
-anova(m)
+anova(SR_model_bf)
 
+#just mosquitoes
 
 speciesrich_CBAYvs_KGLTK_mos <- speciesrich_CBAYvs_KGLTK %>%
   filter(Family == "Culicidae")
 
-m <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
+SR_model_mos <- art(Speciessum ~ factor(Sector) * factor(Month)  + Error(factor(Year)),
          data = speciesrich_CBAYvs_KGLTK_mos)
-anova(m)
-
-marginal = art.con(m, "Sector")
-
-marginal
-
-
-
-modeluniqspsample <- kruskal.test(Speciessum ~ Sector, data = speciesrich_CBAYvs_KGLTK)
-
-modeluniqspsample
-
+anova(SR_model_mos)
 
 #creating data set of total per month for plot
 
@@ -879,7 +956,10 @@ speciesrichplot <- ggplot() +
         strip.background = element_rect(fill = NA, color = NA),
         strip.text  = element_text(face = "bold", size = 14)) +
   
-  facet_wrap(~Family) 
+  facet_wrap(~Family,  
+             labeller = labeller(Family = c(
+               "Simuliidae" = "Black flies", 
+               "Culicidae" = "Mosquitoes")))
 
 ggsave("plots/lineSRtotalSRcbayvskug.png", speciesrichplot , width = 10, height = 4, dpi = 300, bg = "transparent")
 
@@ -890,14 +970,15 @@ ggsave("plots/lineSRtotalSRcbayvskug.png", speciesrichplot , width = 10, height 
 KBIMP_speciesmatrix_mosquitoes <- KBIMP_combined %>%
   filter(Family == "Culicidae") %>%
   select(Species, Sample) %>%
-  dplyr::count(Sample, Species, name = "Abundance") %>% 
-  pivot_wider(names_from = Species, values_from = Abundance, values_fill = 0) %>%
+  dplyr::count(Sample, Species, name = "presence") %>% 
+  pivot_wider(names_from = Species, values_from = presence, 
+              values_fill = 0) %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 
 multi_en_data_mos <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_mosquitoes)) %>%
-  distinct() %>%
+  distinct(Sample, .keep_all = TRUE) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) 
 
 #making sure only the samples we filtered above are in the species matrix 
@@ -949,7 +1030,7 @@ anosim(KBIMP_speciesmatrix_mosquitoes, multi_en_data_mos$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 # Fit environmental vector for CollectionWeek
-env_fit <- envfit(NMDS, multi_en_data_mos, permutations = 999)
+env_fit <- envfit(NMDS, multi_en_data_mos, permutations = 999, na.rm = TRUE)
 
 
 #extracting the nmds data into a dataframe 
@@ -1004,7 +1085,7 @@ KBIMP_speciesmatrix_blackflies <- KBIMP_combined %>%
 
 multi_en_data_bf <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_blackflies)) %>%
-  distinct() %>%
+  distinct(Sample, .keep_all = TRUE) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) 
 
 KBIMP_speciesmatrix_blackflies <- KBIMP_speciesmatrix_blackflies %>%
@@ -1042,7 +1123,7 @@ anosim(KBIMP_speciesmatrix_blackflies, multi_en_data_bf$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 # Fit environmental vector for CollectionWeek
-env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999)
+env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999, na.rm = TRUE)
 
 #convert the data from nmds into a dataframe for plotting 
 
@@ -1099,7 +1180,7 @@ KBIMP_speciesmatrix_blackflies2 <- KBIMP_combined %>%
 
 multi_en_data_bf <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_blackflies)) %>%
-  distinct() %>%
+  distinct(Sample, .keep_all = TRUE) %>%
   filter(SamplingMethod %in% c("Malaise Trap","Sweep Net")) %>%
   filter(!Sample %in% c("KGLTK0137", "KGLTK0103"))
 
@@ -1135,7 +1216,8 @@ anosim(KBIMP_speciesmatrix_blackflies2, multi_en_data_bf$Month ,
        permutations = 999,distance = "bray", strata = NULL)
 
 # Fit environmental vector for CollectionWeek
-env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999)
+env_fit <- envfit(NMDS, multi_en_data_bf, permutations = 999, 
+                  na.rm = TRUE)
 
 #converting the nmds data to a dataframe for plotting
 nmds_scores <- as.data.frame(vegan::scores(NMDS, display = "sites"))
@@ -1185,7 +1267,7 @@ KBIMP_speciesmatrix_everything <- KBIMP_combined %>%
 
 multi_en_data_swn <- meta_data %>%
   filter(Sample %in% rownames(KBIMP_speciesmatrix_everything)) %>%
-  distinct() %>%
+  distinct(Sample, .keep_all = TRUE) %>%
   filter(SamplingMethod %in% c("Sweep Net")) 
 
 KBIMP_speciesmatrix_everything <- KBIMP_speciesmatrix_everything %>%
@@ -2072,6 +2154,53 @@ png("plots/histmaps.png", width = 3000, height = 2000, res = 300)
 print(combined_plot)
 
 dev.off()
+
+#### Positive control figure ----
+
+poscontrolplatemap <- read_csv(file = "raw-data2/poscontrolplatemap.csv")
+
+POSCON_seqs <- read_tsv(file = "raw-data2/Shauna_COINEM_POS_TaxonomicAssignments_DominantContigs.tsv")
+
+
+POSCON_seqs <- POSCON_seqs %>%
+  select(Sample, Species, ReadCount) %>%
+  right_join(poscontrolplatemap, join_by(Sample == Well)) %>%
+  distinct() %>%
+  filter(!is.na(Species)) %>%
+  pivot_longer(cols = -c(Sample, Species, ReadCount, "Black fly concentration", "Mosquito concentration"), 
+               names_to = "Nematode Species", 
+               values_to = "Nem_Concentration") %>%
+  pivot_longer(cols = -c(Sample, Species, ReadCount, "Nematode Species", "Nem_Concentration"), 
+               names_to = "Insect Species", 
+               values_to = "Insect Concentration") %>%
+  mutate(across(c(ReadCount, `Insect Concentration`, `Nem_Concentration`), as.numeric)) %>%
+  filter(`Nem_Concentration` != 0) %>%
+  mutate(`Insect Concentration` = log(`Insect Concentration` + 0.000001),   `Nem_Concentration` = log(`Nem_Concentration` + 0.0000001))
+
+
+
+bubbleplot <-ggplot(POSCON_seqs, aes(x = `Insect Concentration`, 
+                                     y= `Nem_Concentration` , 
+                                     size = ReadCount, 
+                                     colour = `Nematode Species`)) +
+  geom_point() +
+  xlim(-15, 3) +
+  ylim(-6, 3) +
+  scale_colour_manual(values = c("Onchacerca concentration" = "#9DD1F1", "Seteria concentration" = "#E65F5C")) +
+  theme_bw() +
+  facet_grid(~ `Nematode Species`) +
+  theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"),
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10),
+        plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 12)) 
+
+
+ggsave("plots/bubbleplot.png", bubbleplot , width = 8, height = 3, dpi = 300, bg = "transparent")
 
 
 
