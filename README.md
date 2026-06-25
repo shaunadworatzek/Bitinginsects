@@ -1,5 +1,6 @@
 # 📊 Project overview 
 
+
 In this study we used sequences generated from DNA barcodng and metabarcoding on the Oxford Nanopore MinION 
 to investigate nematode incidence and biting insect diversity in the Arctic. The data has already been run through 
 The Barcode Inference Pipeline (BIP) which was developed at the centre for biodiverity genomics. Here we filter out contmanination 
