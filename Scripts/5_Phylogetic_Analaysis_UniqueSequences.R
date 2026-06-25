@@ -186,7 +186,7 @@ alighned_kbimpsim_DNA <- DNAStringSet(muscle::muscle(kbimp_sim_DNA))
 
 unique_seqssim <- unique(alighned_kbimpsim_DNA)
 
-writeXStringSet(unique_seqsbf,
+writeXStringSet(unique_seqssim,
                 filepath = "processed-data/unique_simseq_forbold.fasta",
                 format = "fasta")
 
