@@ -971,8 +971,7 @@ KBIMP_speciesmatrix_mosquitoes <- KBIMP_combined %>%
   filter(Family == "Culicidae") %>%
   select(Species, Sample) %>%
   dplyr::count(Sample, Species, name = "presence") %>% 
-  pivot_wider(names_from = Species, values_from = presence, 
-              values_fill = 0) %>%
+  pivot_wider(names_from = Species, values_from = presence, values_fill = 0) %>%
   column_to_rownames(var = "Sample") %>%
   mutate(across(everything(), ~ ifelse(. > 0, 1, 0)))
 

@@ -56,9 +56,11 @@ kbimp_mos_phydat <- as.phyDat(unique_seqsmos, type = "DNA")
 class(kbimp_mos_phydat) # is a "phyDat" object
 length(kbimp_mos_phydat) # 113 has the  species as seen before
 
+modelTest <- modelTest(kbimp_mos_phydat, model=c("JC", "F81", "K80", "HKY", "SYM", "GTR")) 
+
 ###### Building the tree ######
 
-dist.mos <- dist.ml(kbimp_mos_phydat, ratio = TRUE, model = "JC69") 
+dist.mos <- dist.ml(kbimp_mos_phydat, ratio = TRUE) 
 
 #neighbor joining method
 
@@ -70,11 +72,12 @@ length(NJtree.kbimp.mos$tip.label) #68 tips as expected
 
 # Fit the initial tree using a simple pml 
 
-pml.tree.kbimp.mos <- pml(NJtree.kbimp.mos, kbimp_mos_phydat, k = 4, model = "JC", method = "unrooted")
+pml.tree.kbimp.mos <- pml(NJtree.kbimp.mos, kbimp_mos_phydat, k = 4, model = "GTR", method = "unrooted")
 
 plot(pml.tree.kbimp.mos$tree) 
 
-pml.tree.kbimp.mosop <- pml_bb(pml.tree.kbimp.mos, model = "JC")
+pml.tree.kbimp.mosop <- pml_bb(pml.tree.kbimp.mos, 
+                               model = "GTR")
 
 #bootstrapping to determine reliability
 
@@ -92,21 +95,9 @@ tree_with_bs <- plotBS(rooted.bstree.mos, bs)
 
 ##### preparing labels for finalzed tree #####
 
-# Numeric bootstrap values for plotting on tree
-
-bs_numeric <- as.numeric(rooted.bstree.mos$node.label)
-
-internal_nodes <- (Ntip(rooted.bstree.mos)+1):(Ntip(rooted.bstree.mos)+Nnode(rooted.bstree.mos))
-
-bs_tibble <- tibble(node = internal_nodes, bootstrap = bs_numeric) %>%
-  
-  mutate(bootstrap = (bootstrap *100)) %>%
-  
-  filter(bootstrap >= 60) 
-
 # brining in BOLD data for tree 
 
-BOLDID_mos <- read.csv(file = "processed-data/BOLDaedescombined.csv")
+BOLDID_mos <- read.csv(file = "processed-data/BOLDID_aedes.csv")
 
 BOLDID_mos2 <- BOLDID_mos  %>%
   
@@ -147,6 +138,17 @@ BOLDID_mos2 <- BOLDID_mos2[match(tree_tips_mos, BOLDID_mos2$Query.ID), ]
 
 BOLDID_mos2$tip_label_new <- paste0(BOLDID_mos2$BOLDID," (", BOLDID_mos2$ID., ")")
 
+# Numeric bootstrap values for plotting on tree
+
+bs_numeric <- as.numeric(rooted.bstree.mos$node.label)
+
+internal_nodes <- (Ntip(rooted.bstree.mos)+1):(Ntip(rooted.bstree.mos)+Nnode(rooted.bstree.mos))
+
+bs_tibble <- tibble(node = internal_nodes, bootstrap = bs_numeric) %>%
+  
+  mutate(bootstrap = (bootstrap *100)) %>%
+  
+  filter(bootstrap >= 60) 
 
 #plotting the tree with trait data 
 
@@ -156,17 +158,42 @@ node <- 1:Ntip(rooted.bstree.mos)
 
 mosquitotree2024 <- (ggtree(rooted.bstree.mos, layout = "rectangular", branch.length = TRUE) +
                        
-                       geom_text(aes(label = BOLDID_mos2$tip_label_new[node]), hjust = -0.05, size =4, fontface = "italic") +
+                geom_text(aes(label = ifelse(label =="Outgroup",
+                                                  "Outgroup", 
+                          BOLDID_mos2$tip_label_new[node])),
+                          hjust = -0.05, size = 4) +
+        
+        geom_strip('KGLTK0008_M_J', 'KGLTK0018_M_C', barsize=2, 
+                   color='skyblue3', hjust = 1.2,  fontface = "italic",
+                   label="Culiseta alaskaensis", offset.text=.1, fontsize =5) +
+        geom_strip('KGLTK0101_M_A', 'KGLTK0018_M_A', barsize=2, 
+                   color='pink2', hjust = 1.3, fontface = "italic",
+                   label="Aedes excrucians", offset.text=.1, fontsize =5) +
+        geom_strip('CBAY0036_M_I', 'CBAY0206_M_C', barsize=2, 
+                   color='gold', hjust = 1.2, fontface = "italic",
+                   label="Aedes nigripes/impiger", 
+                   offset.text=.1, fontsize =5) +
+        geom_strip('CBAY0300_M_A', 'CBAY0108_M_A', barsize=2, 
+                   color='green3', hjust = 1.3, fontface = "italic",
+                   label="Aedes communis", offset.text=.1, fontsize =5) +
+        geom_strip('KGLTK0008_M_E', 'CBAY0213_M_C', barsize=2, 
+                   color='darkblue', hjust = 1, fontface = "italic",
+                   label="Aedes punctor/Aedes hexodontus", 
+                   offset.text=.1, fontsize =5) +
+        geom_strip('KGLTK0008_M_L', 'KGLTK0008_M_L', barsize=2, 
+                   color='blueviolet', hjust = 1.3, fontface = "italic",
+                   label="Culiseta inornata", offset.text=.1, fontsize =5) +
                        
-                       theme(legend.title = element_text(size = 14), legend.text = element_text(size = 12), 
-                             legend.position = "top")) %<+% 
+      theme(legend.title = element_text(size = 14), 
+          legend.text = element_text(size = 12), 
+          legend.position = "top")) %<+% 
   
-  bs_tibble +
-  geom_label2(aes(label = bootstrap), hjust = 0.7, size = 3, color = "red", fill = "white") 
+  bs_tibble + geom_label2(aes(label = bootstrap), 
+                          hjust = 0.7, size = 3, 
+                          color = "red", fill = "white") 
 
-mosquitotree2024
+ggsave("plots/mosallseqtree.png", plot = mosquitotree2024, width = 14, height = 16, dpi = 300)
 
-ggsave("plots/mosallseqtree.png", plot = mosquitotree2024, width = 9, height = 16, dpi = 300)
 
 #### both years black flies just Simulium genus ----
 
@@ -224,7 +251,8 @@ tree_with_bssim <- plotBS(pml.tree.kbimp.sim$tree, bs.sim)
 
 #rooting the 
 
-rooted.bstree.sim <- root(tree_with_bssim, outgroup = "Outgroup", resolve.root = TRUE)
+rooted.bstree.sim <- root(tree_with_bssim, 
+                          outgroup = "Outgroup", resolve.root = TRUE)
 
 plot(rooted.bstree.sim)
 
@@ -337,51 +365,6 @@ length(kbimp_bf_phydat) # 83 unique seq
 
 ###### Building the tree ######
 
-#create a new dist matrix
-
-dist.medoid.bf <- dist.ml(kbimp_bf_phydat, ratio = TRUE, model = "JC69") 
-
-# creating a tree using the neighbor joining method
-
-NJtree.kbimp.bf <- NJ(dist.medoid.bf)
-
-plot(NJtree.kbimp.bf)
-
-length(NJtree.kbimp.bf$tip.label) 
-
-# Fit the initial tree using a simple pml
-
-pml.tree.kbimp.bf <- pml(NJtree.kbimp.bf, kbimp_bf_phydat, k = 4, model = "GTR+I", method = "unrooted")
-
-plot(pml.tree.kbimp.bf$tree) 
-
-pml.tree.kbimp.bfop <- pml_bb(pml.tree.kbimp.bf, model = "GTR+I")
-
-#bootstrapping analysis for tree
-
-bs.bf <- bootstrap.pml(pml.tree.kbimp.bfop, bs = 1000, optNni = TRUE, multicore = TRUE)
-
-tree_with_bsbf <- plotBS(pml.tree.kbimp.bf$tree, bs.bf)
-
-#rooting the 
-
-rooted.bstree.bf <- root(tree_with_bsbf, outgroup = "Outgroup", resolve.root = TRUE)
-
-plot(rooted.bstree.bf)
-
-tree_with_bs.bf <- plotBS(rooted.bstree.bf, bs.bf)
-
-##### preparing labels for finalzed tree #####
-
-# Numeric bootstrap values for plotting on tree
-
-bs_numeric <- as.numeric(rooted.bstree.bf$node.label)
-
-internal_nodes <- (Ntip(rooted.bstree.bf)+1):(Ntip(rooted.bstree.bf)+Nnode(rooted.bstree.bf))
-
-bs_tibble <- tibble(node = internal_nodes, bootstrap = bs_numeric) %>%
-  mutate(bootstrap = (bootstrap *100)) %>%
-  filter(bootstrap >= 60) 
 
 #bringing in bold data for final tree 
 
@@ -404,48 +387,6 @@ BOLDID_bfnotsim2 <- BOLDID_bfnotsim  %>%
   
   ungroup() 
 
-# trait data and the tree have the same order of species 
-
-tree_tips_bf <- rooted.bstree.bf$tip.label
-
-sample_name_bf <- BOLDID_bfnotsim2$Query.ID 
-
-# checking if all species names are present in the tree
-
-all(tree_tips_bf %in% sample_name_bf)
-
-all(sample_name_bf %in% tree_tips_bf) 
-
-setdiff(tree_tips_bf, sample_name_bf)
-
-setdiff(sample_name_bf, tree_tips_bf)
-
-#getting trait data set up as tip labels 
-
-BOLDID_bfnotsim2 <- BOLDID_bfnotsim2[match(tree_tips_bf, BOLDID_bfnotsim2$Query.ID), ] 
-
-BOLDID_bfnotsim2$tip_label_new <- paste0(BOLDID_bfnotsim2$BOLDID," (", BOLDID_bfnotsim2$ID., ")")
-
-
-#plotting the tree with trait data 
-
-node <- 1:Ntip(rooted.bstree.bf)
-
-##### Produce finalized tree #####
-
-bftreespecies2024 <- (ggtree(rooted.bstree.bf, layout = "rectangular", branch.length = TRUE) +
-                        
-                        geom_text(aes(label = BOLDID_bfnotsim2$tip_label_new[node]), hjust = -0.05, size =4, fontface = "italic") +
-                        
-                        theme(legend.title = element_text(size = 14), legend.text = element_text(size = 12), 
-                              legend.position = "top")) %<+% 
-  
-  bs_tibble +
-  geom_label2(aes(label = bootstrap), hjust = 0.7, size = 3, color = "red", fill = "white") 
-
-bftreespecies2024 
-
-ggsave("plots/NotSimulium_treespecies.png", plot = bftreespecies2024, width = 28, height = 17, dpi = 300)
 
 
 ##### species assignments and comparing to mediod method -----
@@ -453,28 +394,28 @@ ggsave("plots/NotSimulium_treespecies.png", plot = bftreespecies2024, width = 28
 BOLDIDspecies <- read_csv(file = "processed-data/BOLDIDspecies.csv")
 
 # Combine BOLD tables
-BOLDresults <- bind_rows(BOLDID_mos2, BOLDID_bf2, BOLDID_bfnotsim2)
+BOLDresults <- bind_rows(BOLDID_mos2, BOLDID_sim2, BOLDID_bfnotsim2)
 
 BOLDresults <- BOLDresults %>%
   filter(!Query.ID == "Outgroup") %>%
   filter(!is.na(Query.ID)) %>%
   select(Query.ID, BOLDID)
 
-KBIMP_updatedspecies2 <- KBIMP %>%
+KBIMP_updatedspecies <- KBIMP %>%
   filter(Family %in% c("Culicidae", "Simuliidae")) %>%
   mutate(Species = str_replace(Species, "Aedes punctor", "Aedes punctor/Aedes hexodontus")) %>%
   left_join(BOLDresults, join_by("Sample" =="Query.ID")) %>%
   group_by(Sequence) %>%
   mutate(BOLDID = ifelse(any(!is.na(BOLDID)), na.omit(BOLDID)[1], NA)) %>%
   ungroup() %>%
-  left_join(BOLDIDspecies) %>%
+  left_join(BOLDIDspecies, relationship = "many-to-many") %>%
   mutate(update_flag = case_when(
       Species == "unknown" | is.na(Species) ~ "Sequence Simularity",
       TRUE ~ "Probabolistic")) %>%
     mutate(Species = coalesce(Species_BOLDID, Species)) %>%
     select(-Species_BOLDID) %>%
     filter(!Species == "unknown") %>%
-  select(Sample, Species, Family, update_flag) %>%
+  select(Sample, Species, Family, update_flag, Sequence) 
   mutate(Sample = str_remove(Sample, "_.*")) %>%
   filter(!is.na(Species)) %>% 
   distinct(across(-update_flag), .keep_all = TRUE)
