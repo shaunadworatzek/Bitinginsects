@@ -36,9 +36,6 @@ length(CBAY2024_plate3$Sample) #261
 
 kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
   right_join(kbimp2024_collectionsdata, join_by(FieldID == Sample)) %>%
-  select(SampleID, FieldID, `Date collected`, 
-         Lat.y, Long, `Sample type collection method`) %>%
-  rename(SamplingProtocol = `Sample type collection method`) %>%
   mutate(date_parts = str_split(`Date collected`, "-"),
         end_date_raw = sapply(date_parts, `[`, 2),
         end_date_raw = ifelse(is.na(end_date_raw), 
@@ -46,6 +43,9 @@ kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
         Date_parsed = parse_date_time(end_date_raw,
              orders = c("ymd", "mdy", "dmy", "dm", "md", "m")),
     Month = month(Date_parsed, label = TRUE)) %>%
+  select(SampleID, FieldID, `Date collected`, 
+         Lat.y, Long, `Sample type collection method`, Month) %>%
+  rename(SamplingProtocol = `Sample type collection method`) %>%
     filter(!SamplingProtocol %in% c("D-ring dipnet (250 micron)",
                                    "DipNet", 
                                    "Plankton net (64 micron)", 

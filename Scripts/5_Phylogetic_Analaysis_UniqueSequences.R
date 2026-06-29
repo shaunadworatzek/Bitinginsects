@@ -4,9 +4,8 @@ KBIMP2025 <- read_tsv(file = "processed-data/KBIMP2025_filteredCOI.tsv")
 Outgroup <- read_csv(file = "raw-data2/Outgroup.csv")
 
 KBIMP2024 <- KBIMP2024 %>%
-  full_join(kbimp2024_sampledata, join_by(Sample == SampleID)) %>%
-  
-  mutate(Sample = paste0(FieldID,case_when(
+  left_join(kbimp2024_sampledata_clean, join_by(Sample == SampleID)) %>%
+  mutate(Sample = paste0(FieldID, case_when(
                              Family == "Simuliidae" ~ "_BF",
                              Family == "Culicidae" ~ "_M", TRUE ~ ""))) %>%
   select(Sample, Read_Count, Kingdom, Phylum, Class, Order, Family, Genus, Species, Probability_Genus, Probability_Species, Sequence) %>%
@@ -322,13 +321,101 @@ node <- 1:Ntip(rooted.bstree.sim)
 
 simtreespecies2024 <- (ggtree(rooted.bstree.sim, layout = "rectangular", branch.length = TRUE) +
                         
-                        geom_text(aes(label = BOLDID_sim2$tip_label_new[node]), hjust = -0.05, size =4, fontface = "italic") +
+              geom_text(aes(label = BOLDID_sim2$tip_label_new[node]),
+               hjust = -0.05, size =4, fontface = "italic") +
                         
-                        theme(legend.title = element_text(size = 14), legend.text = element_text(size = 12), 
-                              legend.position = "top")) %<+% 
+             geom_strip('KGLTK0049_BF_C', 'KGLTK0049_BF_B', 
+              barsize=2, color='skyblue3',  
+              fontface = "italic", offset = -0.01,
+              label= "Simulium arcticum complex", 
+              offset.text=0.003, fontsize =5) + 
+            geom_strip('KGLTK0036_BF_C', 'KGLTK0146_BF_A', 
+              barsize=2, color='pink2',  fontface = "italic",
+              label= "Simulium malyschevi",  offset = -0.01,
+              offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0012_BF_B', 'CBAY0308_BF_C', 
+                        barsize=2, color='gold',  
+                         fontface = "italic",offset = -0.01,
+                         label= "Simulium decimatum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0137_BF_C', 'KGLTK0137_BF_B', 
+                        barsize=2, color='darkblue',  
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium murmanum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0019_BF_C', 'KGLTK0034_BF_B', 
+                         barsize=2, color='green3',  offset = -0.01,
+                         fontface = "italic",
+                         label= "Simulium venustum complex", 
+                         offset.text=.002, fontsize =5) + 
+              geom_strip('CBAY0078_BF_A', 'CBAY0267_BF_D', 
+                         barsize= 2, color='darkolivegreen1',  
+                         fontface = "italic", offset = 0.004,
+                         label= "Simulium noelleri", 
+                         offset.text=.002, fontsize =5) + 
+              geom_strip('CBAY0062_BF_B', 'CBAY0062_BF_B', 
+                         barsize=2, color='orange',  
+                         fontface = "italic",
+                         label= "Simulium decorum", 
+                         offset.text=-0.01, fontsize =5) + 
+              geom_strip('KGLTK0107_BF_A', 'KGLTK0107_BF_A', 
+                         barsize=2, color='red3',  
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium verecundum complex", 
+                         offset.text=.0006, fontsize =5) + 
+              geom_strip('CBAY0169_BF_A', 'CBAY0106_BF_E', 
+                         barsize=2, color='forestgreen',  
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium tuberosum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('CBAY0275_BF_C', 'CBAY0275_BF_G', 
+                         barsize=2, color='maroon',  
+                         fontface = "italic", offset = 0.01,
+                         label= "Simulium baffinense", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0137_BF_E', 'KGLTK0137_BF_D', 
+                         barsize=2, color='brown2',   
+                         fontface = "italic", offset = -0.001,
+                         label= "Simulium silvestre", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('CBAY0056_BF_B', 'CBAY0277_BF_C', 
+                         barsize=2, color='seagreen2',   
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium subpusillum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('CBAY0157_BF_C', 'CBAY0157_BF_B', 
+                         barsize=2, color='cyan',  
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium craigi", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0112_BF_B', 'KGLTK0015_BF_B', 
+                         barsize=2, color='blueviolet',  
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium congareenarum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('KGLTK0103_BF_A', 'KGLTK0103_BF_A', 
+                         barsize=2, color='darkgoldenrod3',  
+                         fontface = "italic",
+                         label= "Simulium excisum", 
+                         offset.text=-.001, fontsize =5) + 
+              geom_strip('CBAY0222_BF_A', 'CBAY0306_BF_B', 
+                         barsize=2, color='deeppink2',   
+                         fontface = "italic", offset = -0.01,
+                         label= "Simulium vittatum", 
+                         offset.text=.003, fontsize =5) + 
+              geom_strip('Outgroup', 'Outgroup', 
+                         barsize=2, color='black',   
+                         fontface = "italic",
+                         label= "Outgroup", 
+                         offset.text=.05, fontsize =5) + 
+                        
+      theme(legend.title = element_text(size = 14), 
+      legend.text = element_text(size = 12), 
+      legend.position = "top")) %<+% 
   
   bs_tibble +
-  geom_label2(aes(label = bootstrap), hjust = 0.7, size = 3, color = "red", fill = "white") 
+  geom_label2(aes(label = bootstrap), hjust = 0.7, size = 3, 
+              color = "red", fill = "white") 
 
 simtreespecies2024 
 
