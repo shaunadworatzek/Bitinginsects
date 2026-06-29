@@ -27,10 +27,36 @@ KBIMP2025_COI <- read_tsv(file = "raw-data2/KBIMP2025_insectCOI_OTUDetails.tsv")
 df_extractioncontrols <- read_csv(file = "raw-data2/extractiondata2025.csv")
 df_PCRcontrols <- read_csv(file = "raw-data2/PCRcontrol_data.csv")
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
+kbimp2024_collectionsdata <- read_csv(file = "raw-data2/2024_KBIMP_Collections_Tracking.csv")
+
 
 length(KGLKTK2024_COI$Sample) #232
 length(CBAY2024_plates12456$Sample) #635
 length(CBAY2024_plate3$Sample) #261
+
+kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
+  right_join(kbimp2024_collectionsdata, join_by(FieldID == Sample)) %>%
+  select(SampleID, FieldID, `Date collected`, 
+         Lat.y, Long, `Sample type collection method`) %>%
+  rename(SamplingProtocol = `Sample type collection method`) %>%
+  mutate(date_parts = str_split(`Date collected`, "-"),
+        end_date_raw = sapply(date_parts, `[`, 2),
+        end_date_raw = ifelse(is.na(end_date_raw), 
+                      `Date collected`, end_date_raw),
+        Date_parsed = parse_date_time(end_date_raw,
+             orders = c("ymd", "mdy", "dmy", "dm", "md", "m")),
+    Month = month(Date_parsed, label = TRUE)) %>%
+    filter(!SamplingProtocol %in% c("D-ring dipnet (250 micron)",
+                                   "DipNet", 
+                                   "Plankton net (64 micron)", 
+                                   "Surber net",
+                                   "SurberNet")) %>%
+  mutate(SampleID= gsub("KBIMP_004_H11", "KBIMP-_006_G3", SampleID)) %>%
+  mutate(SampleID= gsub("KBIMP_004_D12", "KBIMP-_006_G4", SampleID)) %>%
+  mutate(SampleID= gsub("KBIMP_004_E12", "KBIMP-_006_G5", SampleID)) %>%
+  mutate(SampleID= gsub("KBIMP_004_F12", "KBIMP-_006_G6", SampleID)) %>%
+  mutate(SampleID= gsub("KBIMP_004_G12", "KBIMP-_006_G7", SampleID)) %>%
+  mutate(SampleID= gsub("KBIMP_004_H10", "KBIMP-_006_G2", SampleID)) 
 
 #Filtering out/ accounting for negative controls 
 #negative control on plate 3
