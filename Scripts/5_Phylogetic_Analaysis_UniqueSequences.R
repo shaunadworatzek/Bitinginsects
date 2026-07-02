@@ -502,9 +502,37 @@ KBIMP_updatedspecies <- KBIMP %>%
     mutate(Species = coalesce(Species_BOLDID, Species)) %>%
     select(-Species_BOLDID) %>%
     filter(!Species == "unknown") %>%
-  select(Sample, Species, Family, update_flag, Sequence) 
-  mutate(Sample = str_remove(Sample, "_.*")) %>%
-  filter(!is.na(Species)) %>% 
-  distinct(across(-update_flag), .keep_all = TRUE)
+  select(Sample, Species, Genus, Family, update_flag, Sequence) 
+ 
 
 write_tsv(KBIMP_updatedspecies2, "processed-data/KBIMP_updatedspecies.tsv")
+
+
+BOLDinvest <- bind_rows(BOLDID_mos, BOLDID_sim, BOLDID_meta)
+
+BOLDinvest <- BOLDinvest %>%
+  right_join(KBIMP_updatedspecies, join_by("Query.ID" == "Sample")) %>%
+filter(Species.x == Species.y) %>%
+  group_by(Query.ID) %>%
+  slice_max(ID., n = 1, with_ties = FALSE) 
+
+BOLDIDspecies_table <- BOLDIDspecies %>%
+  mutate(`Percentage of species assignments` = 
+           ifelse(total_num_species == 0, NA, 
+                  num_species_repo / total_num_species *100)) %>%
+  mutate(`Species assignment:Total sequences in BIN` = paste0(num_species_repo, ":", total_observations)) %>%
+  rename(Species = Species_BOLDID) %>%
+  select(BOLDID, Species, 
+         `Percentage of species assignments`, 
+         `Species assignment:Total sequences in BIN`) %>%
+  gt() %>%
+  fmt_missing(columns = everything(),
+              missing_text = "") %>%
+  fmt_number(columns = 2:last_col(), 
+             decimals = 2) %>%
+  cols_align(align = "center",
+    columns = c(`Percentage of species assignments`, 
+                `Species assignment:Total sequences in BIN`))
+  
+gtsave(data = BOLDIDspecies_table , 
+       filename = "plots/BOLDIDspecies_table.png")

@@ -42,6 +42,7 @@ KBIMP_combined <- read_tsv(file = "processed-data/KBIMP_updatedspecies.tsv")
 sr_2012 <- read.csv(file = "raw-data2/schafer_2012.csv")
 vector_change <- read_csv(file = "raw-data2/vector_change.csv")
 kbimp2024_sampledata_clean <- read_csv(file = "processed-data/kbimp2024_sampledata_clean.csv")
+nonbiting_species <- read.csv(file = "raw-data2/non_biting_species.csv")
 
 
 
@@ -99,6 +100,9 @@ meta_data <- KBIMP2024_metadata %>%
 
 #removing the outgroup from the data
 KBIMP_combined <- KBIMP_combined %>%
+  mutate(Sample = str_remove(Sample, "_.*")) %>%
+  filter(!is.na(Species)) %>% 
+  distinct(across(-update_flag), .keep_all = TRUE) %>%
   filter(Sample != "Outgroup")
 
 #### Investigating the number of black flies and mosquitoes from each year ----
@@ -247,7 +251,7 @@ individuals_gtable <- individuals_table %>%
              "Kugluktuk\n(Qurluqtuq)\n" ~ px(300))
 
 gtsave(data = individuals_gtable, 
-       filename = "plots/individualstable.png")
+       filename = "plots/individualstable2.png")
 
 ##### samples table final for both years #####
 
@@ -849,6 +853,169 @@ vectorchange <- ggplot() +
   c("CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)",                    "KGLTK" = "Kugluktuk\n(Qurluqtuq)")))
 
 ggsave("plots/vectorchange.png", vectorchange , width = 8, height = 4, dpi = 300, bg = "transparent")
+
+
+#### making the figure for the change in the number of biting insects ----
+
+
+#getting the confidence intervals for vectors 
+
+iNEXT_nonbiting <- KBIMP_combined %>%
+  select(Sample, Species) %>%
+  mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
+  mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
+  mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  filter(Species %in% nonbiting_species$Species) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
+  column_to_rownames(var = "Species")
+
+em.inext_nonbiting <- iNEXT(iNEXT_nonbiting, q=0, datatype="incidence_freq")
+
+em.inext_nonbiting$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_nonbiting <- as.data.frame(em.inext_nonbiting$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(type = "Non-biting")
+
+em.inext_nonbiting$DataInfo
+
+#getting the confidence intervals for non-vectors 
+
+iNEXT_biting <- KBIMP_combined %>%
+  filter(Family ==  "Simuliidae") %>%
+  select(Sample, Species) %>%
+  mutate(Species = str_replace(Species, "Aedes punctor/Aedes hexodontus", "Aedes hexodontus")) %>%
+  mutate(Species = if_else(Species == "Aedes nigripes/impiger", "Aedes nigripes/Aedes impiger", Species)) %>%
+  mutate(Species = str_replace(Species, "Simulium arcticum complex sp", "Simulium arcticum complex")) %>%
+  mutate(region = str_extract(Sample, "^[A-Za-z]+")) %>%
+  dplyr::count(region, Sample, Species, name = "Abundance") %>% 
+  mutate(Abundance = ifelse(Abundance > 0, 1, 0)) %>%
+  dplyr::count(region, Species, name = "Incidence") %>%
+  pivot_wider(names_from = region, values_from = Incidence) %>%
+  mutate(CBAY = replace_na(CBAY, 0), KGLTK = replace_na(KGLTK, 0)) %>%
+  filter(!Species %in% nonbiting_species$Species) %>%
+  add_row(Species = "sampling_extent",
+          CBAY = 209,
+          KGLTK = 114, .before = 1) %>%
+  column_to_rownames(var = "Species")
+
+em.inext_biting <- iNEXT(iNEXT_biting, q=0, datatype="incidence_freq")
+
+em.inext_biting$iNextEst
+
+#isolating the data on confidence intervals for the observed data set 
+
+confidenceinterval_biting <- as.data.frame(em.inext_biting$iNextEst$size_based) %>%
+  filter(Method == "Observed") %>%
+  select(Assemblage, qD, qD.LCL, qD.UCL) %>%
+  mutate(x = "total") %>%
+  rename_with(~"Sector", contains("Assemblage")) %>%
+  mutate(type = "Biting")
+
+em.inext_biting$DataInfo
+
+#getting the vector, non-vector, total data from the 2012 dataset
+
+
+biting2012 <- sr_2012 %>%
+  
+  pivot_longer(
+    cols = -taxon,
+    names_to = "Sector",
+    values_to = "Presence") %>%
+  
+  filter(Presence == 1) %>%
+  
+  mutate(InList = taxon %in% nonbiting_species$Species) %>%
+  
+  group_by(Sector) %>%
+  summarise(
+    Total = n(),
+    `Non-biting` = sum(InList),
+    Biting = sum(!InList)) %>%
+  
+  mutate(
+    Sector = dplyr::recode(
+      Sector,
+      "CbB" = "CBAY",
+      "Kug" = "KGLTK")) %>%
+  
+  pivot_longer(
+    cols = c(Total,
+             `Non-biting`,
+             Biting),
+    names_to = "type",
+    values_to = "qD") %>%
+  
+  mutate(Year = "2010-2012")
+
+biting2024 <- bind_rows(confidenceinterval_biting, 
+                        confidenceinterval_total, 
+                        confidenceinterval_nonbiting)
+
+biting2024 <- vector2024 %>%
+  mutate(Year = "2024-2025")
+
+bitingall <- bind_rows(biting2012, biting2024)
+
+#figure with both years for cbay
+
+bitingchange <- ggplot() +
+  
+  geom_point(data = bitingall,
+             aes(x = Year, y = qD, colour = type, group = type), size = 3) +
+  
+  geom_errorbar(data = biting2024, aes(x = Year, ymin = qD.LCL, ymax = qD.UCL, colour = type),
+                width = 0.15) +
+  
+  geom_line(data = bitingall, aes(x = Year, y = qD, colour = type, group = type))+
+  
+  scale_colour_manual(
+    values = c("Biting" = "#9D5C63", "Non-biting" =  "#78BC61", "Total" = "black"))  +
+  
+  theme_bw(base_size = 15) +
+  xlab("Sampling Years") +
+  ylab("Total Species Richness") +
+  
+  theme(axis.text.x = element_text(angle = 0, size = 10, color = "black"),
+        axis.text.y = element_text(angle = 0, size = 10, color = "black"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size = 14, face = "bold"),
+        legend.text = element_text(size = 12),
+        plot.background = element_rect(fill = NA, color = NA), legend.background = element_rect(fill = NA, color = NA), 
+        strip.background = element_rect(fill = NA, color = NA),
+        strip.text  = element_text(face = "bold", size = 14)) +
+  
+  facet_wrap(~Sector, labeller = labeller(Sector = 
+                                            c("CBAY"  = "Cambridge Bay\n(Iqaluktuuttiaq)",                    "KGLTK" = "Kugluktuk\n(Qurluqtuq)")))
+
+ggsave("plots/bitingchange.png", bitingchange , width = 8, height = 4, dpi = 300, bg = "transparent")
+
+
+
+combinedchangeplot <- (vectorchange + bitingchange) +
+  plot_layout(nrow = 2) +
+  plot_annotation(tag_levels = list("A"))
+
+png("plots/changeplot.png", width = 2500, height = 3000, res = 300)
+
+print(combinedchangeplot )
+
+dev.off()
 
 #### - Alpha div analysis ----
 
