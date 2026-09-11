@@ -19,6 +19,7 @@ library(ggplot2)
 library(ggtree)     
 library(seqinr)
 library(DECIPHER)
+library(gt)
 
 
 KBIMP2024 <- read_tsv(file = "processed-data/KBIMP2024_filteredCOI.tsv")
@@ -125,7 +126,7 @@ BOLDID_mos2 <- BOLDID_mos  %>%
   
   extract(PID..BIN.,
           into = c("ID", "BOLDID"),
-          regex = "(.*?)\\[BOLD:(.*?)\\]",
+          regex = "(.*?)\\[(BOLD:.*?)\\]",
           remove = FALSE) %>% 
   
   filter(!is.na(BOLDID)) %>%
@@ -303,7 +304,7 @@ BOLDID_sim2 <- BOLDID_sim  %>%
   
   extract(PID..BIN.,
           into = c("ID", "BOLDID"),
-          regex = "(.*?)\\[BOLD:(.*?)\\]",
+          regex = "(.*?)\\[(BOLD:.*?)\\]",
           remove = FALSE) %>% 
   
   filter(!is.na(BOLDID)) %>%
@@ -450,43 +451,42 @@ ggsave("plots/Simulium_treespecies.png", plot = simtreespecies2024, width = 15, 
 
 #### both years black flies not Simulium genus ----
 
-kbimp_bf_DNA_df <- KBIMP %>%
-  filter(Family %in% c("Simuliidae", "Outgroup")) %>%
-  filter(!Genus == "Simulium") %>%
+kbimp_meta_DNA_df <- KBIMP %>%
+  filter(Genus %in% c("Metacnephia", "Outgroup")) %>%
   select(Sample, Sequence)  
 
 ##### aligning and preparing phydat #####
 
-kbimp_bf_DNA <- DNAStringSet(kbimp_bf_DNA_df$Sequence)
+kbimp_meta_DNA <- DNAStringSet(kbimp_meta_DNA_df$Sequence)
 
-names(kbimp_bf_DNA) <- kbimp_bf_DNA_df$Sample
+names(kbimp_meta_DNA) <- kbimp_meta_DNA_df$Sample
 
-alighned_kbimpbf_DNA <- DNAStringSet(muscle::muscle(kbimp_bf_DNA))
+alighned_kbimpmeta_DNA <- DNAStringSet(muscle::muscle(kbimp_meta_DNA))
 
 #BrowseSeqs(alighned_kbimpbf_DNA)
 
-unique_seqsbf <- unique(alighned_kbimpbf_DNA)
+unique_seqsmeta <- unique(alighned_kbimpmeta_DNA)
 
-writeXStringSet(unique_seqsbf,
-                filepath = "processed-data/unique_bfseq_forbold.fasta",
+writeXStringSet(unique_seqsmeta,
+                filepath = "processed-data/unique_metaseq_forbold.fasta",
                 format = "fasta")
 
-kbimp_bf_phydat <- as.phyDat(unique_seqsbf, type = "DNA")
-class(kbimp_bf_phydat) # is a "phyDat" object
-length(kbimp_bf_phydat) # 83 unique seq
+kbimp_meta_phydat <- as.phyDat(unique_seqsmeta, type = "DNA")
+class(kbimp_meta_phydat) # is a "phyDat" object
+length(kbimp_meta_phydat) # 83 unique seq
 
 ###### Building the tree ######
 
 
 #bringing in bold data for final tree 
 
-BOLDID_bfnotsim <- read.csv(file = "processed-data/BOLDID_notsimulidae.csv")
+BOLDID_meta <- read.csv(file = "processed-data/BOLDID_meta.csv")
 
-BOLDID_bfnotsim2 <- BOLDID_bfnotsim  %>%
+BOLDID_meta2 <- BOLDID_meta  %>%
   
   extract(PID..BIN.,
           into = c("ID", "BOLDID"),
-          regex = "(.*?)\\[BOLD:(.*?)\\]",
+          regex = "(.*?)\\[(BOLD:.*?)\\]",
           remove = FALSE) %>% 
   
   filter(!is.na(BOLDID)) %>%
@@ -499,6 +499,122 @@ BOLDID_bfnotsim2 <- BOLDID_bfnotsim  %>%
   
   ungroup() 
 
+
+#create a new dist matrix
+
+dist.medoid.meta <- dist.ml(kbimp_meta_phydat, ratio = TRUE, model = "JC69") 
+
+# creating a tree using the neighbor joining method
+
+NJtree.kbimp.meta <- NJ(dist.medoid.meta)
+
+plot(NJtree.kbimp.meta)
+
+length(NJtree.kbimp.meta$tip.label) 
+
+# Fit the initial tree using a simple pml
+
+pml.tree.kbimp.meta <- pml(NJtree.kbimp.meta, kbimp_meta_phydat, k = 4, model = "GTR+I", method = "unrooted")
+
+plot(pml.tree.kbimp.meta$tree) 
+
+pml.tree.kbimp.metaop <- pml_bb(pml.tree.kbimp.meta, model = "GTR+I")
+
+#bootstrapping analysis for tree
+
+bs.meta <- bootstrap.pml(pml.tree.kbimp.metaop, bs = 1000, optNni = TRUE, multicore = TRUE)
+
+tree_with_bsmeta <- plotBS(pml.tree.kbimp.meta$tree, bs.meta)
+
+#rooting the 
+
+rooted.bstree.meta <- root(tree_with_bsmeta, outgroup = "Outgroup", resolve.root = TRUE)
+
+plot(rooted.bstree.meta)
+
+tree_with_bs.meta <- plotBS(rooted.bstree.meta, bs.meta)
+
+##### preparing labels for finalzed tree #####
+
+# Numeric bootstrap values for plotting on tree
+
+bs_numeric <- as.numeric(rooted.bstree.meta$node.label)
+
+internal_nodes <- (Ntip(rooted.bstree.meta)+1):(Ntip(rooted.bstree.meta)+Nnode(rooted.bstree.meta))
+
+bs_tibble <- tibble(node = internal_nodes, bootstrap = bs_numeric) %>%
+  mutate(bootstrap = (bootstrap *100)) %>%
+  filter(bootstrap >= 60) 
+
+
+#trait data and the tree have the same order of species 
+
+tree_tips_meta <- rooted.bstree.meta$tip.label
+
+sample_name_meta <- BOLDID_meta2$Query.ID 
+
+# checking if all species names are present in the tree
+
+all(tree_tips_meta %in% sample_name_meta)
+
+all(sample_name_meta %in% tree_tips_meta) 
+
+setdiff(tree_tips_meta, sample_name_meta)
+
+setdiff(sample_name_meta, tree_tips_meta)
+
+#getting trait data set up as tip labels 
+
+BOLDID_meta2 <- BOLDID_meta2[match(tree_tips_meta, BOLDID_meta2$Query.ID), ] 
+
+BOLDID_meta2$tip_label_new <- paste0(BOLDID_meta2$BOLDID," (", BOLDID_meta2$ID., ")")
+
+
+#plotting the tree with trait data 
+
+node <- 1:Ntip(rooted.bstree.meta)
+
+##### Produce finalized tree #####
+
+metatreespecies2024 <- (ggtree(rooted.bstree.meta, layout = "rectangular",
+                               branch.length = TRUE) +
+                          
+                          geom_text(aes(label = BOLDID_meta2$tip_label_new[node]), 
+                                    hjust = -0.05, size =4, fontface = "italic") +
+                          
+                          geom_strip('CBAY0073_BF_J', 'CBAY0071_BF_A', 
+                                     barsize=2, color='skyblue2',  
+                                     fontface = "italic", offset = -0.05,
+                                     label= "Metacnephia borealis", 
+                                     offset.text=.003, fontsize =5) +
+                          geom_strip('CBAY0264_BF_D', 'CBAY0294_BF_C', 
+                                     barsize=2, color='skyblue2',  
+                                     fontface = "italic", offset = -0.01,
+                                     label= "Metacnephia borealis", 
+                                     offset.text=.003, fontsize =5) +
+                          geom_strip('KGLTK0111_BF_A', 'KGLTK0113_BF_D', 
+                                     barsize=2, color='gold',  
+                                     fontface = "italic", offset = -0.007,
+                                     label= "Metacnephia bilineata", 
+                                     offset.text=.003, fontsize =5) +
+                          geom_strip('Outgroup', 'Outgroup', 
+                                     barsize=2, color='black',   
+                                     fontface = "italic", 
+                                     label= "Outgroup", offset = 0.01,
+                                     fontsize =5) +
+                          
+                          theme(legend.title = element_text(size = 14), 
+                                legend.text = element_text(size = 12), 
+                                legend.position = "top")) %<+% 
+  
+  bs_tibble +
+  geom_label2(aes(label = bootstrap), hjust = 0.7, size = 3, 
+              color = "red", fill = "white") 
+
+metatreespecies2024 
+
+
+ggsave("plots/meta_treespecies.png", plot = metatreespecies2024, width = 18, height = 5, dpi = 300)
 
 
 ##### species assignments -----
@@ -520,7 +636,8 @@ KBIMP_updatedspecies <- KBIMP %>%
   group_by(Sequence) %>%
   mutate(BOLDID = ifelse(any(!is.na(BOLDID)), na.omit(BOLDID)[1], NA)) %>%
   ungroup() %>%
-  left_join(BOLDIDspecies, relationship = "many-to-many") %>%
+  left_join(BOLDIDspecies, relationship = "many-to-many", 
+            join_by(BOLDID == BIN)) %>%
   mutate(update_flag = case_when(
       Species == "unknown" | is.na(Species) ~ "Sequence Simularity",
       TRUE ~ "Probabolistic")) %>%
@@ -641,8 +758,8 @@ for (i in 1:length(unique_species_bf)) {
     sp1 <- unique_species_bf[i]
     sp2 <- unique_species_bf[j]
     
-    idx1 <- which(species == sp1)
-    idx2 <- which(species == sp2)
+    idx1 <- which(species_bf == sp1)
+    idx2 <- which(species_bf == sp2)
     
     # Extract the sub-matrix for these two groups
     vals <- dist_mat[idx1, idx2]
@@ -775,7 +892,7 @@ gtsave(data = mosquito_dis_matrix ,
 
 #### preparing data for the Popart figure ----
 
-nigripis_popart <- KBIMP_combined %>%
+nigripis_popart <- KBIMP_updatedspecies %>%
   filter(Species == "Aedes nigripes/impiger") %>%
   select(Sample, Sequence) 
 
@@ -801,12 +918,6 @@ write.nexus.data(alighned_nigripis_popart_mat,
                  ,format = "dna")
 
 
-binary_matrix_trait_nigripis <- 
-  get_binary_trait_matrix(meta_data, alighned_nigripis_popart)
-
-#writing the binary matrices and nexus files 
-
-write_tsv(binary_matrix_trait_nigripis, "processed-data/mosmetadata_nigripis.tsv")
 
 
 
