@@ -4,8 +4,7 @@
 #and extraction to give information on controls extractiondata2025.csv and 
 #PCRcontrol_data.csv. 
 
-#Output will be the filtered metabarcoding file which has the controls filtered 
-#and removed
+#Output will be the filtered metabarcoding file which has the controls filtered and removed
 
 library(stringr)
 library(tidyverse)
@@ -29,13 +28,16 @@ df_PCRcontrols <- read_csv(file = "raw-data2/PCRcontrol_data.csv")
 kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
 kbimp2024_collectionsdata <- read_csv(file = "raw-data2/2024_KBIMP_Collections_Tracking.csv")
 
+#determining the number of samples in the file before filtering
 
 length(KGLKTK2024_COI$Sample) #232
 length(CBAY2024_plates12456$Sample) #635
 length(CBAY2024_plate3$Sample) #261
 
+#cleaning the sample data from 2024 to be in the correct format
+
 kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
-  right_join(kbimp2024_collectionsdata, join_by(FieldID == Sample)) %>%
+  right_join(kbimp2024_collectionsdata, join_by(FieldID == Sample)) %>% #joining individual well data with overall sample data
   mutate(date_parts = str_split(`Date collected`, "-"),
         end_date_raw = sapply(date_parts, `[`, 2),
         end_date_raw = ifelse(is.na(end_date_raw), 
@@ -43,9 +45,9 @@ kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
         Date_parsed = parse_date_time(end_date_raw,
              orders = c("ymd", "mdy", "dmy", "dm", "md", "m")),
     Month = month(Date_parsed, label = TRUE)) %>%
+  #although an error comes from parsing all of the months are correct
   select(SampleID, FieldID, `Date collected`, 
-         Lat.y, Long, `Sample type collection method`, Month) %>%
-  rename(SamplingProtocol = `Sample type collection method`) %>%
+         Lat.y, Long, SamplingProtocol, Month) %>%
     filter(!SamplingProtocol %in% c("D-ring dipnet (250 micron)",
                                    "DipNet", 
                                    "Plankton net (64 micron)", 
