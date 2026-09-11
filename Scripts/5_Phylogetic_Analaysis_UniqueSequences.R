@@ -1,10 +1,33 @@
+#Data required for analysis is filtered data from 2024 and 2025 (KBIMP2024_filteredCOI and KBIMP2025_filteredCOI) 
+#
+
+
+
+
+#loading packaging
+
+library(stringr)
+library(tidyverse)
+library(readr)
+library(viridis)
+library(Biostrings) 
+library(ape)     
+library(muscle) 
+library(phangorn) 
+library(parallel) 
+library(ggplot2)    
+library(ggtree)     
+library(seqinr)
+library(DECIPHER)
+
 
 KBIMP2024 <- read_tsv(file = "processed-data/KBIMP2024_filteredCOI.tsv")
 KBIMP2025 <- read_tsv(file = "processed-data/KBIMP2025_filteredCOI.tsv")
 Outgroup <- read_csv(file = "raw-data2/Outgroup.csv")
 
 KBIMP2024 <- KBIMP2024 %>%
-  left_join(kbimp2024_sampledata_clean, join_by(Sample == SampleID)) %>%
+  left_join(kbimp2024_sampledata_clean, 
+            join_by(Sample == SampleID)) %>%
   mutate(Sample = paste0(FieldID, case_when(
                              Family == "Simuliidae" ~ "_BF",
                              Family == "Culicidae" ~ "_M", TRUE ~ ""))) %>%
@@ -220,6 +243,9 @@ kbimp_sim_phydat <- as.phyDat(unique_seqssim, type = "DNA")
 class(kbimp_sim_phydat) # is a "phyDat" object
 length(kbimp_sim_phydat) # 83 unique seq
 
+#maybe should do this once at the begginig on the other file 
+modelTest <- modelTest(kbimp_sim_phydat, model=c("JC", "JC69", "F81", "K80", "HKY", "SYM", "GTR", "TN93", "GG95")) 
+
 ###### Building the tree ######
 
 #create a new dist matrix
@@ -422,7 +448,6 @@ simtreespecies2024
 ggsave("plots/Simulium_treespecies.png", plot = simtreespecies2024, width = 15, height = 17, dpi = 300)
 
 
-
 #### both years black flies not Simulium genus ----
 
 kbimp_bf_DNA_df <- KBIMP %>%
@@ -476,12 +501,12 @@ BOLDID_bfnotsim2 <- BOLDID_bfnotsim  %>%
 
 
 
-##### species assignments and comparing to mediod method -----
+##### species assignments -----
 
 BOLDIDspecies <- read_csv(file = "processed-data/BOLDIDspecies.csv")
 
 # Combine BOLD tables
-BOLDresults <- bind_rows(BOLDID_mos2, BOLDID_sim2, BOLDID_bfnotsim2)
+BOLDresults <- bind_rows(BOLDID_mos2, BOLDID_sim2, BOLDID_meta2)
 
 BOLDresults <- BOLDresults %>%
   filter(!Query.ID == "Outgroup") %>%
@@ -505,7 +530,7 @@ KBIMP_updatedspecies <- KBIMP %>%
   select(Sample, Species, Genus, Family, update_flag, Sequence) 
  
 
-write_tsv(KBIMP_updatedspecies2, "processed-data/KBIMP_updatedspecies.tsv")
+write_tsv(KBIMP_updatedspecies, "processed-data/KBIMP_updatedspecies.tsv")
 
 
 BOLDinvest <- bind_rows(BOLDID_mos, BOLDID_sim, BOLDID_meta)
@@ -521,10 +546,11 @@ BOLDIDspecies_table <- BOLDIDspecies %>%
            ifelse(total_num_species == 0, NA, 
                   num_species_repo / total_num_species *100)) %>%
   mutate(`Species assignment:Total sequences in BIN` = paste0(num_species_repo, ":", total_observations)) %>%
-  rename(Species = Species_BOLDID) %>%
-  select(BOLDID, Species, 
+  dplyr::rename(Species = Species_BOLDID) %>%
+  select(BIN, Species, 
          `Percentage of species assignments`, 
-         `Species assignment:Total sequences in BIN`) %>%
+         `Species assignment:Total sequences in BIN`) %>% 
+  arrange(Species) %>%
   gt() %>%
   fmt_missing(columns = everything(),
               missing_text = "") %>%
@@ -532,7 +558,257 @@ BOLDIDspecies_table <- BOLDIDspecies %>%
              decimals = 2) %>%
   cols_align(align = "center",
     columns = c(`Percentage of species assignments`, 
-                `Species assignment:Total sequences in BIN`))
+                `Species assignment:Total sequences in BIN`)) %>%
+  tab_stubhead(label = md("")) %>%
+  tab_header(title = md("")) %>%
+  tab_footnote(footnote = md("")) %>%
+  tab_options(
+    table.border.top.width = px(0),
+    table.border.bottom.width = px(0),
+    column_labels.border.top.width = px(0),
+    column_labels.border.bottom.width = px(0),
+    table_body.hlines.width = px(0),
+    table_body.vlines.width = px(0),
+    row_group.border.top.width = px(0),
+    row_group.border.bottom.width = px(0),
+    stub.border.style = "none") %>%
+  tab_style(style = cell_text(weight = "bold"),
+            locations = list(cells_column_spanners(), 
+                             cells_row_groups())) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+                                 color = "black", weight = px(2)),
+            locations = cells_title()) %>%
+  tab_style(style = cell_borders(sides = c("top"),
+                                 color = "black", weight = px(2)),
+            locations = cells_footnotes()) %>%
+  tab_style(style = cell_borders(sides = c("bottom"),
+                                 color = "black", weight = px(2)),
+            locations = list(cells_column_labels(), 
+                             cells_stubhead())) %>%
+  tab_style(style = cell_borders(
+    sides = c("top", "bottom"),
+    color = "black", weight = px(2)),
+    locations = cells_row_groups()) %>%
+  tab_options(data_row.padding = px(5)) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(
+      columns = c(Species)))
   
 gtsave(data = BOLDIDspecies_table , 
        filename = "plots/BOLDIDspecies_table.png")
+
+
+#### Analysis of genetic divergences ----
+
+##### black flies #####
+
+#filter out just Simulium
+
+bf_furtherinvestigation <- KBIMP_updatedspecies %>%
+  filter(Genus == "Simulium") %>%
+  select(Species, Sequence) 
+
+#create DNA stringset
+
+DNA_furtherinvestigation_bf <- DNAStringSet(bf_furtherinvestigation$Sequence)
+
+names(DNA_furtherinvestigation_bf) <- bf_furtherinvestigation$Species
+
+alighned_DNA_furtherinvestigation_bf <- DNAStringSet(muscle::muscle(DNA_furtherinvestigation_bf))
+
+unique_seqs_bf <- unique(alighned_DNA_furtherinvestigation_bf)
+
+kbimp_bf_phydat <- as.phyDat(unique_seqs_bf, type = "DNA")
+
+#calculate distance matrix and assosiate this with the species names
+
+dist.bf <- dist.ml(kbimp_bf_phydat, model = "F81", ratio = TRUE) 
+
+species_bf <- names(unique_seqs_bf)
+
+dist_mat <- as.matrix(dist.bf)
+
+#find the average distance for each species pairing 
+
+averagedist_bf <- data.frame()
+unique_species_bf <- unique(species_bf)
+
+# Start j at 'i' instead of 'i+1' to include within-species
+for (i in 1:length(unique_species_bf)) {
+  for (j in i:length(unique_species_bf)) {
+    
+    sp1 <- unique_species_bf[i]
+    sp2 <- unique_species_bf[j]
+    
+    idx1 <- which(species == sp1)
+    idx2 <- which(species == sp2)
+    
+    # Extract the sub-matrix for these two groups
+    vals <- dist_mat[idx1, idx2]
+    
+    # CRITICAL: If comparing the same species, remove the diagonal (self-comparisons)
+    if (sp1 == sp2) {
+      # If there's only 1 individual in the species, mean is NA (can't compare to others)
+      if (length(idx1) == 1) {
+        mean_val <- NA
+      } else {
+        # Convert to matrix and extract only the off-diagonal elements
+        vals_mat <- as.matrix(vals)
+        mean_val <- mean(vals_mat[row(vals_mat) != col(vals_mat)], na.rm = TRUE)
+      }
+    } else {
+      # For different species, just take the standard mean
+      mean_val <- mean(as.vector(vals), na.rm = TRUE)
+    }
+    
+    averagedist_bf <- rbind(averagedist_bf, data.frame(
+      Species1 = sp1,
+      Species2 = sp2,
+      MeanDistance = mean_val
+    ))
+  }
+}
+
+#create final table to export
+
+bf_dis_matrix <- averagedist_bf %>%
+  pivot_wider(names_from = Species2, values_from = MeanDistance) %>%
+  column_to_rownames("Species1") %>%
+  as_tibble(rownames = "Species") %>%
+  gt() %>%
+  fmt_missing(columns = everything(),
+              missing_text = "") %>%
+  fmt_number(columns = 2:last_col(), 
+             decimals = 5) 
+
+gtsave(data = bf_dis_matrix , 
+       filename = "plots/bf_dis_matrix.png", vwidth = 2300, vheight = 1500)
+
+##### mosquitoes #####
+
+#filter out mosquitoes from data 
+
+mos_furtherinvestigation <- KBIMP_updatedspecies %>%
+  filter(Family == "Culicidae") %>%
+  select(Species, Sequence) 
+
+#create DNa string set/ phydat
+
+DNA_furtherinvestigation <- DNAStringSet(mos_furtherinvestigation$Sequence)
+
+names(DNA_furtherinvestigation) <- mos_furtherinvestigation$Species
+
+alighned_DNA_furtherinvestigation <- DNAStringSet(muscle::muscle(DNA_furtherinvestigation))
+
+unique_seqs <- unique(alighned_DNA_furtherinvestigation)
+
+kbimp_mos_phydat <- as.phyDat(unique_seqs, type = "DNA")
+
+#calculate distances 
+
+dist.mos <- dist.ml(kbimp_mos_phydat, ratio = TRUE) 
+
+#assosiate distances with species 
+
+species <- names(unique_seqs)
+
+dist_mat <- as.matrix(dist.mos)
+
+#get the average values 
+
+results <- data.frame()
+
+unique_species <- unique(species)
+
+
+# Start j at 'i' instead of 'i+1' to include within-species
+for (i in 1:length(unique_species)) {
+  for (j in i:length(unique_species)) {
+    
+    sp1 <- unique_species[i]
+    sp2 <- unique_species[j]
+    
+    idx1 <- which(species == sp1)
+    idx2 <- which(species == sp2)
+    
+    # Extract the sub-matrix for these two groups
+    vals <- dist_mat[idx1, idx2]
+    
+    # CRITICAL: If comparing the same species, remove the diagonal (self-comparisons)
+    if (sp1 == sp2) {
+      # If there's only 1 individual in the species, mean is NA (can't compare to others)
+      if (length(idx1) == 1) {
+        mean_val <- NA
+      } else {
+        # Convert to matrix and extract only the off-diagonal elements
+        vals_mat <- as.matrix(vals)
+        mean_val <- mean(vals_mat[row(vals_mat) != col(vals_mat)], na.rm = TRUE)
+      }
+    } else {
+      # For different species, just take the standard mean
+      mean_val <- mean(as.vector(vals), na.rm = TRUE)
+    }
+    
+    results <- rbind(results, data.frame(
+      Species1 = sp1,
+      Species2 = sp2,
+      MeanDistance = mean_val
+    ))
+  }
+}
+
+
+mosquito_dis_matrix <- results %>%
+  pivot_wider(names_from = Species2, values_from = MeanDistance) %>%
+  column_to_rownames("Species1") %>%
+  as_tibble(rownames = "Species") %>%
+  gt() %>%
+  fmt_missing(columns = everything(),
+              missing_text = "") %>%
+  fmt_number(columns = 2:last_col(), 
+             decimals = 5) 
+
+gtsave(data = mosquito_dis_matrix , 
+       filename = "plots/mosquito_dis_matrix.png")
+
+
+#### preparing data for the Popart figure ----
+
+nigripis_popart <- KBIMP_combined %>%
+  filter(Species == "Aedes nigripes/impiger") %>%
+  select(Sample, Sequence) 
+
+nigripis_popart2 <- DNAStringSet(nigripis_popart$Sequence)
+
+names(nigripis_popart2) <- nigripis_popart$Sample
+
+alighned_nigripis_popart <- DNAStringSet(
+  muscle::muscle(nigripis_popart2))
+
+writeXStringSet(alighned_nigripis_popart,
+                filepath = "processed-data/alighned_hexodontus.fasta",
+                format = "fasta")
+
+nigripis_popart_phydat <- as.phyDat(alighned_nigripis_popart, type = "DNA")
+
+# Convert to character matrix
+alighned_nigripis_popart_mat <- as.character(alighned_nigripis_popart)
+
+# Write to NEXUS format (seqinr writes sequential by default)
+write.nexus.data(alighned_nigripis_popart_mat, 
+                 file = "processed-data/output_alignment_nigripis.nex"
+                 ,format = "dna")
+
+
+binary_matrix_trait_nigripis <- 
+  get_binary_trait_matrix(meta_data, alighned_nigripis_popart)
+
+#writing the binary matrices and nexus files 
+
+write_tsv(binary_matrix_trait_nigripis, "processed-data/mosmetadata_nigripis.tsv")
+
+
+
+
+
