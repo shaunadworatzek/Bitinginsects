@@ -1,10 +1,13 @@
+
 #Data required for analysis is filtered data from 2024 and 2025 (KBIMP2024_filteredCOI and KBIMP2025_filteredCOI) 
-#
+#KBIMP 2024 sample data to fix up the 2024 species data 
 
 
 
 
-#loading packaging
+#### PART 1 - Loading packages, Openeing files, Running functions ----
+
+##### Packages #####
 
 library(stringr)
 library(tidyverse)
@@ -21,10 +24,49 @@ library(seqinr)
 library(DECIPHER)
 library(gt)
 
+##### Files #####
 
 KBIMP2024 <- read_tsv(file = "processed-data/KBIMP2024_filteredCOI.tsv")
 KBIMP2025 <- read_tsv(file = "processed-data/KBIMP2025_filteredCOI.tsv")
+kbimp2024_sampledata_clean <- read_csv( 
+          files = "processed-data/kbimp2024_sampledata_clean.csv")
 Outgroup <- read_csv(file = "raw-data2/Outgroup.csv")
+
+
+##### Packages #####
+
+# function to find medoid sequence in a cluster
+find_medoid <- function(distmat, members) {
+  mat <- as.matrix(distmat)
+  members <- intersect(members, rownames(mat)) # only keep matching names
+  submat <- mat[members, members, drop = FALSE]
+  sums <- rowSums(submat)
+  medoid <- names(which.min(sums))
+  return(medoid)
+}
+
+#binary trait matrix
+
+get_binary_trait_matrix <- function(seq_data) {
+  
+  mosmetadata <- kbimp_mosmetadata %>%
+    filter(SampleID %in% names(seq_data)) %>%
+    select(SampleID, ExactSite) %>%
+    column_to_rownames(var = "SampleID")
+  
+  binary_matrix_trait <- model.matrix(~ ExactSite - 1, data = mosmetadata)
+  
+  binary_matrix_trait <- binary_matrix_trait %>% as.data.frame() %>%
+    rownames_to_column(var = "SampleID") 
+  
+  return(binary_matrix_trait)
+  
+}
+
+
+#### PART 2 - Combining data from 2024 and 2025 ----
+
+#preparing data from 2024 to be in the same format 
 
 KBIMP2024 <- KBIMP2024 %>%
   left_join(kbimp2024_sampledata_clean, 
@@ -37,6 +79,11 @@ KBIMP2024 <- KBIMP2024 %>%
   mutate(Sample = paste0(Sample, "_", LETTERS[row_number()])) %>%
   ungroup()
 
+#writing this file to be used in the sample count 
+
+write_tsv(KBIMP2024, "processed-data/KBIMP2024_clean.tsv")
+
+#preparing 2025 data for combination 
 
 KBIMP2025 <- KBIMP2025 %>%
   mutate(
@@ -50,6 +97,7 @@ KBIMP2025 <- KBIMP2025 %>%
   ungroup() %>%
     select(Sample, Read_Count, Kingdom, Phylum, Class, Order, Family, Genus, Species, Probability_Genus, Probability_Species, Sequence) 
 
+#combining 
 
 KBIMP <- bind_rows(KBIMP2024, KBIMP2025, Outgroup)
 

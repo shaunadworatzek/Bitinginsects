@@ -18,15 +18,38 @@ library(ggplot2)
 
 #input raw sequence data 
 
-KGLKTK2024_COI <- read_tsv(file = "raw-data2/KGLKTK_2024_OTUDetails.tsv")
-CBAY2024_plates12456 <- read_tsv(file = "raw-data2/CBAY2024_AllPlates_OTUDetails.tsv")
-CBAY2024_plate3 <- read_tsv(file = "raw-data2/Shauna_CBAY2024_Plate3_OTUDetails.tsv")
-problemsamples <- read_csv(file = "raw-data2/problemsamples.csv")
-KBIMP2025_COI <- read_tsv(file = "raw-data2/KBIMP2025_insectCOI_OTUDetails.tsv")
-df_extractioncontrols <- read_csv(file = "raw-data2/extractiondata2025.csv")
-df_PCRcontrols <- read_csv(file = "raw-data2/PCRcontrol_data.csv")
-kbimp2024_sampledata <- read_csv(file = "raw-data2/KBIMP2024_specimendata.csv")
-kbimp2024_collectionsdata <- read_csv(file = "raw-data2/2024_KBIMP_Collections_Tracking.csv")
+KGLKTK2024_COI <- read_tsv(
+  file = "raw-data2/KGLKTK_2024_OTUDetails.tsv")
+
+CBAY2024_plates12456 <- read_tsv(
+  file = "raw-data2/CBAY2024_AllPlates_OTUDetails.tsv")
+
+CBAY2024_plate3 <- read_tsv(
+  file = "raw-data2/Shauna_CBAY2024_Plate3_OTUDetails.tsv")
+
+problemsamples <- read_csv(
+  file = "raw-data2/problemsamples.csv")
+
+KBIMP2025_COI <- read_tsv(
+  file = "raw-data2/KBIMP2025_insectCOI_OTUDetails.tsv")
+
+df_extractioncontrols <- read_csv(
+  file = "raw-data2/extractiondata2025.csv")
+
+df_PCRcontrols <- read_csv(
+  file = "raw-data2/PCRcontrol_data.csv")
+
+kbimp2024_sampledata <- read_csv(
+  file = "raw-data2/KBIMP2024_specimendata.csv")
+
+kbimp2024_collectionsdata <- read_csv(
+  file = "raw-data2/2024_KBIMP_Collections_Tracking.csv")
+
+df_extractioncontrols <- read_csv(
+  file = "raw-data2/extractiondata2025.csv")
+
+df_PCRcontrols <- read_csv(
+  file = "raw-data2/PCRcontrol_data.csv")
 
 #determining the number of samples in the file before filtering
 
@@ -59,6 +82,9 @@ kbimp2024_sampledata_clean <- kbimp2024_sampledata %>%
   mutate(SampleID= gsub("KBIMP_004_F12", "KBIMP-_006_G6", SampleID)) %>%
   mutate(SampleID= gsub("KBIMP_004_G12", "KBIMP-_006_G7", SampleID)) %>%
   mutate(SampleID= gsub("KBIMP_004_H10", "KBIMP-_006_G2", SampleID)) 
+
+write_csv(kbimp2024_sampledata_clean, 
+          "processed-data/kbimp2024_sampledata_clean.csv")
 
 #Filtering out/ accounting for negative controls 
 #negative control on plate 3
@@ -210,10 +236,7 @@ rm(KBIMP2024_mosquitoes, CBAY2024, problemsamples,
 
 ##### Filtering for negative controls #####
 
-#opening negative control data into R 
-
-df_extractioncontrols <- read_csv(file = "raw-data2/extractiondata2025.csv")
-df_PCRcontrols <- read_csv(file = "raw-data2/PCRcontrol_data.csv")
+#opening negative control data into R
 
 # filtering out PCR controls 
 
